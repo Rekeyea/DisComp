@@ -64,30 +64,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
+      <file leaf-file-name="python.flex" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/language/python.flex">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="21" selection-start="597" selection-end="597" vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="345">
-              <folding />
+            <state line="60" column="13" selection-start="1170" selection-end="1170" vertical-scroll-proportion="0.6462264" vertical-offset="474" max-vertical-offset="1110">
+              <folding>
+                <marker date="1434773485905" expanded="false" signature="40:77" placeholder="..." />
+                <marker date="1434773485905" expanded="true" signature="238:294" placeholder="{...}" />
+                <marker date="1434773485905" expanded="true" signature="345:407" placeholder="{...}" />
+                <marker date="1434773485905" expanded="true" signature="1196:1230" placeholder="{...}" />
+                <marker date="1434773485905" expanded="true" signature="1257:1296" placeholder="{...}" />
+                <marker date="1434773485905" expanded="true" signature="1323:1347" placeholder="{...}" />
+                <marker date="1434773485905" expanded="true" signature="1374:1404" placeholder="{...}" />
+                <marker date="1434773485905" expanded="true" signature="1431:1455" placeholder="{...}" />
+                <marker date="1434773485905" expanded="true" signature="1482:1505" placeholder="{...}" />
+                <marker date="1434773485905" expanded="true" signature="1535:1589" placeholder="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="python.flex" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/language/python.flex">
+      <file leaf-file-name="main.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="79" selection-start="986" selection-end="986" vertical-scroll-proportion="0.0" vertical-offset="401" max-vertical-offset="780">
-              <folding>
-                <marker date="1434594542240" expanded="true" signature="220:276" placeholder="{...}" />
-                <marker date="1434594542240" expanded="true" signature="327:389" placeholder="{...}" />
-                <marker date="1434594542240" expanded="true" signature="606:636" placeholder="{...}" />
-                <marker date="1434594542240" expanded="true" signature="663:698" placeholder="{...}" />
-                <marker date="1434594542240" expanded="true" signature="725:749" placeholder="{...}" />
-                <marker date="1434594542240" expanded="true" signature="776:801" placeholder="{...}" />
-                <marker date="1434594542240" expanded="true" signature="828:852" placeholder="{...}" />
-                <marker date="1434594542240" expanded="true" signature="879:902" placeholder="{...}" />
-                <marker date="1434594542240" expanded="true" signature="932:986" placeholder="{...}" />
-              </folding>
+            <state line="28" column="30" selection-start="826" selection-end="841" vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="690">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -95,72 +96,7 @@
       <file leaf-file-name="Lexer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Lexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="583" column="0" selection-start="18493" selection-end="18493" vertical-scroll-proportion="0.0" vertical-offset="8596" max-vertical-offset="11145">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="0" selection-start="1093" selection-end="1093" vertical-scroll-proportion="0.7478992" vertical-offset="168" max-vertical-offset="525">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PrintStream.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/io/PrintStream.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="96" column="16" selection-start="3732" selection-end="3732" vertical-scroll-proportion="0.0" vertical-offset="1311" max-vertical-offset="1740">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Writer.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/io/Writer.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="16" selection-start="744" selection-end="744" vertical-scroll-proportion="0.0" vertical-offset="186" max-vertical-offset="585">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="String.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/String.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="207" column="8" selection-start="8421" selection-end="8421" vertical-scroll-proportion="0.0" vertical-offset="2971" max-vertical-offset="3315">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Symbol.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/de/jflex/jflex/1.6.1/jflex-1.6.1.jar!/java_cup/runtime/Symbol.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="28" selection-start="932" selection-end="932" vertical-scroll-proportion="-8.56" vertical-offset="191" max-vertical-offset="510">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StringBuilder.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/StringBuilder.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="11" selection-start="345" selection-end="345" vertical-scroll-proportion="0.0" vertical-offset="6" max-vertical-offset="1455">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AbstractStringBuilder.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/AbstractStringBuilder.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="16" selection-start="789" selection-end="789" vertical-scroll-proportion="0.0" vertical-offset="261" max-vertical-offset="1860">
+            <state line="13" column="49" selection-start="378" selection-end="378" vertical-scroll-proportion="0.0" vertical-offset="195" max-vertical-offset="11175">
               <folding />
             </state>
           </provider>
@@ -178,9 +114,9 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Parser.java" />
-        <option value="$PROJECT_DIR$/src/main/language/python.flex" />
         <option value="$PROJECT_DIR$/src/main/java/Lexer.java" />
         <option value="$PROJECT_DIR$/src/main/java/main.java" />
+        <option value="$PROJECT_DIR$/src/main/language/python.flex" />
       </list>
     </option>
   </component>
@@ -264,6 +200,50 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JFlex_Python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JFlex_Python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JFlex_Python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JFlex_Python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -490,7 +470,6 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -501,6 +480,7 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -526,6 +506,107 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/language/python.flex">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="13" selection-start="1131" selection-end="1131" vertical-scroll-proportion="0.0" vertical-offset="699" max-vertical-offset="1125">
+          <folding>
+            <marker date="1434773485905" expanded="false" signature="40:77" placeholder="..." />
+            <marker date="1434773485905" expanded="true" signature="238:294" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="345:407" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1196:1230" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1257:1296" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1323:1347" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1374:1404" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1431:1455" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1482:1505" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1535:1589" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="30" selection-start="826" selection-end="841" vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="690">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Lexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="49" selection-start="378" selection-end="378" vertical-scroll-proportion="0.0" vertical-offset="195" max-vertical-offset="11175">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="21" selection-start="597" selection-end="597" vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="345">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/language/python.flex">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="79" selection-start="986" selection-end="986" vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="780">
+          <folding>
+            <marker date="1434773485905" expanded="false" signature="40:77" placeholder="..." />
+            <marker date="1434773485905" expanded="true" signature="238:294" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="345:407" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1196:1230" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1257:1296" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1323:1347" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1374:1404" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1431:1455" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1482:1505" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1535:1589" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Lexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="583" column="0" selection-start="18493" selection-end="18493" vertical-scroll-proportion="0.0" vertical-offset="8745" max-vertical-offset="11175">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="0" selection-start="1093" selection-end="1093" vertical-scroll-proportion="0.0" vertical-offset="525" max-vertical-offset="525">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/io/PrintStream.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="96" column="16" selection-start="3732" selection-end="3732" vertical-scroll-proportion="0.0" vertical-offset="1440" max-vertical-offset="1755" />
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/io/Writer.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="16" selection-start="744" selection-end="744" vertical-scroll-proportion="0.0" vertical-offset="315" max-vertical-offset="600" />
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/String.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="207" column="8" selection-start="8421" selection-end="8421" vertical-scroll-proportion="0.0" vertical-offset="3105" max-vertical-offset="3330" />
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/de/jflex/jflex/1.6.1/jflex-1.6.1.jar!/java_cup/runtime/Symbol.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="28" selection-start="932" selection-end="932" vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="525" />
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/StringBuilder.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="11" selection-start="345" selection-end="345" vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="1470" />
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/AbstractStringBuilder.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="16" selection-start="789" selection-end="789" vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="1875" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="21" selection-start="597" selection-end="597" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="345">
@@ -537,15 +618,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="46" column="79" selection-start="986" selection-end="986" vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="780">
           <folding>
-            <marker date="1434594542240" expanded="true" signature="220:276" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="327:389" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="606:636" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="663:698" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="725:749" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="776:801" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="828:852" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="879:902" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="932:986" placeholder="{...}" />
+            <marker date="1434773485905" expanded="false" signature="40:77" placeholder="..." />
+            <marker date="1434773485905" expanded="true" signature="238:294" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="345:407" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1196:1230" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1257:1296" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1323:1347" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1374:1404" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1431:1455" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1482:1505" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1535:1589" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -553,9 +635,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/Lexer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="342" column="7" selection-start="12330" selection-end="12335" vertical-scroll-proportion="0.0" vertical-offset="5130" max-vertical-offset="11145">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -580,78 +660,65 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/language/python.flex">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="79" selection-start="986" selection-end="986" vertical-scroll-proportion="0.0" vertical-offset="101" max-vertical-offset="780">
-          <folding>
-            <marker date="1434594542240" expanded="true" signature="220:276" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="327:389" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="606:636" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="663:698" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="725:749" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="776:801" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="828:852" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="879:902" placeholder="{...}" />
-            <marker date="1434594542240" expanded="true" signature="932:986" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/AbstractStringBuilder.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="16" selection-start="789" selection-end="789" vertical-scroll-proportion="0.0" vertical-offset="261" max-vertical-offset="1860">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/StringBuilder.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="11" selection-start="345" selection-end="345" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1455">
-          <folding />
-        </state>
+        <state line="9" column="11" selection-start="345" selection-end="345" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1455" />
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/de/jflex/jflex/1.6.1/jflex-1.6.1.jar!/java_cup/runtime/Symbol.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="28" selection-start="932" selection-end="932" vertical-scroll-proportion="-8.56" vertical-offset="191" max-vertical-offset="510">
-          <folding />
-        </state>
+        <state line="28" column="28" selection-start="932" selection-end="932" vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="525" />
       </provider>
     </entry>
     <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/String.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="207" column="8" selection-start="8421" selection-end="8421" vertical-scroll-proportion="0.0" vertical-offset="2971" max-vertical-offset="3315">
-          <folding />
-        </state>
+        <state line="207" column="8" selection-start="8421" selection-end="8421" vertical-scroll-proportion="0.0" vertical-offset="2971" max-vertical-offset="3315" />
       </provider>
     </entry>
     <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/io/Writer.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="16" selection-start="744" selection-end="744" vertical-scroll-proportion="0.0" vertical-offset="186" max-vertical-offset="585">
-          <folding />
-        </state>
+        <state line="21" column="16" selection-start="744" selection-end="744" vertical-scroll-proportion="0.0" vertical-offset="186" max-vertical-offset="585" />
       </provider>
     </entry>
     <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/io/PrintStream.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="96" column="16" selection-start="3732" selection-end="3732" vertical-scroll-proportion="0.0" vertical-offset="1311" max-vertical-offset="1740">
-          <folding />
-        </state>
+        <state line="96" column="16" selection-start="3732" selection-end="3732" vertical-scroll-proportion="0.0" vertical-offset="1311" max-vertical-offset="1740" />
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/AbstractStringBuilder.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="16" selection-start="789" selection-end="789" vertical-scroll-proportion="0.0" vertical-offset="261" max-vertical-offset="1860" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Lexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="583" column="0" selection-start="18493" selection-end="18493" vertical-scroll-proportion="0.0" vertical-offset="8596" max-vertical-offset="11145">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="13" column="49" selection-start="378" selection-end="378" vertical-scroll-proportion="0.0" vertical-offset="10350" max-vertical-offset="11145">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="0" selection-start="1093" selection-end="1093" vertical-scroll-proportion="0.7478992" vertical-offset="168" max-vertical-offset="525">
+        <state line="28" column="30" selection-start="826" selection-end="841" vertical-scroll-proportion="0.0" vertical-offset="116" max-vertical-offset="540">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/language/python.flex">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="13" selection-start="1170" selection-end="1170" vertical-scroll-proportion="0.6462264" vertical-offset="474" max-vertical-offset="1110">
+          <folding>
+            <marker date="1434773485905" expanded="false" signature="40:77" placeholder="..." />
+            <marker date="1434773485905" expanded="true" signature="238:294" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="345:407" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1196:1230" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1257:1296" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1323:1347" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1374:1404" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1431:1455" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1482:1505" placeholder="{...}" />
+            <marker date="1434773485905" expanded="true" signature="1535:1589" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>

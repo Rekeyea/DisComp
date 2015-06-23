@@ -28,6 +28,7 @@ public class main {
                 simbolo = lexer.next_token();
                 while (simbolo.sym != sym.EOF){
                     System.out.println(simbolo.toString());
+                    System.out.println(simbolo.value);
                     simbolo = lexer.next_token();
                 }
             }catch (Exception ex){
