@@ -68,8 +68,6 @@ public class PyObject {
 
     /**
      * Devuelve la instancia de la clase de este objeto. O sea, su meta clase.
-     * @return
-     * @throws PyException
      */
     public PyType getType(){
         if(this.__class__ == null){
@@ -95,8 +93,6 @@ public class PyObject {
 
     /**
      * Initializer que segun argumentos, realiza acciones.
-     * @param args
-     * @param kwargs
      */
     public void __init__(PyObject[] args, AttrDict kwargs) throws PyException{
     }
@@ -113,7 +109,6 @@ public class PyObject {
 
     /**
      * Metodo de conveniencia para imprimir un objeto: llama a __str__ del objeto y retorna su valor.
-     * @return
      */
     public String print() throws PyException{
         //print por defecto
@@ -125,9 +120,6 @@ public class PyObject {
      * Retorna un atributo del objeto. Si no lo encuentra, lo busca en su clase, y sus clases 'padre' (clase python, o tipo). Si no error.
      * Si el resultado es una instancia de PyNativeFunction, en vez de retornarla, retorna un PyMethodWrapper para que pueda ser llamada con el 'this' pasado automaticamente.
      *      Esto unicamente, si el resultado se obtuvo de la clase o padres, y no de la instancia misma.
-     *
-     * @param key
-     * @return
      */
     public PyObject __getattr__(String key) throws PyException {
         PyObject r = __dict__.get(key);
@@ -171,7 +163,6 @@ public class PyObject {
      * no ambigua de un objeto, orientada al programador y no al usuario final.
      * Por defecto esto es lo que se utiliza para obtener el PyString de un objeto, sub clases pueden optar por implementar este, __str__ o ninguno.
      * Utiliza getType() y no __name__ para poder ser llamada por clases hijas y poder obtener su clase correcta.
-     * @return
      */
     public PyString __repr__() throws PyException{
         return new PyString(String.format("<instancia de '%s'>", getType().getClassName()));
@@ -180,8 +171,6 @@ public class PyObject {
     /**
      * Crea una instancia de PyStr, puede o no ser modificada en clases hijo.
      * Por defecto crea un string a partir del resultado de this.print()
-     * @return
-     * @throws PyException
      */
     public PyString __str__() throws PyException{
         //Por defecto el string de un objeto es su representacion, clases pueden optar o no por modificar la representacion del objeto.
@@ -192,7 +181,6 @@ public class PyObject {
     /**
      * Devuelve un hash del objeto. Utilizado para las claves de diccionarios y demas.
      * IMPORTANTE: Para clases que no se quiera permitir como clave de diccionarios, LANZAR EXCEPCION. No permitir hash.
-     * @return
      */
     public PyInteger __hash__() throws PyException{
         //POR AHORA DEVUELVO EL HASH DE JAVA... Sera suficiente?
@@ -205,7 +193,6 @@ public class PyObject {
     /**
      * Castea un objeto a int, object lanza error, pero puede ser implementado por otras clases.
      * Puede devolver PyInteger o PyLong dependiendo del tamano del valor.
-     * @return
      */
     public PyObject __int__() throws PyException{
         throw new PyTypeError(String.format("'%s' no se puede convertir a %s", getType().getClassName(), PyInteger.__name__));
@@ -213,7 +200,6 @@ public class PyObject {
 
     /**
      * Castea un objeto a long, object lanza error, pero puede ser implementado por otras clases.
-     * @return
      */
     public PyObject __long__() throws PyException{
         throw new PyTypeError(String.format("'%s' no se puede convertir a %s", getType().getClassName(), PyLong.__name__));
@@ -221,7 +207,6 @@ public class PyObject {
 
     /**
      * Castea un objeto a float, object lanza error, pero puede ser implementado por otras clases.
-     * @return
      */
     public PyObject __float__() throws PyException{
         throw new PyTypeError(String.format("'%s' no se puede convertir a %s", getType().getClassName(), PyFloat.__name__));
@@ -230,7 +215,6 @@ public class PyObject {
     /**
      * Castea un objeto a bool, por defecto evalua en TRUE, debe re implementarse en clase hijas que puedan evaluar en FALSE.
      * Es importante que todas las funciones retornen el singleton de True o False de bool.
-     * @return
      */
     public PyBool __bool__() throws PyException{
         return PySingletons.True;

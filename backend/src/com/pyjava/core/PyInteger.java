@@ -152,12 +152,10 @@ public class PyInteger extends PyObject {
         }
 
         if(obj instanceof PyBool){
-            if(obj instanceof PyBool){
-                if(!((PyBool)obj).value){
-                    return new PyInteger(1);
-                }
-                return new PyInteger(this.value);
+            if(!((PyBool)obj).value){
+                return new PyInteger(1);
             }
+            return new PyInteger(this.value);
         }
 
 
@@ -376,7 +374,7 @@ public class PyInteger extends PyObject {
             return (double)this.value == ((PyFloat)obj).value ? PySingletons.True : PySingletons.False;
         }
         if(obj instanceof PyBool){
-            return ((this.value == 0 ? false : true) == ((PyBool)obj).value) ? PySingletons.True : PySingletons.False;
+            return ((this.value != 0) == ((PyBool)obj).value) ? PySingletons.True : PySingletons.False;
         }
 
         return PySingletons.False;

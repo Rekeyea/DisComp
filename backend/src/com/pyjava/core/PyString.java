@@ -136,8 +136,8 @@ public class PyString extends PyObject{
                 for (int i = 0; i < val; i++) {
                     res += this.value;
                 }
-                return new PyString(res);
             }
+            return new PyString(res);
         }
 
         if(obj instanceof PyLong){
@@ -150,8 +150,8 @@ public class PyString extends PyObject{
                 for (int i = 0; i < val; i++) {
                     res += this.value;
                 }
-                return new PyString(res);
             }
+            return new PyString(res);
 
         }
 

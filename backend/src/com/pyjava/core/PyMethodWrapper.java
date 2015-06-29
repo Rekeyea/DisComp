@@ -38,9 +38,7 @@ public class PyMethodWrapper extends PyObject{
         }
         PyObject[] newArgs = new PyObject[args.length + 1];
         newArgs[0] = self;
-        for(int i = 0; i < args.length; i++){
-            newArgs[i+1] = args[i];
-        }
+        System.arraycopy(args, 0, newArgs, 1, args.length);
 
         return wrappedFunc.__call__(newArgs, kwargs, estado);
 

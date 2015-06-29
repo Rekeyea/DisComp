@@ -171,12 +171,10 @@ public class PyFloat extends PyObject {
         }
 
         if(obj instanceof PyBool){
-            if(obj instanceof PyBool){
-                if(!((PyBool)obj).value){
-                    return new PyFloat(1.0);
-                }
-                return new PyFloat(this.value);
+            if(!((PyBool)obj).value){
+                return new PyFloat(1.0);
             }
+            return new PyFloat(this.value);
         }
 
         throw AritmeticaHelper.getErrorBinary("**", this, obj);
@@ -278,7 +276,7 @@ public class PyFloat extends PyObject {
             return this.value == (double)((PyLong)obj).value ? PySingletons.True : PySingletons.False;
         }
         if(obj instanceof PyBool){
-            return ((this.value == 0.0 ? false : true) == ((PyBool)obj).value) ? PySingletons.True : PySingletons.False;
+            return ((this.value != 0.0) == ((PyBool)obj).value) ? PySingletons.True : PySingletons.False;
         }
 
         return PySingletons.False;

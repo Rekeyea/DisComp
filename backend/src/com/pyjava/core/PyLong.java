@@ -158,12 +158,10 @@ public class PyLong extends PyObject {
         }
 
         if(obj instanceof PyBool){
-            if(obj instanceof PyBool){
-                if(!((PyBool)obj).value){
-                    return new PyLong(1);
-                }
-                return new PyLong(this.value);
+            if(!((PyBool)obj).value){
+                return new PyLong(1);
             }
+            return new PyLong(this.value);
         }
 
         throw AritmeticaHelper.getErrorBinary("**", this, obj);
@@ -360,7 +358,7 @@ public class PyLong extends PyObject {
             return (double)this.value == ((PyFloat)obj).value ? PySingletons.True : PySingletons.False;
         }
         if(obj instanceof PyBool){
-            return ((this.value == 0L ? false : true) == ((PyBool)obj).value) ? PySingletons.True : PySingletons.False;
+            return ((this.value != 0L) == ((PyBool)obj).value) ? PySingletons.True : PySingletons.False;
         }
 
         return PySingletons.False;

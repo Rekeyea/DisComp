@@ -83,7 +83,6 @@ public class PyType extends PyObject {
 
     /**
      * Devuelve una instancia de la clase almacenada. Creando el objeto llamando a __new__ e __init__ de la clase creada.
-     * @return
      */
     public PyObject instanciarClase(PyObject[] args, AttrDict kwargs) throws PyException {
 
@@ -119,7 +118,6 @@ public class PyType extends PyObject {
 
     /**
      * Devuelve el nombre 'string' de la clase a la que hace referencia este type. Se obtiene del campo __name__ de la clase.
-     * @return
      */
     public String getClassName() {
         return claseAlmacenadaName;
@@ -160,8 +158,6 @@ public class PyType extends PyObject {
     /**
      * Sobreescribe para cambiar el mensaje de error.
      * Ademas en este caso, no crea PyMethodWrapper ya que si se llama desde aca quiere decir que se llamo desde una clase y no una instancia.
-     * @param key
-     * @return
      */
     @Override
     public PyObject __getattr__(String key) throws PyException {
