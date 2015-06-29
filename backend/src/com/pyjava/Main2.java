@@ -25,6 +25,7 @@ public class Main2 {
          * sumaRes = var1 + var2
          * print 'La suma es: ', sumaRes
          * print None
+         * print type(sumaRes)
          * print var3 //Esto deberia explotar y dar un error acorde.
          */
 
@@ -47,6 +48,7 @@ public class Main2 {
         codigo.co_names.add("sumaRes");
         codigo.co_names.add("int");
         codigo.co_names.add("None");
+        codigo.co_names.add("type");
         codigo.co_names.add("var3");
 
 
@@ -83,10 +85,17 @@ public class Main2 {
         codigo.co_code.add(new Instruccion(5, OpCode.PRINT_ITEM,0));
         codigo.co_code.add(new Instruccion(5, OpCode.PRINT_NEWLINE,0));
 
-        //print var3
+        //print type(sumaRes)
         codigo.co_code.add(new Instruccion(6, OpCode.LOAD_NAME, 5));
-        codigo.co_code.add(new Instruccion(6, OpCode.PRINT_ITEM,0));
+        codigo.co_code.add(new Instruccion(6, OpCode.LOAD_NAME, 2));
+        codigo.co_code.add(new Instruccion(6, OpCode.CALL_FUNCTION,1));
+        codigo.co_code.add(new Instruccion(5, OpCode.PRINT_ITEM,0));
         codigo.co_code.add(new Instruccion(6, OpCode.PRINT_NEWLINE,0));
+
+        //print var3
+        codigo.co_code.add(new Instruccion(7, OpCode.LOAD_NAME, 6));
+        codigo.co_code.add(new Instruccion(7, OpCode.PRINT_ITEM,0));
+        codigo.co_code.add(new Instruccion(7, OpCode.PRINT_NEWLINE,0));
 
         //instruccion especial de fin de ejecucion
         codigo.co_code.add(new Instruccion(7, OpCode.FIN_EJECUCION, 0));
