@@ -25,6 +25,8 @@
         <module name="JFlex_Python" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="JFlex_Python" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
-

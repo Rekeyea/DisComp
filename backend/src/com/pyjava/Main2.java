@@ -104,10 +104,8 @@ public class Main2 {
                 return;
             }
             catch (PyException e){
-                System.out.println("Error:");
-                System.out.println(String.format("\tArchivo: %s", estado.getArchivoActual()));
-                System.out.println(String.format("\tFuncion o modulo: %s", estado.getFuncActual()));
-                System.out.println(String.format("\tLinea: %s", estado.getLineaActual()));
+                System.out.println("Error: Stack trace:");
+                estado.printStacktrace();
                 System.out.println(e.getMessage());
 
                 //Finalizo la ejecucion ante error.

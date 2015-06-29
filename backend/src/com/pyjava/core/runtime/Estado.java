@@ -74,6 +74,21 @@ public class Estado {
     }
 
     /**
+     * Imprime el trace
+     */
+    public void printStacktrace(){
+
+        if(this.frameActual.f_back != null){
+            this.printStacktrace();
+        }
+
+        System.out.println(String.format("\tArchivo: %s", this.getArchivoActual()));
+        System.out.println(String.format("\tFuncion o modulo: %s", this.getFuncActual()));
+        System.out.println(String.format("\tLinea: %s", this.getLineaActual()));
+        System.out.println("-----");
+    }
+
+    /**
      * Interpreta la proxima instruccion, segun el frame actual y su f_instr.
      * Lanza excepciones. El llamador debera ser encargado de agarrarlas, y reportar el error, y lineas del error.
      */
