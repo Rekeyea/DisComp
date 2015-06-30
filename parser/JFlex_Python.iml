@@ -14,5 +14,7 @@
     <orderEntry type="library" name="Maven: de.jflex:jflex:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant:1.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.7.0" level="project" />
+    <orderEntry type="library" name="jflex-1.6.1" level="project" />
+    <orderEntry type="library" name="java-cup-11a" level="project" />
   </component>
 </module>

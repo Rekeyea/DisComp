@@ -39,5 +39,16 @@ public class main {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
         }
+//        try{
+//            parser Analizador = new parser(new Lexer(new FileReader("C:\\Users\\Usuario\\Desktop\\Compiladores\\DisComp.git\\src\\main\\java\\prueba.txt")));
+//            Analizador.parse();
+//            System.out.println("El archivo está bien");
+//        }
+//        catch (Exception e){
+//            System.out.println("El archivo tiene errores:");
+//            System.out.println(e.getMessage());
+//        }
+
+
     }
 }
