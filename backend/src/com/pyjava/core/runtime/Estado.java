@@ -527,7 +527,7 @@ public class Estado {
         }
         catch (Throwable t) {
             //Por ahora para debug
-            System.out.println(String.format("Error en instruccion numero: %s de la linea %s", frameActual.f_instr, this.getLineaActual()));
+            System.out.println(String.format("[DEBUG] Error en instruccion numero: %s de la linea %s", frameActual.f_instr, this.getLineaActual()));
             throw t;
         }
     }
