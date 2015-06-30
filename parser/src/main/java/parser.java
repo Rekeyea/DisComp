@@ -4,9 +4,6 @@
 // Mon Jun 29 23:53:20 UYT 2015
 //----------------------------------------------------
 
-import java_cup.runtime.*;
-import java.util.Scanner;
-
 /** CUP v0.11a beta 20060608 generated parser.
   * @version Mon Jun 29 23:53:20 UYT 2015
   */
