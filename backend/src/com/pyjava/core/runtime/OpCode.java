@@ -98,9 +98,31 @@ public class OpCode {
     public final static int PRINT_NEWLINE = 27;
 
 
+    //---------- Operaciones de salto --------------------------------
+    /** Nota: f_instr es el contador de instruccion del frame actual, que va desde 0 a N-1, siendo N la cantidad de instrucciones del codigo del frame.
+     * No se hace ningun chequeo por que la proxima instruccion sea valida, queda como responsabilidad del compilador.
+     *
+     * JUMP_FORWARD(i) : Aumenta f_instr en i, o sea, f_instr += i
+     * POP_JUMP_IF_TRUE(i) : Si TOS evalua en True, f_instr = i. TOS es popeado
+     * POP_JUMP_IF_FALSE(i) : Si TOS evalua en False, f_instr = i. TOS es popeado
+     * JUMP_IF_TRUE_OR_POP(i) : Si TOS evalua en True, f_instr = i, si no, se popea TOS. (y avanza instruccion)
+     * JUMP_IF_FALSE_OR_POP(i) : Si TOS evalua en False, f_instr = i, si no, se popea TOS. (y avanza instruccion)
+     * JUMP_ABSOLUTE(i) : f_instr = i
+     *
+     */
+
+    public final static int JUMP_FORWARD = 28;
+    public final static int POP_JUMP_IF_TRUE = 29;
+    public final static int POP_JUMP_IF_FALSE = 30;
+    public final static int JUMP_IF_TRUE_OR_POP = 31;
+    public final static int JUMP_IF_FALSE_OR_POP = 32;
+    public final static int JUMP_ABSOLUTE = 33;
+
+
     //------------ Operaciones condicionales (and, or, not) -----------
 
-    //Pendiente...
+        //El not ya esta implementado: UNARY_NOT
+        //Las demas construcciones, las hace el parser, encadenando y evaluaciones JUMPS.
 
 
     //------------ Operaciones loops -----------

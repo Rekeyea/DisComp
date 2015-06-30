@@ -92,376 +92,443 @@ public class Estado {
      * Interpreta la proxima instruccion, segun el frame actual y su f_instr.
      * Lanza excepciones. El llamador debera ser encargado de agarrarlas, y reportar el error, y lineas del error.
      */
-    public void interpretarInstruccion() throws PyException{
+    public void interpretarInstruccion() throws PyException {
 
         //Si frameActual es null, hay un error de implementacion, no lo controlo ya que se supone no debe pasar.
+        try {
+            Instruccion instr = frameActual.f_code.co_code.get(frameActual.f_instr);
+            int instrCode = instr.instruccion;
+            int instrArg = instr.arg;
+            Stack<PyObject> stack = frameActual.f_stack;
 
-        Instruccion instr = frameActual.f_code.co_code.get(frameActual.f_instr);
-        int instrCode = instr.instruccion;
-        int instrArg = instr.arg;
-        Stack<PyObject> stack = frameActual.f_stack;
 
+            switch (instrCode) {
 
-        switch (instrCode) {
+                case OpCode.CALL_FUNCTION: {
 
-            case OpCode.CALL_FUNCTION: {
+                    //Por ahora solo argumentos posicionales son validos, los kwargs se ignoran/no obtienen.
 
-                //Por ahora solo argumentos posicionales son validos, los kwargs se ignoran/no obtienen.
+                    //Obtengo argumentos. Estan en el stack de derecha a izquierda.
+                    PyObject[] args = new PyObject[instrArg];
 
-                //Obtengo argumentos. Estan en el stack de derecha a izquierda.
-                PyObject[] args = new PyObject[instrArg];
-
-                for(int i = instrArg-1; i >= 0; i--){
-                    args[i] = stack.pop();
-                }
-
-                //Objeto a llamar esta ultimo en el stack.
-
-                PyObject callable = stack.pop();
-
-                PyObject res = callable.__call__(args, PySingletons.kwargsVacios, this);
-
-                //Si obtuve resultado, quiere decir que se llamo a una funcion nativa o que no modifica el frame,
-                //Por lo que hago un push del resultado.
-                if(res != null){
-                    stack.push(res);
-                    frameActual.f_instr+=1;
-                }
-                else {
-                    //En caso contrario, deberia continuar sin hacer nada, el __call__ de la funcion se encargo de modificar el frame.
-                    //No implementado por ahora.
-                }
-
-                break;
-            }
-
-            case OpCode.RETURN_VALUE: {
-
-                //Obtengo el resultado del top del stack actual, y restauro estado del frame anterior.
-                //Si f_back del frame actual es null, hay un error critico del parser, no lo controlo ya que el parser deberia controlar que no haya returns en cosas que no sean funciones.
-                //Por otro lado, si el stack esta vacio, tambien es un error del parser, ya que siempre debe retornar algo, al menos None.
-
-                PyObject res = stack.pop();
-
-                //Restaura el frame anterior
-                frameActual = frameActual.f_back;
-
-                //Hace push del resultado
-                frameActual.f_stack.push(res);
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.LOAD_CONST: {
-
-                //Es un error del parser si se intenta obtener una constante que no existe, asi que no se chequea.
-                stack.push(frameActual.f_code.co_consts.get(instrArg));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.LOAD_FAST: {
-
-                //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
-                String name = frameActual.f_code.co_varnames.get(instrArg);
-
-                PyObject valor = frameActual.f_locals.get(name);
-
-                if(valor == null){
-                    throw new PyNameError(String.format("nombre local '%s' no esta definido.", name));
-                }
-
-                stack.push(valor);
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.LOAD_NAME: {
-
-                //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
-                String name = frameActual.f_code.co_names.get(instrArg);
-
-                PyObject valor = frameActual.f_locals.get(name);
-
-                //si no lo encuentro en locals, busco en globals
-                if (valor == null){
-                    valor = frameActual.f_globals.get(name);
-                }
-
-                //Si no lo encuentro en globals, lo busco en builtins.
-                if(valor == null){
-                    valor = builtins.get(name);
-                }
-
-                //Si no lo encontre en ningun lado, error.
-                if(valor == null){
-                    throw new PyNameError(String.format("nombre '%s' no esta definido.", name));
-                }
-
-                stack.push(valor);
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.LOAD_ATTR: {
-
-                //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
-                String name = frameActual.f_code.co_names.get(instrArg);
-
-                //Lanza excepcion acorde si no existe el atributo.
-                PyObject valor = stack.pop().__getattr__(name);
-
-                stack.push(valor);
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-
-            case OpCode.STORE_FAST: {
-
-                //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
-                String name = frameActual.f_code.co_varnames.get(instrArg);
-
-                frameActual.f_locals.put(name, stack.pop());
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.STORE_NAME: {
-                //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
-                String name = frameActual.f_code.co_names.get(instrArg);
-
-                frameActual.f_locals.put(name, stack.pop());
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.UNARY_INVERT: {
-
-                stack.push(stack.pop().__bnot__());
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.UNARY_NEGATIVE: {
-
-                stack.push(stack.pop().__neg__());
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.UNARY_NOT: {
-
-                PyBool val = PySingletons.True;
-                if(stack.pop().__bool__().value){
-                    val = PySingletons.False;
-                }
-                stack.push(val);
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_POW: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__pow__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_MUL: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__mul__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_DIV: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__div__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_FLOOR_DIV: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__int_div__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_MOD: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__mod__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_ADD: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__add__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_SUB: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__sub__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_LSHIFT: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__sleft__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_RSHIFT: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__sright__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_AND: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__band__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_XOR: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__bxor__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.BINARY_OR: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-                stack.push(v1.__bor__(v2));
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.COMPARE_OP: {
-
-                PyObject v2 = stack.pop();
-                PyObject v1 = stack.pop();
-
-
-                switch (instrArg) {
-                    case OpCode.CompareCode.EQ: {
-                        stack.push(v1.__eq__(v2));
-                        break;
+                    for (int i = instrArg - 1; i >= 0; i--) {
+                        args[i] = stack.pop();
                     }
-                    case OpCode.CompareCode.NEQ: {
-                        stack.push(v1.__not_eq__(v2));
-                        break;
+
+                    //Objeto a llamar esta ultimo en el stack.
+
+                    PyObject callable = stack.pop();
+
+                    PyObject res = callable.__call__(args, PySingletons.kwargsVacios, this);
+
+                    //Si obtuve resultado, quiere decir que se llamo a una funcion nativa o que no modifica el frame,
+                    //Por lo que hago un push del resultado.
+                    if (res != null) {
+                        stack.push(res);
+                        frameActual.f_instr += 1;
+                    } else {
+                        //En caso contrario, deberia continuar sin hacer nada, el __call__ de la funcion se encargo de modificar el frame.
+                        //No implementado por ahora.
                     }
-                    case OpCode.CompareCode.GT: {
-                        stack.push(v1.__gt__(v2));
-                        break;
-                    }
-                    case OpCode.CompareCode.LT: {
-                        stack.push(v1.__lt__(v2));
-                        break;
-                    }
-                    case OpCode.CompareCode.GE: {
-                        stack.push(v1.__ge__(v2));
-                        break;
-                    }
-                    case OpCode.CompareCode.LE: {
-                        stack.push(v1.__le__(v2));
-                        break;
-                    }
+
+                    break;
                 }
 
-                frameActual.f_instr+=1;
-                break;
+                case OpCode.RETURN_VALUE: {
+
+                    //Obtengo el resultado del top del stack actual, y restauro estado del frame anterior.
+                    //Si f_back del frame actual es null, hay un error critico del parser, no lo controlo ya que el parser deberia controlar que no haya returns en cosas que no sean funciones.
+                    //Por otro lado, si el stack esta vacio, tambien es un error del parser, ya que siempre debe retornar algo, al menos None.
+
+                    PyObject res = stack.pop();
+
+                    //Restaura el frame anterior
+                    frameActual = frameActual.f_back;
+
+                    //Hace push del resultado
+                    frameActual.f_stack.push(res);
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.LOAD_CONST: {
+
+                    //Es un error del parser si se intenta obtener una constante que no existe, asi que no se chequea.
+                    stack.push(frameActual.f_code.co_consts.get(instrArg));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.LOAD_FAST: {
+
+                    //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
+                    String name = frameActual.f_code.co_varnames.get(instrArg);
+
+                    PyObject valor = frameActual.f_locals.get(name);
+
+                    if (valor == null) {
+                        throw new PyNameError(String.format("nombre local '%s' no esta definido.", name));
+                    }
+
+                    stack.push(valor);
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.LOAD_NAME: {
+
+                    //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
+                    String name = frameActual.f_code.co_names.get(instrArg);
+
+                    PyObject valor = frameActual.f_locals.get(name);
+
+                    //si no lo encuentro en locals, busco en globals
+                    if (valor == null) {
+                        valor = frameActual.f_globals.get(name);
+                    }
+
+                    //Si no lo encuentro en globals, lo busco en builtins.
+                    if (valor == null) {
+                        valor = builtins.get(name);
+                    }
+
+                    //Si no lo encontre en ningun lado, error.
+                    if (valor == null) {
+                        throw new PyNameError(String.format("nombre '%s' no esta definido.", name));
+                    }
+
+                    stack.push(valor);
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.LOAD_ATTR: {
+
+                    //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
+                    String name = frameActual.f_code.co_names.get(instrArg);
+
+                    //Lanza excepcion acorde si no existe el atributo.
+                    PyObject valor = stack.pop().__getattr__(name);
+
+                    stack.push(valor);
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+
+                case OpCode.STORE_FAST: {
+
+                    //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
+                    String name = frameActual.f_code.co_varnames.get(instrArg);
+
+                    frameActual.f_locals.put(name, stack.pop());
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.STORE_NAME: {
+                    //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
+                    String name = frameActual.f_code.co_names.get(instrArg);
+
+                    frameActual.f_locals.put(name, stack.pop());
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.UNARY_INVERT: {
+
+                    stack.push(stack.pop().__bnot__());
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.UNARY_NEGATIVE: {
+
+                    stack.push(stack.pop().__neg__());
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.UNARY_NOT: {
+
+                    PyBool val = PySingletons.True;
+                    if (stack.pop().__bool__().value) {
+                        val = PySingletons.False;
+                    }
+                    stack.push(val);
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_POW: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__pow__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_MUL: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__mul__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_DIV: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__div__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_FLOOR_DIV: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__int_div__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_MOD: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__mod__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_ADD: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__add__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_SUB: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__sub__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_LSHIFT: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__sleft__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_RSHIFT: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__sright__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_AND: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__band__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_XOR: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__bxor__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.BINARY_OR: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+                    stack.push(v1.__bor__(v2));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.COMPARE_OP: {
+
+                    PyObject v2 = stack.pop();
+                    PyObject v1 = stack.pop();
+
+
+                    switch (instrArg) {
+                        case OpCode.CompareCode.EQ: {
+                            stack.push(v1.__eq__(v2));
+                            break;
+                        }
+                        case OpCode.CompareCode.NEQ: {
+                            stack.push(v1.__not_eq__(v2));
+                            break;
+                        }
+                        case OpCode.CompareCode.GT: {
+                            stack.push(v1.__gt__(v2));
+                            break;
+                        }
+                        case OpCode.CompareCode.LT: {
+                            stack.push(v1.__lt__(v2));
+                            break;
+                        }
+                        case OpCode.CompareCode.GE: {
+                            stack.push(v1.__ge__(v2));
+                            break;
+                        }
+                        case OpCode.CompareCode.LE: {
+                            stack.push(v1.__le__(v2));
+                            break;
+                        }
+                    }
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.PRINT_ITEM: {
+                    System.out.print(stack.pop().print());
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.PRINT_NEWLINE: {
+
+                    System.out.println();
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.JUMP_FORWARD: {
+
+                    frameActual.f_instr += instrArg;
+                    break;
+                }
+
+                case OpCode.POP_JUMP_IF_TRUE: {
+
+                    if (stack.peek().__bool__().value) {
+                        stack.pop();
+                        frameActual.f_instr = instrArg;
+                    } else {
+                        frameActual.f_instr += 1;
+                    }
+
+                    break;
+                }
+
+                case OpCode.POP_JUMP_IF_FALSE: {
+
+                    if (!stack.peek().__bool__().value) {
+                        stack.pop();
+                        frameActual.f_instr = instrArg;
+                    } else {
+                        frameActual.f_instr += 1;
+                    }
+
+
+                    break;
+                }
+
+                case OpCode.JUMP_IF_TRUE_OR_POP: {
+
+                    if (stack.peek().__bool__().value) {
+                        frameActual.f_instr = instrArg;
+                    } else {
+                        stack.pop();
+                        frameActual.f_instr += 1;
+                    }
+
+                    break;
+                }
+
+                case OpCode.JUMP_IF_FALSE_OR_POP: {
+
+                    if (!stack.peek().__bool__().value) {
+                        frameActual.f_instr = instrArg;
+                    } else {
+                        stack.pop();
+                        frameActual.f_instr += 1;
+                    }
+
+                    break;
+                }
+
+                case OpCode.JUMP_ABSOLUTE: {
+
+                    frameActual.f_instr = instrArg;
+                    break;
+                }
+
+
+                case OpCode.FIN_EJECUCION: {
+                    throw new PyFinEjecucion("Fin de ejecucicion.");
+                }
+
+                default: {
+                    throw new RuntimeException("Error fatal, instruccion desconocida.");
+                }
             }
-
-            case OpCode.PRINT_ITEM: {
-                System.out.print(stack.pop().print());
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.PRINT_NEWLINE: {
-
-                System.out.println();
-
-                frameActual.f_instr+=1;
-                break;
-            }
-
-            case OpCode.FIN_EJECUCION: {
-                throw new PyFinEjecucion("Fin de ejecucicion.");
-            }
-
-            default: {
-                throw new RuntimeException("Error fatal, instruccion desconocida.");
-            }
+        }
+        catch (Throwable t) {
+            //Por ahora para debug
+            System.out.println(String.format("Error en instruccion numero: %s de la linea %s", frameActual.f_instr, this.getLineaActual()));
+            throw t;
         }
     }
 
