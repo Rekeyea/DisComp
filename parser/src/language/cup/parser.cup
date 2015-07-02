@@ -3,17 +3,29 @@
 import java_cup.runtime.*;
 import java.util.Scanner;
 
+parser code
+{:
+    public void syntax_error(Symbol s){
+        System.out.println("Error de sintaxis");
+    }
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        System.out.println("Error de sintaxis");
+    }
+:}
+
+
 /* Terminals (tokens returned by the scanner). */
+
 terminal           COMA, DOT, COLON, SEMICOLON, RPAREN, LPAREN, RBRACKET, LBRACKET, RCURLY, LCURLY;
-terminal           DEL, FROM, WHILE, AS, ELIF, GLOBAL, WITH, ASSERT, ELSE, IF, PASS, YIELD, BREAK, EXCEPT, IMPORT, CLASS, EXEC, IN, RAISE, CONTINUE, FINALLY, IS, RETURN, DEF, FOR, LAMBDA, TRY;
-terminal           NEWLINE, WHITESPACE, INPUTCHARACTER, COMMENT, NAME, ASSIGN, INTEGER, LONG, FLOAT, STRING, STRING3;
+terminal           DEL, FROM, WHILE, AS, ELIF, GLOBAL, WITH, ASSERT, ELSE, IF, PASS, YIELD, BREAK, EXCEPT, IMPORT, CLASS, EXEC, IN, RAISE, CONTINUE, FINALLY, IS, RETURN, DEF, FOR, LAMBDA, TRY, TYPE, PRINT;
+terminal           NEWLINE, WHITESPACE, TAB, INPUTCHARACTER, COMMENT, NAME, ASSIGN, INTEGER, LONG, FLOAT, STRING, STRING3;
 terminal           PLUS, MINUS, MULT, DIV, EXP, DIVE, MOD;
 terminal           ANDB, ORB, XORB, NOTB, SHIFTL, SHIFTR;
 terminal           AND, OR, NOT, EQUALS, DIFF, MINOR, MAJOR, MINOREQ, MAJOREQ;
 
 /* Non-terminals */
-non terminal Integer    expr;
+non terminal    expr;
 
 /* The grammar */
 
-expr      ::= COMMENT;
+expr      ::= NAME   {:	System.out.println("Lei un nombre"); :};

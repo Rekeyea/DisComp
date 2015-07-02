@@ -23,6 +23,10 @@ import jflex.sym;
     }
 %}
 
+%eofval{
+    return symbol(sym1.EOF);
+%eofval}
+
 NEWLINE = \r|\n|\r\n
 WHITESPACE = [ \t\f]
 INPUTCHARACTER = [^\r\n]
@@ -51,6 +55,18 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 /*REGLAS LEXICAS*/
 
 <YYINITIAL> {
+
+    ","                       {return symbol(sym1.COMA, yytext());}
+    "."                       {return symbol(sym1.DOT, yytext());}
+    ":"                       {return symbol(sym1.COLON, yytext());}
+    ";"                       {return symbol(sym1.SEMICOLON, yytext());}
+    "("                       {return symbol(sym1.LPAREN, yytext());}
+    ")"                       {return symbol(sym1.RPAREN, yytext());}
+    "["                       {return symbol(sym1.LBRACKET, yytext());}
+    "]"                       {return symbol(sym1.RBRACKET, yytext());}
+    "{"                       {return symbol(sym1.LCURLY, yytext());}
+    "}"                       {return symbol(sym1.RCURLY, yytext());}
+
     {COMMENT}                 {   }
     {INTEGER}                 {return symbol(sym1.INTEGER, yytext());}
     {WHITESPACE}              {return symbol(sym1.WHITESPACE, yytext());}
@@ -64,6 +80,7 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     \"|\'                     { string.setLength(0); yybegin(STRING);}
     {NAME}                    {return symbol(sym1.NAME, yytext());}
     {NEWLINE}                 {return symbol(sym1.NEWLINE, yytext());}
+    <<EOF>>                   { return symbol(sym1.EOF); }
 }
 
 <STRING> {
