@@ -98,9 +98,9 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
     "+"                       {return symbol(sym1.PLUS, yytext());}
     "-"                       {return symbol(sym1.MINUS, yytext());}
+    "**"                      {return symbol(sym1.EXP, yytext());}
     "*"                       {return symbol(sym1.MULT, yytext());}
     "/"                       {return symbol(sym1.DIV, yytext());}
-    "**"                      {return symbol(sym1.EXP, yytext());}
     "//"                      {return symbol(sym1.DIVE, yytext());}
     "%"                       {return symbol(sym1.MOD, yytext());}
 
@@ -127,8 +127,8 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {TAB}                     {return symbol(sym1.TAB, yytext());}
     {NAME}                    {return symbol(sym1.NAME, yytext());}
     {ASSIGN}                  {return symbol(sym1.NAME, yytext());}
-    {INTEGER}                 {return symbol(sym1.INTEGER, yytext());}
     {LONG}                    {return symbol(sym1.LONG, yytext());}
+    {INTEGER}                 {return symbol(sym1.INTEGER, yytext());}
     {FLOAT}                   {return symbol(sym1.FLOAT, yytext());}
     {STRING}                  {string.setLength(0); yybegin(STRING);}
     {TRIPLE_STRING}           {string.setLength(0); yybegin(TRIPLE_STRING);}
