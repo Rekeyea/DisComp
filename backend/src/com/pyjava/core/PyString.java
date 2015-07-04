@@ -8,7 +8,9 @@ import org.w3c.dom.Attr;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Created by Cristiano on 16/06/2015.
@@ -181,6 +183,33 @@ public class PyString extends PyObject{
     //__not_eq__ implementado por object a partir de __eq__
 
 
+
+    @Override
+    public PyObject __iter__() throws PyException{
+
+        return new PyIterator(this,
+
+                new Iterator<PyObject>() {
+                    private int pos = 0;
+
+                    @Override
+                    public boolean hasNext() {
+                        return pos < PyString.this.value.length();
+                    }
+
+                    @Override
+                    public PyObject next() {
+                        if(pos < PyString.this.value.length()){
+
+                            PyObject res = new PyString(String.valueOf(PyString.this.value.charAt(pos)));
+                            pos++;
+                            return res;
+                        }
+                        throw new NoSuchElementException();
+                    }
+                }
+        );
+    }
 
 
 

@@ -4,6 +4,7 @@ import com.pyjava.core.*;
 import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyFinEjecucion;
 import com.pyjava.core.exceptions.PyNameError;
+import com.pyjava.core.exceptions.PyStopIteration;
 
 import java.util.HashMap;
 import java.util.Stack;
@@ -100,7 +101,6 @@ public class Estado {
             int instrCode = instr.instruccion;
             int instrArg = instr.arg;
             Stack<PyObject> stack = frameActual.f_stack;
-
 
             switch (instrCode) {
 
@@ -462,8 +462,7 @@ public class Estado {
 
                 case OpCode.POP_JUMP_IF_TRUE: {
 
-                    if (stack.peek().__bool__().value) {
-                        stack.pop();
+                    if (stack.pop().__bool__().value) {
                         frameActual.f_instr = instrArg;
                     } else {
                         frameActual.f_instr += 1;
@@ -474,8 +473,8 @@ public class Estado {
 
                 case OpCode.POP_JUMP_IF_FALSE: {
 
-                    if (!stack.peek().__bool__().value) {
-                        stack.pop();
+
+                    if (!stack.pop().__bool__().value) {
                         frameActual.f_instr = instrArg;
                     } else {
                         frameActual.f_instr += 1;
@@ -515,8 +514,50 @@ public class Estado {
                     break;
                 }
 
+                case OpCode.POP_JUMP_FORWARD: {
+
+                    stack.pop();
+                    frameActual.f_instr += instrArg;
+
+                    break;
+                }
+
+                case OpCode.POP_JUMP_ABSOLUTE: {
+                    stack.pop();
+                    frameActual.f_instr = instrArg;
+
+                    break;
+                }
+
+
+                /** Iteracioens **/
+
+                case OpCode.GET_ITER: {
+                    stack.push(stack.pop().__iter__());
+                    frameActual.f_instr += 1;
+
+                    break;
+                }
+
+                case OpCode.FOR_ITER: {
+                    try{
+                        stack.push(stack.peek().__next__());
+                        frameActual.f_instr += 1;
+                    }
+                    catch (PyStopIteration e){
+                        stack.pop();
+                        frameActual.f_instr += instrArg;
+                    }
+
+                    break;
+                }
+
+
+
+
 
                 case OpCode.FIN_EJECUCION: {
+                    System.out.println(String.format("[DEBUG] Ejecutando instruccion de FIN: Numero de instruccion = %s, tamanio del stack del frame actual = %s", frameActual.f_instr, stack.size()));
                     throw new PyFinEjecucion("Fin de ejecucicion.");
                 }
 
@@ -527,7 +568,7 @@ public class Estado {
         }
         catch (Throwable t) {
             //Por ahora para debug
-            System.out.println(String.format("[DEBUG] Error en instruccion numero: %s de la linea %s", frameActual.f_instr, this.getLineaActual()));
+            System.out.println(String.format("[DEBUG] Error en instruccion numero: %s de la linea %s, con tamano de stack en frame actual %s", frameActual.f_instr, this.getLineaActual(), frameActual.f_stack.size()));
             throw t;
         }
     }
