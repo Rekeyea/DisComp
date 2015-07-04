@@ -23,6 +23,7 @@ terminal           COMA, DOT, COLON, SEMICOLON, RPAREN, LPAREN, RBRACKET, LBRACK
 terminal           PLUS, MINUS, MULT, DIV, EXP, DIVE, MOD;
 terminal           ANDB, ORB, XORB, NOTB, SHIFTL, SHIFTR;
 terminal           AND, OR, NOT, EQUALS, DIFF, MINOR, MAJOR, MINOREQ, MAJOREQ;
+terminal            INDENT, DEDENT;
 
 /* Non-terminals */
 
@@ -65,6 +66,9 @@ non terminal testlist;
 
 non terminal expr_stmt;
 
+non terminal exprlist_repeat;
+non terminal exprlist;
+
 non terminal break_stmt;
 non terminal continue_stmt;
 non terminal return_stmt;
@@ -76,6 +80,7 @@ non terminal print_stmt;
 non terminal small_stmt;
 non terminal small_stmt_aux;
 
+non terminal simple_stmt_aux;
 non terminal simple_stmt;
 
 non terminal program;
@@ -85,7 +90,9 @@ non terminal program;
 start with program;
 
 number ::= INTEGER | LONG | FLOAT;
-atom ::= NAME | number | STRING;
+atom ::= NAME
+        | number
+        | STRING;
 
 /* ************ FACTOR DEFINITION *****************
 ************************************************** */
@@ -255,6 +262,22 @@ testlist ::=   test
 
 
 
+/***************  EXPRESSION LISTS *****************
+***********************************************************/
+
+exprlist_repeat ::= COMA expr
+                    |COMA expr COMA
+                    |COMA expr exprlist_repeat;
+exprlist ::=   expr
+               |expr exprlist_repeat;
+
+
+/* ************************************************
+************************************************** */
+
+
+
+
 /***************  EXPRESSION STATEMENTS  *****************
 ***********************************************************/
 
@@ -288,20 +311,18 @@ flow_stmt ::= break_stmt | continue_stmt | return_stmt;
 
 
 print_stmt_aux ::=  COMA test
-                    | COMA test print_stmt_aux;
+                    |COMA test COMA
+                    |COMA test print_stmt_aux;
 
 print_stmt ::=  PRINT
                 | PRINT test
                 | PRINT test COMA
-                | PRINT test print_stmt_aux
-                | PRINT test print_stmt_aux COMA
-                | PRINT SHIFTR test
-                | PRINT SHIFTR test print_stmt_aux
-                | PRINT SHIFTR test print_stmt_aux COMA;
+                | PRINT test print_stmt_aux;
 
 
 /* ************************************************
 ************************************************** */
+
 
 
 /***************  SMALL STATEMENTS  *****************
@@ -314,4 +335,34 @@ small_stmt ::= expr_stmt | print_stmt | flow_stmt;
 
 
 
-program ::= small_stmt {: System.out.println("EL PROGRAMA ES CORRECTO"); :};
+/***************  SIMPLE STATEMENTS  *****************
+***********************************************************/
+
+simple_stmt_aux ::= SEMICOLON small_stmt
+                    |SEMICOLON small_stmt SEMICOLON
+                    |SEMICOLON small_stmt simple_stmt_aux;
+simple_stmt ::= small_stmt NEWLINE
+                | small_stmt simple_stmt_aux NEWLINE;
+
+/* ************************************************
+************************************************** */
+
+
+/***************  STATEMENTS  *****************************
+***********************************************************/
+/*
+stmt ::= simple_stmt | compund_stmt;
+stmt_repeat ::= stmt | stmt stmt_repeat;
+suite ::= simple_stmt | NEWLINE INDENT stmt_repeat DEDENT;
+if_stmt ::= IF test COLON suite
+            |IF test COLON suite ELSE COLON suite;
+while_stmt::= WHILE test COLON suite;
+for_stmt::= FOR exprlist IN testlist COLON suite;
+compund_stmt ::= if_stmt | while_stmt | for_stmt;
+*/
+/* ************************************************
+************************************************** */
+
+
+
+program ::= simple_stmt{: System.out.println("EL PROGRAMA ES CORRECTO"); :};

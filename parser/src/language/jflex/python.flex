@@ -24,6 +24,7 @@ import jflex.sym;
 %}
 
 %eofval{
+    return symbol(sym1.DEDENT);
     return symbol(sym1.EOF);
 %eofval}
 
@@ -124,7 +125,8 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
     {COMMENT}                 { }
     {NEWLINE}                 {return symbol(sym1.NEWLINE, yytext());}
-    {WHITESPACE}              {return symbol(sym1.WHITESPACE, yytext());}
+    {WHITESPACE}{WHITESPACE}{WHITESPACE}{WHITESPACE} {return symbol(sym1.INDENT);}
+    {WHITESPACE}              {}
     {TAB}                     {return symbol(sym1.TAB, yytext());}
     {NAME}                    {return symbol(sym1.NAME, yytext());}
     {ASSIGN}                  {return symbol(sym1.NAME, yytext());}
