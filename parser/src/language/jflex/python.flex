@@ -120,6 +120,7 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     ">"                       {return symbol(sym1.MAJOR, yytext());}
     "<="                      {return symbol(sym1.MINOREQ, yytext());}
     ">="                      {return symbol(sym1.MAJOREQ, yytext());}
+    "="                       {return symbol(sym1.ASSIGN, yytext());}
 
     {COMMENT}                 { }
     {NEWLINE}                 {return symbol(sym1.NEWLINE, yytext());}

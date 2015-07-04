@@ -7,6 +7,7 @@ parser code
 {:
     public void syntax_error(Symbol s){
         System.out.println("Error de sintaxis "+s.sym);
+        System.out.println(s.value);
     }
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
         System.out.println("Error de sintaxis "+s.sym);
@@ -59,6 +60,23 @@ non terminal and_test;
 non terminal or_test;
 
 non terminal test;
+
+non terminal testlist;
+
+non terminal expr_stmt;
+
+non terminal break_stmt;
+non terminal continue_stmt;
+non terminal return_stmt;
+non terminal flow_stmt;
+
+non terminal print_stmt_aux;
+non terminal print_stmt;
+
+non terminal small_stmt;
+non terminal small_stmt_aux;
+
+non terminal simple_stmt;
 
 non terminal program;
 
@@ -194,8 +212,8 @@ not_test ::=    NOT not_test
 ***********************************************************/
 
 
-and_test ::=    AND and_test
-                | not_test;
+and_test ::=    not_test
+                | not_test AND and_test;
 
 
 /* ************************************************
@@ -206,8 +224,8 @@ and_test ::=    AND and_test
 ***********************************************************/
 
 
-or_test ::=    OR or_test
-                | and_test;
+or_test ::=    and_test
+               | and_test OR or_test;
 
 
 /* ************************************************
@@ -218,8 +236,18 @@ or_test ::=    OR or_test
 ***********************************************************/
 
 
-test ::=    or_test
-            | or_test IF or_test ELSE test;
+test ::=    or_test;
+
+
+/* ************************************************
+************************************************** */
+
+/***************  TESTS LISTS *****************
+***********************************************************/
+
+
+testlist ::=   test
+                |test COMA testlist;
 
 
 /* ************************************************
@@ -227,5 +255,63 @@ test ::=    or_test
 
 
 
+/***************  EXPRESSION STATEMENTS  *****************
+***********************************************************/
 
-program ::= test NEWLINE{: System.out.println("EL PROGRAMA ES CORRECTO"); :};
+
+expr_stmt ::=   testlist
+                | testlist ASSIGN testlist;
+
+
+/* ************************************************
+************************************************** */
+
+
+
+/***************  FLOW STATEMENTS  *****************
+***********************************************************/
+
+break_stmt ::= BREAK;
+continue_stmt ::= CONTINUE;
+return_stmt ::= RETURN
+                |RETURN testlist;
+flow_stmt ::= break_stmt | continue_stmt | return_stmt;
+
+
+/* ************************************************
+************************************************** */
+
+
+
+/***************  PRINT STATEMENTS  *****************
+***********************************************************/
+
+
+print_stmt_aux ::=  COMA test
+                    | COMA test print_stmt_aux;
+
+print_stmt ::=  PRINT
+                | PRINT test
+                | PRINT test COMA
+                | PRINT test print_stmt_aux
+                | PRINT test print_stmt_aux COMA
+                | PRINT SHIFTR test
+                | PRINT SHIFTR test print_stmt_aux
+                | PRINT SHIFTR test print_stmt_aux COMA;
+
+
+/* ************************************************
+************************************************** */
+
+
+/***************  SMALL STATEMENTS  *****************
+***********************************************************/
+
+small_stmt ::= expr_stmt | print_stmt | flow_stmt;
+
+/* ************************************************
+************************************************** */
+
+
+
+program ::= small_stmt {: System.out.println("EL PROGRAMA ES CORRECTO"); :};
