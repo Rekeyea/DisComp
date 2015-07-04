@@ -41,5 +41,16 @@ public class Frame {
      */
     public Code f_code;
 
+    public Frame(){
+
+    }
+
+    public Frame(Frame f_back, HashMap<String, PyObject> f_globals, HashMap<String, PyObject> f_locals, Code f_code, int f_instr){
+        this.f_back = f_back;
+        this.f_globals = f_globals;
+        this.f_locals = f_locals;
+        this.f_code = f_code;
+        this.f_instr = f_instr;
+    }
 
 }

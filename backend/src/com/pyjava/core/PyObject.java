@@ -14,7 +14,7 @@ import com.pyjava.core.runtime.Estado;
  *  *
  *
  * Todas las instancias creadas deberan setear correctamente su referencia a __class__ y opcionalmente metodos en __dict__
- * __class__ se setea automaticamente si no se llama al constructor no por defecto de object.
+ * __class__ se setea automaticamente si se llama al constructor por defecto de object.
  *
  * Por otro lado, todo lo que reciba args o kwargs, en caso de mandar vacio, debera utilizar PySingletons.argsVacios y PySingletons.kwargsVacios
  * para evitar comparar siempre por null.
@@ -421,7 +421,26 @@ public class PyObject {
     }
 
 
+    /*********** Operaciones de iteracion ****************
+     * Se tienen 2:
+     * __iter__() returna un PyObject el cual puede ser iterado
+     * __next__() retorna el proximo PyObject de la iteracion.
+     */
 
+    /**
+     * Retorna un nuevo objeto iterable. Por defecto ningun PyObject es iterable
+     */
+    public PyObject __iter__() throws PyException{
+        throw new PyTypeError(String.format("'%s' no es iterable.", getType().getClassName()));
+    }
+
+    /**
+     * Devuelve un nuevo objeto de la iteracion.
+     * Si se llego al fin, se debe lanzar PyStopIteration la cual debera ser manejada correctamente.
+     */
+    public PyObject __next__() throws PyException{
+        throw new PyTypeError(String.format("'%s' no es un iterador.", getType().getClassName()));
+    }
 
 
     /**

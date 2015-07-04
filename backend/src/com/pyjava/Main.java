@@ -2,6 +2,7 @@ package com.pyjava;
 
 import com.pyjava.core.*;
 import com.pyjava.core.exceptions.PyException;
+import com.pyjava.core.exceptions.PyStopIteration;
 
 public class Main {
 
@@ -547,6 +548,32 @@ public class Main {
             System.out.println(PySingletons.False.__le__(PySingletons.False).__repr__().print());
             System.out.println(int3.__le__(new PyFloat(3.0)).__repr__().print());
             System.out.println(int4.__le__(new PyFloat(3.0)).__repr__().print());
+
+        }
+        catch (Throwable t){
+            System.out.println(t.getMessage());
+        }
+
+
+        System.out.println("-------------------------------------");
+
+
+        try {
+            PyObject pp = new PyString("String de prueba para iterator");
+
+            PyObject iterador = pp.__iter__();
+            System.out.println(iterador.print());
+            while (true){
+                try{
+                    System.out.println(iterador.__next__().print());
+                }
+                catch (PyStopIteration e){
+                    System.out.println("----- Iteracion finalizada -----");
+                    break;
+                }
+            }
+
+
 
         }
         catch (Throwable t){

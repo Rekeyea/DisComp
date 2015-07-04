@@ -2,10 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3182540-db5d-4e52-a157-5dc83fb94858" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/runtime/Estado.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/runtime/Estado.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/runtime/OpCode$CompareCode.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/runtime/OpCode$CompareCode.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/runtime/OpCode.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/runtime/OpCode.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/pyjava/core/PyIterator.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyStopIteration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/Main$1.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/Main$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/Main.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyObject$Builtins$1.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyObject$Builtins$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyObject$Builtins$2.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyObject$Builtins$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyObject$Builtins.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyObject$Builtins.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyObject.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyObject.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PySingletons.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PySingletons.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyString$Builtins$1.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyString$Builtins$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyString$Builtins.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyString$Builtins.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyString.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/core/PyString.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/pyjava/core/runtime/Estado.java" afterPath="$PROJECT_DIR$/src/com/pyjava/core/runtime/Estado.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/pyjava/core/runtime/Frame.java" afterPath="$PROJECT_DIR$/src/com/pyjava/core/runtime/Frame.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/pyjava/Main.java" afterPath="$PROJECT_DIR$/src/com/pyjava/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/pyjava/Main2.java" afterPath="$PROJECT_DIR$/src/com/pyjava/Main2.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/pyjava/core/runtime/OpCode.java" afterPath="$PROJECT_DIR$/src/com/pyjava/core/runtime/OpCode.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/pyjava/core/PyObject.java" afterPath="$PROJECT_DIR$/src/com/pyjava/core/PyObject.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/pyjava/core/PySingletons.java" afterPath="$PROJECT_DIR$/src/com/pyjava/core/PySingletons.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/pyjava/core/PyString.java" afterPath="$PROJECT_DIR$/src/com/pyjava/core/PyString.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="pyjava.iws" />
@@ -31,23 +47,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="PyType.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyType.java">
+      <file leaf-file-name="PyString.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyString.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="48" column="7" selection-start-line="48" selection-start-column="7" selection-end-line="48" selection-end-column="7" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PyObject.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyObject.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="375" column="18" selection-start-line="375" selection-start-column="18" selection-end-line="375" selection-end-column="18" />
+              <caret line="203" column="46" selection-start-line="203" selection-start-column="46" selection-end-line="203" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#5219#5220#0" expanded="true" />
+                <element signature="e#5308#5309#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -57,7 +65,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/pyjava/Main2.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="102" column="49" selection-start-line="102" selection-start-column="49" selection-end-line="102" selection-end-column="49" />
+              <caret line="104" column="69" selection-start-line="104" selection-start-column="69" selection-end-line="104" selection-end-column="69" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -65,11 +73,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Estado.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Estado.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Estado.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.5">
-              <caret line="529" column="54" selection-start-line="529" selection-start-column="54" selection-end-line="529" selection-end-column="54" />
+            <state vertical-scroll-proportion="0.85714287">
+              <caret line="570" column="137" selection-start-line="570" selection-start-column="137" selection-end-line="570" selection-end-column="137" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#717#734#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OpCode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/OpCode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="108" column="92" selection-start-line="108" selection-start-column="92" selection-end-line="108" selection-end-column="92" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Frame.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Frame.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -93,32 +124,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OpCode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/OpCode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="131" column="0" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Frame.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Frame.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Instruccion.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Instruccion.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Instruccion.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.21621622">
+            <state vertical-scroll-proportion="0.0">
               <caret line="8" column="157" selection-start-line="8" selection-start-column="157" selection-end-line="8" selection-end-column="157" />
               <folding />
             </state>
@@ -154,31 +163,33 @@
         <option value="$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyException.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyAttributeError.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyValueError.java" />
-        <option value="$PROJECT_DIR$/src/com/pyjava/core/PySingletons.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyZeroDivisionError.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyTypeError.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/AritmeticaHelper.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/runtime/Instrucciones.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/runtime/Code.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyNativeFunction.java" />
-        <option value="$PROJECT_DIR$/src/com/pyjava/Main.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/runtime/Interprete.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/runtime/Instruccion.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyBool.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyNone.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyFinEjecucion.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyNameError.java" />
-        <option value="$PROJECT_DIR$/src/com/pyjava/core/runtime/Frame.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyInteger.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyFloat.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyLong.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyMethodWrapper.java" />
+        <option value="$PROJECT_DIR$/src/com/pyjava/core/PyType.java" />
+        <option value="$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyStopIteration.java" />
+        <option value="$PROJECT_DIR$/src/com/pyjava/core/PyIterator.java" />
+        <option value="$PROJECT_DIR$/src/com/pyjava/core/PySingletons.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyObject.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyString.java" />
-        <option value="$PROJECT_DIR$/src/com/pyjava/core/PyType.java" />
+        <option value="$PROJECT_DIR$/src/com/pyjava/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/pyjava/core/runtime/Frame.java" />
+        <option value="$PROJECT_DIR$/src/com/pyjava/Main2.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/runtime/OpCode.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/runtime/Estado.java" />
-        <option value="$PROJECT_DIR$/src/com/pyjava/Main2.java" />
       </list>
     </option>
   </component>
@@ -303,6 +314,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="runtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="backend" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="backend" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pyjava" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="exceptions" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -517,7 +554,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1050" extended-state="7" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -528,7 +565,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28432432" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28432432" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14479166" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
@@ -562,7 +599,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/pyjava/Main2.java</url>
-          <line>136</line>
+          <line>160</line>
           <properties />
           <option name="timeStamp" value="56" />
         </line-breakpoint>
@@ -576,29 +613,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyBool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyFloat.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="34" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_05/src.zip!/java/io/Serializable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.84753364">
-          <caret line="168" column="17" selection-start-line="168" selection-start-column="17" selection-end-line="168" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_05/src.zip!/java/lang/Thread.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -736,13 +750,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyCallable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="72" selection-start-line="19" selection-start-column="61" selection-end-line="19" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyTypeError.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5945946">
@@ -860,45 +867,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyMethodWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5135135">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyNativeFunction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33227345">
-          <caret line="30" column="11" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyNone.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6534181">
           <caret line="40" column="58" selection-start-line="40" selection-start-column="58" selection-end-line="40" selection-end-column="58" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PySingletons.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.26868045">
-          <caret line="66" column="41" selection-start-line="66" selection-start-column="41" selection-end-line="66" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyString.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44038156">
-          <caret line="211" column="103" selection-start-line="211" selection-start-column="103" selection-end-line="211" selection-end-column="103" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -910,59 +883,91 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Instruccion.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="43" />
+          <caret line="8" column="157" selection-start-line="8" selection-start-column="157" selection-end-line="8" selection-end-column="157" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Frame.java">
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/exceptions/PyStopIteration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5405405">
+          <caret line="29" column="29" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyCallable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5135135">
+          <caret line="19" column="72" selection-start-line="19" selection-start-column="61" selection-end-line="19" selection-end-column="72" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyMethodWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <caret line="48" column="8" selection-start-line="48" selection-start-column="8" selection-end-line="48" selection-end-column="153" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PySingletons.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7297297">
+          <caret line="97" column="58" selection-start-line="97" selection-start-column="58" selection-end-line="97" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyNativeFunction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.25119236">
+          <caret line="39" column="23" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="23" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="375" column="18" selection-start-line="375" selection-start-column="18" selection-end-line="375" selection-end-column="18" />
+        <state vertical-scroll-proportion="-0.010084034">
+          <caret line="120" column="109" selection-start-line="120" selection-start-column="94" selection-end-line="120" selection-end-column="109" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Estado.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.5">
-          <caret line="529" column="54" selection-start-line="529" selection-start-column="54" selection-end-line="529" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/Main2.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_05/src.zip!/java/util/Iterator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="102" column="49" selection-start-line="102" selection-start-column="49" selection-end-line="102" selection-end-column="49" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/OpCode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="131" column="0" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
+          <caret line="69" column="6" selection-start-line="69" selection-start-column="6" selection-end-line="69" selection-end-column="6" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyIterator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="44" column="37" selection-start-line="44" selection-start-column="15" selection-end-line="44" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyString.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="203" column="46" selection-start-line="203" selection-start-column="46" selection-end-line="203" selection-end-column="46" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#5219#5220#0" expanded="true" />
+            <element signature="e#5308#5309#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -980,11 +985,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Instruccion.java">
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21621622">
-          <caret line="8" column="157" selection-start-line="8" selection-start-column="157" selection-end-line="8" selection-end-column="157" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="571" column="26" selection-start-line="571" selection-start-column="26" selection-end-line="571" selection-end-column="26" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Frame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/Main2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="104" column="69" selection-start-line="104" selection-start-column="69" selection-end-line="104" selection-end-column="69" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/OpCode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="108" column="92" selection-start-line="108" selection-start-column="92" selection-end-line="108" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Estado.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.85714287">
+          <caret line="570" column="137" selection-start-line="570" selection-start-column="137" selection-end-line="570" selection-end-column="137" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#717#734#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

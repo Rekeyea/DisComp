@@ -103,11 +103,13 @@ public class OpCode {
      * No se hace ningun chequeo por que la proxima instruccion sea valida, queda como responsabilidad del compilador.
      *
      * JUMP_FORWARD(i) : Aumenta f_instr en i, o sea, f_instr += i
-     * POP_JUMP_IF_TRUE(i) : Si TOS evalua en True, f_instr = i. TOS es popeado
-     * POP_JUMP_IF_FALSE(i) : Si TOS evalua en False, f_instr = i. TOS es popeado
-     * JUMP_IF_TRUE_OR_POP(i) : Si TOS evalua en True, f_instr = i, si no, se popea TOS. (y avanza instruccion)
-     * JUMP_IF_FALSE_OR_POP(i) : Si TOS evalua en False, f_instr = i, si no, se popea TOS. (y avanza instruccion)
+     * POP_JUMP_IF_TRUE(i) : Si TOS evalua en True, f_instr = i. TOS es siempre popeado
+     * POP_JUMP_IF_FALSE(i) : Si TOS evalua en False, f_instr = i. TOS es siempre popeado
+     * JUMP_IF_TRUE_OR_POP(i) : Si TOS evalua en True, f_instr = i y deja el stack intacto, si no, se popea TOS. (y avanza instruccion)
+     * JUMP_IF_FALSE_OR_POP(i) : Si TOS evalua en False, f_instr = i y deja el stack intacto, si no, se popea TOS. (y avanza instruccion)
      * JUMP_ABSOLUTE(i) : f_instr = i
+     * POP_JUMP_FORWARD(i) : Hace pop y aumenta f_instr en i, o sea, f_instr += 1
+     * POP_JUMP_ABSOLUTE(i) : Hace pop y f_instr = i
      *
      */
 
@@ -117,6 +119,8 @@ public class OpCode {
     public final static int JUMP_IF_TRUE_OR_POP = 31;
     public final static int JUMP_IF_FALSE_OR_POP = 32;
     public final static int JUMP_ABSOLUTE = 33;
+    public final static int POP_JUMP_FORWARD = 34;
+    public final static int POP_JUMP_ABSOLUTE = 35;
 
 
     //------------ Operaciones condicionales (and, or, not) -----------
@@ -127,7 +131,33 @@ public class OpCode {
 
     //------------ Operaciones loops -----------
 
-        //Pendiente...
+    /** En todos los casos se va a lanzar excepcion si el objeto no es un iterable.
+     *
+     * GET_ITER : Hace pop del stack, Llama a __iter__ del objeto popeado, y pushea el resultado en el stack.
+     * FOR_ITER(i) : Llama a __next__ del objeto en TOS. Si se llego al final de la iteracion, se avanza la instruccion actual i posiciones y se popea TOS.
+     *               En caso contrario, se pushea el valor de la proxima iteracion (no se popea el iterador en este caso)
+     *
+     * Algunas guias para la implementacion de LOOPS:
+     *      - Para los FOR, siempre que haya un BREAK hay que hacer POP del stack (se puede usar POP_JUMP_FORWARD o POP_JUMP_ABSOLUTE
+     *              Esto es para eliminar el iterador que queda en el stack.
+     *
+     *      - Para el caso de los WHILE, no deberia ser necesario hacer POP, a menos que se haya dejado algo en el stack (cosa que no es probable, porque siempre se asigna algo a alguna variable)
+     *
+     *      - Escenario tipico de un for:
+     *          0: GET_ITER
+     *          1: FOR_ITER(5) : si no hay mas elementos, hace jump 5 lugares para ir a la instruccion 6
+     *          2: ... instr ...
+     *          3: ... instr ...
+     *          4: ... instr ...
+     *          5: JUMP_ABSOLUTE(1) : fin del for, vuelvo arriba.
+     *          6: ... instr fuera del for ....
+     */
+
+
+    public final static int GET_ITER = 36;
+    public final static int FOR_ITER = 37;
+
+
 
 
     //------------ Operaciones listas -----------
