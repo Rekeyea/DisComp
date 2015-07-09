@@ -1,6 +1,8 @@
 /*SECCIÓN DE CÓDIGO DE USUARIO*/
 import java_cup.runtime.*;
 import jflex.sym;
+import java.util.Deque;
+import java.util.LinkedList;
 
 %%
 /*SECCIÓN DE DEFINICIONES*/
@@ -12,6 +14,8 @@ import jflex.sym;
 %column
 
 %{
+    Deque<Integer> Stack = new LinkedList<Integer>();
+
     StringBuffer string = new StringBuffer();
 
     private Symbol symbol(int type){
@@ -21,15 +25,21 @@ import jflex.sym;
     private  Symbol symbol(int type,Object value){
         return new Symbol(type,yyline,yycolumn,value);
     }
+
 %}
 
 %eofval{
-    return symbol(sym1.DEDENT);
-    return symbol(sym1.EOF);
+    if(Stack.size()==0){
+        return symbol(sym1.EOF);
+    }else{
+        yypushback(1);
+        return symbol(sym1.DEDENT);
+    }
 %eofval}
 
 NEWLINE = \r|\n|\r\n
 WHITESPACE = [ \t\f]
+INDENT_TOKEN = ("    ")*
 INPUTCHARACTER = [^\r\n]
 TAB = \t
 COMMENT     = "#" {INPUTCHARACTER}* {NEWLINE}?
@@ -49,6 +59,7 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
 %state STRING
 %state TRIPLE_STRING
+%state INDENTATION
 
 %%
 
@@ -124,18 +135,17 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     "="                       {return symbol(sym1.ASSIGN, yytext());}
 
     {COMMENT}                 { }
+    {NEWLINE}"    "{INDENT_TOKEN}   {yypushback(yylength()); yybegin(INDENTATION);}
     {NEWLINE}                 {return symbol(sym1.NEWLINE, yytext());}
-    {WHITESPACE}{WHITESPACE}{WHITESPACE}{WHITESPACE} {return symbol(sym1.INDENT);}
     {WHITESPACE}              {}
     {TAB}                     {return symbol(sym1.TAB, yytext());}
-    {NAME}                    {return symbol(sym1.NAME, yytext());}
     {ASSIGN}                  {return symbol(sym1.NAME, yytext());}
     {LONG}                    {return symbol(sym1.LONG, yytext());}
     {INTEGER}                 {return symbol(sym1.INTEGER, yytext());}
     {FLOAT}                   {return symbol(sym1.FLOAT, yytext());}
     {STRING}                  {string.setLength(0); yybegin(STRING);}
     {TRIPLE_STRING}           {string.setLength(0); yybegin(TRIPLE_STRING);}
-
+    {NAME}                    {return symbol(sym1.NAME, yytext());}
 }
 
 <STRING> {
@@ -153,4 +163,34 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
   [^((\"\"\")|(\'\'\'))]+     {string.append(yytext());}
 }
 
-[^]                           {throw new Error("Illegal Character < "+yytext()+" >");}
+
+<INDENTATION>{
+    {NEWLINE} {
+        return symbol(sym1.NEWLINE,yytext());
+    }
+    {INDENT_TOKEN}
+    {
+      //HAY QUE VER BIEN COMO FUNCIONA EL yypushback PERO ESE ES EL CAMINO
+      int indentLevel = yylength() / 4;
+      int nivelStack = Stack.size() == 0 ? 0 : Stack.peek();
+      if(indentLevel == nivelStack){
+          yybegin(YYINITIAL);
+      }else if(indentLevel < nivelStack){
+          //tengo que emitir tokens DEDENT hasta llegar al nivel del stack
+          Stack.pop();
+          return symbol(sym1.DEDENT,yytext());
+      }else{
+          //aumento el nivel de indentacion
+          nivelStack+=1;
+          yypushback(4*(indentLevel-nivelStack));
+          Stack.push(nivelStack);
+          return symbol(sym1.INDENT,yytext());
+      }
+      //return symbol(sym1.INDENT,"");
+
+    }
+
+
+}
+
+[^]                           {System.out.println("Illegal Character < "+yytext()+" > in state "+yystate());}

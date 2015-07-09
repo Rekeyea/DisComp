@@ -83,6 +83,19 @@ non terminal small_stmt_aux;
 non terminal simple_stmt_aux;
 non terminal simple_stmt;
 
+non terminal func_def;
+non terminal parameters;
+non terminal arglist;
+non terminal arg;
+
+non terminal stmt;
+non terminal stmt_repeat;
+non terminal suite;
+non terminal if_stmt;
+non terminal while_stmt;
+non terminal for_stmt;
+non terminal compund_stmt;
+
 non terminal program;
 
 /* The grammar */
@@ -348,9 +361,25 @@ simple_stmt ::= small_stmt NEWLINE
 ************************************************** */
 
 
+/***************  FUNCTIONS  ******************************
+***********************************************************/
+
+func_def ::= DEF NAME parameters COLON suite;
+arg ::= NAME
+        |NAME ASSIGN test;
+arglist ::= arg
+            |arg COMA
+            |arg COMA arglist;
+parameters ::= LPAREN RPAREN
+               | LPAREN arglist RPAREN;
+
+/* ************************************************
+************************************************** */
+
+
 /***************  STATEMENTS  *****************************
 ***********************************************************/
-/*
+
 stmt ::= simple_stmt | compund_stmt;
 stmt_repeat ::= stmt | stmt stmt_repeat;
 suite ::= simple_stmt | NEWLINE INDENT stmt_repeat DEDENT;
@@ -358,11 +387,11 @@ if_stmt ::= IF test COLON suite
             |IF test COLON suite ELSE COLON suite;
 while_stmt::= WHILE test COLON suite;
 for_stmt::= FOR exprlist IN testlist COLON suite;
-compund_stmt ::= if_stmt | while_stmt | for_stmt;
-*/
+compund_stmt ::= if_stmt | while_stmt | for_stmt | func_def;
+
 /* ************************************************
 ************************************************** */
 
 
 
-program ::= simple_stmt{: System.out.println("EL PROGRAMA ES CORRECTO"); :};
+program ::= compund_stmt{: System.out.println("EL PROGRAMA ES CORRECTO"); :};

@@ -41,9 +41,10 @@ public class main {
 //        }
 
         try{
-            parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/program")));
-            Analizador.parse();
-            /*Lexer lexer = new Lexer(new FileReader("/home/rekeyea/Documents/program"));
+
+            /*parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/program")));
+            Analizador.parse();*/
+            Lexer lexer = new Lexer(new FileReader("/home/rekeyea/Documents/program"));
             Symbol s = lexer.next_token();
             while(s.sym!=sym1.EOF){
                 System.out.println(s.sym);
@@ -52,12 +53,13 @@ public class main {
                     System.out.println(texto);
                     s = lexer.next_token();
                 }
-            }*/
+            }
             System.out.println("El archivo esta bien");
         }
         catch (Exception e){
-            System.out.println("El archivo tiene errores:");
             System.out.println(e.getMessage());
+            /*System.out.println("El archivo tiene errores:");
+            System.out.println(e.getMessage());*/
         }
 
 
