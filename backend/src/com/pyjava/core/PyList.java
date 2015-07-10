@@ -47,11 +47,17 @@ public class PyList extends PyObject {
         if(this.lista.size() > 0) {
             StringBuilder res = new StringBuilder("[");
             for (PyObject e : this.lista) {
-                res.append(e.__repr__().value + ", ");
+                if(e != this) {
+                    res.append(e.__repr__().value + ", ");
+                }
+                //Para evitar una recursion infinita.
+                else {
+                    res.append("[...], ");
+                }
             }
 
             res.deleteCharAt(res.length() - 1);
-            res.deleteCharAt(res.length() - 2);
+            res.deleteCharAt(res.length() - 1);
 
             res.append("]");
             return new PyString(res.toString());
