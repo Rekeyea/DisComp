@@ -27,6 +27,6 @@ public class PyValueError extends PyException {
 
     @Override
     public String getName(){
-        return "Value Error";
+        return "ValueError";
     }
 }

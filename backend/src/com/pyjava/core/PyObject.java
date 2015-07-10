@@ -220,6 +220,20 @@ public class PyObject {
         return PySingletons.True;
     }
 
+    /**
+     * Castea o convierte un objeto a list. Cada PyObject que sea convertible a lista debera implementarlo.
+     * @return
+     * @throws PyException
+     */
+    public PyObject __list__() throws PyException{
+        throw new PyTypeError(String.format("'%s' no se puede convertir a %s", getType().getClassName(), PyList.__name__));
+    }
+
+    //tuplas
+    //dicts
+
+
+
 
     //********** Operadores Aritmeticos *************
     //**** Todas deberan promover el resultado a otro tipo, en caso de tener tipos distintos:
@@ -443,6 +457,24 @@ public class PyObject {
     }
 
 
+    //*********** Operaciones de indices *********
+
+
+    /**
+     * Obtiene objeto[x] siendo x y objeto un PyObject.
+     * Debe ser implementado por listas, tuplas y dicts u algun otro objeto que permita acceder por indice, como strings.
+     */
+    public PyObject __get_index__(PyObject i) throws PyException{
+        throw new PyTypeError(String.format("No se puede acceder por indice a %s", getType().getClassName()));
+    }
+
+    /**
+     * Guarda v[i] siendo v e i PyObject.
+     */
+    public PyObject __set_index__(PyObject i, PyObject v) throws PyException{
+        throw new PyTypeError(String.format("No se puede guardar en indice a %s", getType().getClassName()));
+    }
+
     /**
      * Clase interna para manejar definicion de builtins.
      */
@@ -467,15 +499,10 @@ public class PyObject {
                         new PyCallable() {
                             @Override
                             public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
-                                if (args.length == 0) {
-                                    throw new PyTypeError(String.format("__hash__ necesita 1 argumento, 0 encontrados."));
-                                }
-                                else if(args.length == 1) {
-                                    return args[0].__hash__();
-                                }
-                                else {
+                                if (args.length != 1) {
                                     throw new PyTypeError(String.format("__hash__ necesita 1 argumento, %s encontrados.", args.length));
                                 }
+                                return args[0].__hash__();
                             }
                         }
                 );
@@ -487,15 +514,11 @@ public class PyObject {
                         new PyCallable() {
                             @Override
                             public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
-                                if (args.length == 0) {
-                                    throw new PyTypeError(String.format("__repr__ necesita 1 argumento, 0 encontrados."));
-                                }
-                                else if(args.length == 1) {
-                                    return args[0].__repr__();
-                                }
-                                else {
+                                if (args.length != 1) {
                                     throw new PyTypeError(String.format("__repr__ necesita 1 argumento, %s encontrados.", args.length));
                                 }
+                                return args[0].__repr__();
+
                             }
                         }
                 );
