@@ -91,7 +91,7 @@ public class Main {
             System.out.println(t.getMessage());
         }
 
-        System.out.println("-------------------------------------");
+        System.out.println("------------------strings count -------------------");
 
         try {
             //Lo llamo desde la clase
@@ -573,6 +573,33 @@ public class Main {
                 }
             }
 
+
+
+        }
+        catch (Throwable t){
+            System.out.println(t.getMessage());
+        }
+
+
+        System.out.println("--------------- TEST LISTA ----------------------");
+
+
+        try {
+            PyList lista = new PyList();
+
+
+            //Le agrego algunos elementos llamando la funcion append
+            lista.__getattr__("append").__call__(new PyObject[]{s}, PySingletons.kwargsVacios, null);
+
+            lista.__getattr__("append").__call__(new PyObject[]{s}, PySingletons.kwargsVacios, null);
+            lista.__getattr__("append").__call__(new PyObject[]{o}, PySingletons.kwargsVacios, null);
+            lista.__getattr__("append").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios, null); //agrego a si misma a la lista, count de esto me deberia dar 1.
+
+            //Imprimo size
+            System.out.println(lista.__getattr__("size").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios, null).print());
+
+            //imprimo count
+            System.out.println(lista.__getattr__("count").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios, null).print());
 
 
         }

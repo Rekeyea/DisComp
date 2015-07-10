@@ -1,10 +1,7 @@
 package com.pyjava.core.runtime;
 
 import com.pyjava.core.*;
-import com.pyjava.core.exceptions.PyException;
-import com.pyjava.core.exceptions.PyFinEjecucion;
-import com.pyjava.core.exceptions.PyNameError;
-import com.pyjava.core.exceptions.PyStopIteration;
+import com.pyjava.core.exceptions.*;
 
 import java.util.HashMap;
 import java.util.Stack;
@@ -569,7 +566,7 @@ public class Estado {
         catch (Throwable t) {
             //Por ahora para debug
             System.out.println(String.format("[DEBUG] Error en instruccion numero: %s de la linea %s, con tamano de stack en frame actual %s", frameActual.f_instr, this.getLineaActual(), frameActual.f_stack.size()));
-            throw t;
+            throw new PyRuntimeException(t.getMessage());
         }
     }
 

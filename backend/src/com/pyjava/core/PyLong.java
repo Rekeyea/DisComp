@@ -44,6 +44,7 @@ public class PyLong extends PyObject {
         return new PyString(String.valueOf(this.value)+"L");
     }
 
+    @Override
     public PyString __str__() throws PyException{
         return new PyString(String.valueOf(this.value));
     }

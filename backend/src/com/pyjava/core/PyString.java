@@ -1,6 +1,7 @@
 package com.pyjava.core;
 
 import com.pyjava.core.exceptions.PyException;
+import com.pyjava.core.exceptions.PyIndexError;
 import com.pyjava.core.exceptions.PyTypeError;
 import com.pyjava.core.exceptions.PyValueError;
 import org.w3c.dom.Attr;
@@ -211,6 +212,37 @@ public class PyString extends PyObject{
         );
     }
 
+    /**
+     * Al igual que python, llamar a list(string) retorna una lista de strings por cada char.
+     * @return
+     * @throws PyException
+     */
+    @Override
+    public PyObject __list__() throws PyException{
+        ArrayList<PyObject> res = new ArrayList<>();
+        for(char c : this.value.toCharArray()){
+            res.add(new PyString(String.valueOf(c)));
+        }
+        return new PyList(res);
+    }
+
+
+    @Override
+    public PyObject __get_index__(PyObject i) throws PyException{
+
+        try{
+            int index = ((PyInteger)i.__int__()).value;
+            return new PyString(String.valueOf(index));
+        }
+        catch (PyException e){
+            throw new PyTypeError(String.format("%s no es un indice valido", i.getType().getClassName()));
+        }
+        catch (IndexOutOfBoundsException e){
+            throw new PyIndexError();
+        }
+
+
+    }
 
 
     public static class Builtins{
@@ -227,15 +259,12 @@ public class PyString extends PyObject{
 
                 //cuenta las ocurrencias de la sub cadena 'sub' en S
                 //El primer argumento debe ser una instancia de PyString, y el segundo tambien.
-                //Retorna una instancia de PyInt, o PyTypeError si los datos son invalidos.
+                //Retorna una instancia de PyInteger, o lanza PyTypeError si los datos son invalidos.
                 PyNativeFunction count = new PyNativeFunction("count", clase,
                         new PyCallable() {
                             @Override
                             public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
-                                if (args.length == 0) {
-                                    throw new PyTypeError(String.format("count necesita 2 argumentos, 0 encontrados."));
-                                }
-                                if (args.length < 2) {
+                                if (args.length != 2) {
                                     throw new PyTypeError(String.format("count necesita 2 argumentos, %s encontrados.", args.length));
                                 }
                                 if (!(args[0] instanceof PyString) || !(args[1] instanceof PyString)) {
@@ -256,7 +285,7 @@ public class PyString extends PyObject{
                                     count++;
                                 }
 
-                                return new PyString(String.valueOf(count));
+                                return new PyInteger(count);
 
 
                             }

@@ -32,6 +32,7 @@ public class PySingletons {
     public static PyType bool = null;
     public static PyType noneType = null;
     public static PyType iterator = null;
+    public static PyType list = null;
 
     public static PyType builtinFunc = null;
     public static PyType methodWrapper = null;
@@ -76,6 +77,7 @@ public class PySingletons {
             bool = type.crearClase(PyBool.__name__, PyBool.class, Arrays.asList(object));
             noneType = type.crearClase(PyNone.__name__, PyNone.class, Arrays.asList(object));
             iterator = type.crearClase(PyIterator.__name__, PyIterator.class, Arrays.asList(object));
+            list = type.crearClase(PyList.__name__, PyList.class, Arrays.asList(object));
 
             builtinFunc = type.crearClase(PyNativeFunction.__name__, PyNativeFunction.class, Arrays.asList(object));
             methodWrapper = type.crearClase(PyMethodWrapper.__name__, PyMethodWrapper.class, Arrays.asList(object));
@@ -98,6 +100,7 @@ public class PySingletons {
             bool.__dict__ = PyBool.Builtins.getBuiltins();
             noneType.__dict__ = PyNone.Builtins.getBuiltins();
             iterator.__dict__ = PyIterator.Builtins.getBuiltins();
+            list.__dict__ = PyList.Builtins.getBuiltins();
 
             builtinFunc.__dict__ = PyNativeFunction.Builtins.getBuiltins();
             methodWrapper.__dict__ = PyMethodWrapper.Builtins.getBuiltins();
