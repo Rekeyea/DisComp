@@ -47,12 +47,20 @@ public class main {
             Lexer lexer = new Lexer(new FileReader("/home/rekeyea/Documents/program"));
             Symbol s = lexer.next_token();
             while(s.sym!=sym1.EOF){
-                System.out.println(s.sym);
-                String texto = (String)s.value;
-                if(!texto.isEmpty()){
-                    System.out.println(texto);
-                    s = lexer.next_token();
+                int symbol = s.sym;
+                if(symbol==sym1.INDENT){
+                    System.out.println("INDENT");
+                }else if (symbol==sym1.DEDENT){
+                    System.out.println("DEDENT");
+                }else if (symbol==sym1.NEWLINE){
+                    System.out.println("NEW LINE");
+                }else{
+                    String texto = (String)s.value;
+                    if(!texto.isEmpty()){
+                        System.out.println(texto);
+                    }
                 }
+                s = lexer.next_token();
             }
             System.out.println("El archivo esta bien");
         }

@@ -33,11 +33,12 @@ import java.util.LinkedList;
 %}
 
 %eofval{
-    if(Stack.size()==0){
+    if(Stack.size()<=0){
         return symbol(sym1.EOF);
     }else{
-        yypushback(1);
-        return symbol(sym1.DEDENT);
+        Stack.pop();
+        yypushback(0);
+        return symbol(sym1.DEDENT,yytext());
     }
 %eofval}
 
@@ -62,7 +63,6 @@ INDENT = [ \t\f]{3}
 NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
 
-%state SENTENCE
 %state STRING
 %state TRIPLE_STRING
 %state INDENTATION
@@ -71,91 +71,8 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
 /*REGLAS LEXICAS*/
 
+
 <YYINITIAL> {
-    {INDENT}                  {indentSentence++; if(indentSentence > indentLevel) return symbol(sym1.INDENT, yytext());}
-
-    "del"                     {yybegin(SENTENCE);return symbol(sym1.DEL, yytext());}
-    "from"                    {yybegin(SENTENCE);return symbol(sym1.FROM, yytext());}
-    "while"                   {yybegin(SENTENCE);return symbol(sym1.WHILE, yytext());}
-    "as"                      {yybegin(SENTENCE);return symbol(sym1.AS, yytext());}
-    "elif"                    {yybegin(SENTENCE);return symbol(sym1.ELIF, yytext());}
-    "global"                  {yybegin(SENTENCE);return symbol(sym1.GLOBAL, yytext());}
-    "with"                    {yybegin(SENTENCE);return symbol(sym1.WITH, yytext());}
-    "assert"                  {yybegin(SENTENCE);return symbol(sym1.ASSERT, yytext());}
-    "else"                    {yybegin(SENTENCE);return symbol(sym1.ELSE, yytext());}
-    "if"                      {yybegin(SENTENCE);return symbol(sym1.IF, yytext());}
-    "pass"                    {yybegin(SENTENCE);return symbol(sym1.PASS, yytext());}
-    "yield"                   {yybegin(SENTENCE);return symbol(sym1.YIELD, yytext());}
-    "break"                   {yybegin(SENTENCE);return symbol(sym1.BREAK, yytext());}
-    "except"                  {yybegin(SENTENCE);return symbol(sym1.EXCEPT, yytext());}
-    "import"                  {yybegin(SENTENCE);return symbol(sym1.IMPORT, yytext());}
-    "class"                   {yybegin(SENTENCE);return symbol(sym1.CLASS, yytext());}
-    "exec"                    {yybegin(SENTENCE);return symbol(sym1.EXEC, yytext());}
-    "in"                      {yybegin(SENTENCE);return symbol(sym1.IN, yytext());}
-    "raise"                   {yybegin(SENTENCE);return symbol(sym1.RAISE, yytext());}
-    "continue"                {yybegin(SENTENCE);return symbol(sym1.CONTINUE, yytext());}
-    "finally"                 {yybegin(SENTENCE);return symbol(sym1.FINALLY, yytext());}
-    "is"                      {yybegin(SENTENCE);return symbol(sym1.IS, yytext());}
-    "return"                  {yybegin(SENTENCE);return symbol(sym1.RETURN, yytext());}
-    "def"                     {yybegin(SENTENCE);return symbol(sym1.DEF, yytext());}
-    "for"                     {yybegin(SENTENCE);return symbol(sym1.FOR, yytext());}
-    "lambda"                  {yybegin(SENTENCE);return symbol(sym1.LAMBDA, yytext());}
-    "try"                     {yybegin(SENTENCE);return symbol(sym1.TRY, yytext());}
-    "type"                    {yybegin(SENTENCE);return symbol(sym1.TYPE, yytext());}
-    "print"                   {yybegin(SENTENCE);return symbol(sym1.PRINT, yytext());}
-
-    ","                       {yybegin(SENTENCE);return symbol(sym1.COMA, yytext());}
-    "."                       {yybegin(SENTENCE);return symbol(sym1.DOT, yytext());}
-    ":"                       {yybegin(SENTENCE);return symbol(sym1.COLON, yytext());}
-    ";"                       {yybegin(SENTENCE);return symbol(sym1.SEMICOLON, yytext());}
-    "("                       {yybegin(SENTENCE);return symbol(sym1.LPAREN, yytext());}
-    ")"                       {yybegin(SENTENCE);return symbol(sym1.RPAREN, yytext());}
-    "["                       {yybegin(SENTENCE);return symbol(sym1.LBRACKET, yytext());}
-    "]"                       {yybegin(SENTENCE);return symbol(sym1.RBRACKET, yytext());}
-    "{"                       {yybegin(SENTENCE);return symbol(sym1.LCURLY, yytext());}
-    "}"                       {yybegin(SENTENCE);return symbol(sym1.RCURLY, yytext());}
-
-    "+"                       {yybegin(SENTENCE);return symbol(sym1.PLUS, yytext());}
-    "-"                       {yybegin(SENTENCE);return symbol(sym1.MINUS, yytext());}
-    "**"                      {yybegin(SENTENCE);return symbol(sym1.EXP, yytext());}
-    "*"                       {yybegin(SENTENCE);return symbol(sym1.MULT, yytext());}
-    "/"                       {yybegin(SENTENCE);return symbol(sym1.DIV, yytext());}
-    "//"                      {yybegin(SENTENCE);return symbol(sym1.DIVE, yytext());}
-    "%"                       {yybegin(SENTENCE);return symbol(sym1.MOD, yytext());}
-
-    "&"                       {yybegin(SENTENCE);return symbol(sym1.ANDB, yytext());}
-    "|"                       {yybegin(SENTENCE);return symbol(sym1.ORB, yytext());}
-    "^"                       {yybegin(SENTENCE);return symbol(sym1.XORB, yytext());}
-    "~"                       {yybegin(SENTENCE);return symbol(sym1.NOTB, yytext());}
-    "<<"                      {yybegin(SENTENCE);return symbol(sym1.SHIFTL, yytext());}
-    ">>"                      {yybegin(SENTENCE);return symbol(sym1.SHIFTR, yytext());}
-
-    "and"                     {yybegin(SENTENCE);return symbol(sym1.AND, yytext());}
-    "or"                      {yybegin(SENTENCE);return symbol(sym1.OR, yytext());}
-    "not"                     {yybegin(SENTENCE);return symbol(sym1.NOT, yytext());}
-    "=="                      {yybegin(SENTENCE);return symbol(sym1.EQUALS, yytext());}
-    "!="                      {yybegin(SENTENCE);return symbol(sym1.DIFF, yytext());}
-    "<"                       {yybegin(SENTENCE);return symbol(sym1.MINOR, yytext());}
-    ">"                       {yybegin(SENTENCE);return symbol(sym1.MAJOR, yytext());}
-    "<="                      {yybegin(SENTENCE);return symbol(sym1.MINOREQ, yytext());}
-    ">="                      {yybegin(SENTENCE);return symbol(sym1.MAJOREQ, yytext());}
-    "="                       {yybegin(SENTENCE);return symbol(sym1.ASSIGN, yytext());}
-
-    {COMMENT}                 { }
-    {WHITESPACE}              { }
-    {TAB}                     {yybegin(SENTENCE); return symbol(sym1.TAB, yytext());}
-    {NAME}                    {yybegin(SENTENCE); return symbol(sym1.NAME, yytext());}
-    {ASSIGN}                  {yybegin(SENTENCE); return symbol(sym1.NAME, yytext());}
-    {LONG}                    {yybegin(SENTENCE); return symbol(sym1.LONG, yytext());}
-    {INTEGER}                 {yybegin(SENTENCE); return symbol(sym1.INTEGER, yytext());}
-    {FLOAT}                   {yybegin(SENTENCE); return symbol(sym1.FLOAT, yytext());}
-
-    {NEWLINE}                 {indentLevel=indentSentence;indentSentence=0;return symbol(sym1.NEWLINE, yytext());}
-    {STRING}                  {string.setLength(0); yybegin(STRING);}
-    {TRIPLE_STRING}           {string.setLength(0); yybegin(TRIPLE_STRING);}
-}
-
-<SENTENCE> {
     "del"                     {return symbol(sym1.DEL, yytext());}
     "from"                    {return symbol(sym1.FROM, yytext());}
     "while"                   {return symbol(sym1.WHILE, yytext());}
@@ -225,7 +142,12 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
     {COMMENT}                 { }
 
-    {NEWLINE}"    "{INDENT_TOKEN}   {yypushback(yylength()); yybegin(INDENTATION);}
+    {NEWLINE}"    "{INDENT_TOKEN}
+    {
+            yypushback(yylength());
+            String t = yytext();
+            yybegin(INDENTATION);
+    }
     {NEWLINE}                 {return symbol(sym1.NEWLINE, yytext());}
     {WHITESPACE}              {}
 
@@ -234,14 +156,14 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {LONG}                    {return symbol(sym1.LONG, yytext());}
     {INTEGER}                 {return symbol(sym1.INTEGER, yytext());}
     {FLOAT}                   {return symbol(sym1.FLOAT, yytext());}
-    {NEWLINE}                 {indentLevel=indentSentence;indentSentence=0;yybegin(YYINITIAL); return symbol(sym1.NEWLINE, yytext());}
+    {NEWLINE}                 {return symbol(sym1.NEWLINE, yytext());}
     {STRING}                  {string.setLength(0); yybegin(STRING);}
     {TRIPLE_STRING}           {string.setLength(0); yybegin(TRIPLE_STRING);}
     {NAME}                    {return symbol(sym1.NAME, yytext());}
 }
 
 <STRING> {
-  \"|\'                       {yybegin(SENTENCE); return symbol(sym1.STRING, string.toString());}
+  \"|\'                       {yybegin(YYINITIAL); return symbol(sym1.STRING, string.toString());}
   [^\r\n\"\\]+                {string.append( yytext() );}
   \\t                         {string.append('\t');}
   \\n                         {string.append('\n');}
@@ -251,7 +173,7 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 }
 
 <TRIPLE_STRING> {
-  (\"\"\")|(\'\'\')           {yybegin(SENTENCE); return symbol(sym1.STRING3, string.toString());}
+  (\"\"\")|(\'\'\')           {yybegin(YYINITIAL); return symbol(sym1.STRING3, string.toString());}
   [^((\"\"\")|(\'\'\'))]+     {string.append(yytext());}
 }
 
@@ -270,19 +192,22 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
       }else if(indentLevel < nivelStack){
           //tengo que emitir tokens DEDENT hasta llegar al nivel del stack
           Stack.pop();
+          indentLevel = Stack.peek();
+          yypushback((nivelStack-indentLevel)*4);
           return symbol(sym1.DEDENT,yytext());
       }else{
           //aumento el nivel de indentacion
           nivelStack+=1;
-          yypushback(4*(indentLevel-nivelStack));
+          yypushback((nivelStack-indentLevel)*4);
           Stack.push(nivelStack);
           return symbol(sym1.INDENT,yytext());
       }
       //return symbol(sym1.INDENT,"");
 
     }
-
+    [^] {yypushback(1); System.out.println(yytext()); yybegin(YYINITIAL);}
 
 }
 
-[^]                           {System.out.println("Illegal Character < "+yytext()+" > in state "+yystate());}
+[^]  {System.out.println("Illegal Character < "+yytext()+" > in state "+yystate());}
+
