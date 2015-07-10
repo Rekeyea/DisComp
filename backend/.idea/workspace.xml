@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3182540-db5d-4e52-a157-5dc83fb94858" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="C:\Users\Cristiano\Desktop\compilGit\DisComp\backend\out\production\pyjava\com\pyjava\Main.class" afterPath="C:\Users\Cristiano\Desktop\compilGit\DisComp\backend\out\production\pyjava\com\pyjava\Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/Main.class" afterPath="$PROJECT_DIR$/out/production/pyjava/com/pyjava/Main.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/pyjava/Main.java" afterPath="$PROJECT_DIR$/src/com/pyjava/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/pyjava/core/PyList.java" afterPath="$PROJECT_DIR$/src/com/pyjava/core/PyList.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -30,24 +30,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/pyjava/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6">
-              <caret line="615" column="34" selection-start-line="615" selection-start-column="34" selection-end-line="615" selection-end-column="34" />
+            <state vertical-scroll-proportion="-14.5">
+              <caret line="629" column="70" selection-start-line="629" selection-start-column="70" selection-end-line="629" selection-end-column="70" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PyInteger.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyInteger.java">
+      <file leaf-file-name="PyList.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyList.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.6216216">
+              <caret line="53" column="17" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#408#409#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -166,8 +165,8 @@
         <option value="$PROJECT_DIR$/src/com/pyjava/core/runtime/Estado.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyObject.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/core/PyString.java" />
-        <option value="$PROJECT_DIR$/src/com/pyjava/core/PyList.java" />
         <option value="$PROJECT_DIR$/src/com/pyjava/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/pyjava/core/PyList.java" />
       </list>
     </option>
   </component>
@@ -583,7 +582,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/pyjava/core/PyList.java</url>
-          <line>92</line>
+          <line>94</line>
           <properties />
           <option name="timeStamp" value="61" />
         </line-breakpoint>
@@ -841,8 +840,8 @@
         <state vertical-scroll-proportion="0.5675676">
           <caret line="29" column="29" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
           <folding>
-            <element signature="e#700#701#0" expanded="true" />
-            <element signature="e#738#739#0" expanded="true" />
+            <element signature="e#700#701#0" expanded="false" />
+            <element signature="e#738#739#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -949,16 +948,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Estado.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7027027">
-          <caret line="568" column="57" selection-start-line="568" selection-start-column="57" selection-end-line="568" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PySingletons.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -977,16 +966,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="176" column="0" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyInteger.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -994,18 +973,6 @@
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#408#409#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33227345">
-          <caret line="84" column="20" selection-start-line="84" selection-start-column="20" selection-end-line="84" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#534#535#0" expanded="true" />
-            <element signature="e#564#565#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1028,11 +995,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="176" column="0" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/pyjava/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6">
-          <caret line="615" column="34" selection-start-line="615" selection-start-column="34" selection-end-line="615" selection-end-column="34" />
+        <state vertical-scroll-proportion="-14.5">
+          <caret line="629" column="70" selection-start-line="629" selection-start-column="70" selection-end-line="629" selection-end-column="70" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/runtime/Estado.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="14.91097">
+          <caret line="568" column="57" selection-start-line="568" selection-start-column="57" selection-end-line="568" selection-end-column="57" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/pyjava/core/PyList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6216216">
+          <caret line="53" column="17" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

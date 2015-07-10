@@ -621,6 +621,16 @@ public class Main {
                 System.out.println(iter.iterador.next().print());
             }
 
+            PyList lista2 = new PyList();
+
+            //Le agrego algunos elementos llamando la funcion append
+            lista2.__getattr__("append").__call__(new PyObject[]{s}, PySingletons.kwargsVacios, null);
+            lista2.__getattr__("append").__call__(new PyObject[]{s}, PySingletons.kwargsVacios, null);
+            lista2.__getattr__("append").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios, null);
+            lista.__getattr__("append").__call__(new PyObject[]{lista2}, PySingletons.kwargsVacios, null);
+
+            System.out.println(lista2.print());
+
 
         }
         catch (Throwable t){

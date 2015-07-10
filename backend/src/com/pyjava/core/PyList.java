@@ -47,12 +47,14 @@ public class PyList extends PyObject {
         if(this.lista.size() > 0) {
             StringBuilder res = new StringBuilder("[");
             for (PyObject e : this.lista) {
-                if(e != this) {
-                    res.append(e.__repr__().value + ", ");
-                }
-                //Para evitar una recursion infinita.
-                else {
+
+                //Para evitar recursion infinita, no permitimos imprimir listas, dicts o tuplas anidados.
+                if(e instanceof PyList) {
                     res.append("[...], ");
+                }
+
+                else {
+                    res.append(e.__repr__().value + ", ");
                 }
             }
 
