@@ -33,6 +33,8 @@ public class PySingletons {
     public static PyType noneType = null;
     public static PyType iterator = null;
     public static PyType list = null;
+    public static PyType tuple = null;
+    public static PyType dict = null;
 
     public static PyType builtinFunc = null;
     public static PyType methodWrapper = null;
@@ -78,6 +80,8 @@ public class PySingletons {
             noneType = type.crearClase(PyNone.__name__, PyNone.class, Arrays.asList(object));
             iterator = type.crearClase(PyIterator.__name__, PyIterator.class, Arrays.asList(object));
             list = type.crearClase(PyList.__name__, PyList.class, Arrays.asList(object));
+            tuple = type.crearClase(PyTuple.__name__, PyTuple.class, Arrays.asList(object));
+            dict =  type.crearClase(PyDict.__name__, PyDict.class, Arrays.asList(object));
 
             builtinFunc = type.crearClase(PyNativeFunction.__name__, PyNativeFunction.class, Arrays.asList(object));
             methodWrapper = type.crearClase(PyMethodWrapper.__name__, PyMethodWrapper.class, Arrays.asList(object));
@@ -101,6 +105,8 @@ public class PySingletons {
             noneType.__dict__ = PyNone.Builtins.getBuiltins();
             iterator.__dict__ = PyIterator.Builtins.getBuiltins();
             list.__dict__ = PyList.Builtins.getBuiltins();
+            tuple.__dict__ = PyTuple.Builtins.getBuiltins();
+            dict.__dict__ = PyDict.Builtins.getBuiltins();
 
             builtinFunc.__dict__ = PyNativeFunction.Builtins.getBuiltins();
             methodWrapper.__dict__ = PyMethodWrapper.Builtins.getBuiltins();

@@ -5,6 +5,8 @@ import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyTypeError;
 import com.pyjava.core.runtime.Estado;
 
+import java.util.Objects;
+
 /**
  * Created by Cristiano on 16/06/2015.
  *
@@ -179,12 +181,34 @@ public class PyObject {
     }
 
     /**
-     * Devuelve un hash del objeto. Utilizado para las claves de diccionarios y demas.
-     * IMPORTANTE: Para clases que no se quiera permitir como clave de diccionarios, LANZAR EXCEPCION. No permitir hash.
+     * Devuelve true si el objeto es hasheable, false en otro caso. Utilizado para las claves de diccionarios y demas.
+     * @return
      */
-    public PyInteger __hash__() throws PyException{
+    public boolean __hasheable__(){
+        return true;
+    }
+
+    /**
+     * Para poder devolver el hash como PyObject
+     */
+    public final PyInteger __hash__() throws PyException{
         //POR AHORA DEVUELVO EL HASH DE JAVA... Sera suficiente?
         return new PyInteger(this.hashCode());
+    }
+
+    /**
+     * Override de equals para que hashmap compare correctamente
+     */
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof PyObject){
+            try {
+                return this.__eq__((PyObject)o).value;
+            } catch (PyException e) {
+                return false;
+            }
+        }
+        return false;
     }
 
 
@@ -222,15 +246,24 @@ public class PyObject {
 
     /**
      * Castea o convierte un objeto a list. Cada PyObject que sea convertible a lista debera implementarlo.
-     * @return
-     * @throws PyException
      */
     public PyObject __list__() throws PyException{
         throw new PyTypeError(String.format("'%s' no se puede convertir a %s", getType().getClassName(), PyList.__name__));
     }
 
-    //tuplas
-    //dicts
+    /**
+     * Castea un objeto a tuple
+     */
+    public PyObject __tuple__() throws PyException{
+        throw new PyTypeError(String.format("'%s' no se puede convertir a %s", getType().getClassName(), PyTuple.__name__));
+    }
+
+    /**
+     * Castea a dict
+     */
+    public PyObject __dict__() throws PyException{
+        throw new PyTypeError(String.format("'%s' no se puede convertir a %s", getType().getClassName(), PyDict.__name__));
+    }
 
 
 
@@ -474,6 +507,7 @@ public class PyObject {
     public PyObject __set_index__(PyObject i, PyObject v) throws PyException{
         throw new PyTypeError(String.format("No se puede guardar en indice a %s", getType().getClassName()));
     }
+
 
     /**
      * Clase interna para manejar definicion de builtins.

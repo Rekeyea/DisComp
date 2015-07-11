@@ -468,6 +468,11 @@ public class PyBool extends PyObject {
         throw AritmeticaHelper.getErrorBinary("<=", this, obj);
     }
 
+    @Override
+    public int hashCode(){
+        return this.value ? 1 : 0;
+    }
+
 
     public static class Builtins{
         private static AttrDict builtins = null;

@@ -445,6 +445,11 @@ public class PyLong extends PyObject {
     }
 
 
+    @Override
+    public int hashCode(){
+        return (int)this.value;
+    }
+
     public static class Builtins{
         private static AttrDict builtins = null;
 

@@ -52,7 +52,12 @@ public class PyList extends PyObject {
                 if(e instanceof PyList) {
                     res.append("[...], ");
                 }
-
+                else if (e instanceof PyTuple){
+                    res.append("(...), ");
+                }
+                else if(e instanceof PyDict){
+                    res.append("{...}, ");
+                }
                 else {
                     res.append(e.__repr__().value + ", ");
                 }
@@ -71,6 +76,11 @@ public class PyList extends PyObject {
     }
 
     @Override
+    public boolean __hasheable__(){
+        return false;
+    }
+
+    @Override
     public PyBool __bool__() throws PyException{
         return this.lista.size() > 0 ? PySingletons.True : PySingletons.False;
     }
@@ -81,6 +91,11 @@ public class PyList extends PyObject {
         // osea, hace una copia debil
 
         return new PyList(new ArrayList<PyObject>(this.lista));
+    }
+
+    @Override
+    public PyObject __tuple__() throws PyException{
+        return new PyTuple(new ArrayList<PyObject>(this.lista));
     }
 
     @Override

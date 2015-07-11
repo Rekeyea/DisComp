@@ -226,6 +226,15 @@ public class PyString extends PyObject{
         return new PyList(res);
     }
 
+    @Override
+    public PyObject __tuple__() throws PyException{
+        ArrayList<PyObject> res = new ArrayList<>();
+        for(char c : this.value.toCharArray()){
+            res.add(new PyString(String.valueOf(c)));
+        }
+        return new PyTuple(res);
+    }
+
 
     @Override
     public PyObject __get_index__(PyObject i) throws PyException{
@@ -244,6 +253,10 @@ public class PyString extends PyObject{
 
     }
 
+    @Override
+    public int hashCode(){
+        return this.value.hashCode();
+    }
 
     public static class Builtins{
 

@@ -4,6 +4,8 @@ import com.pyjava.core.*;
 import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyStopIteration;
 
+import java.util.ArrayList;
+
 public class Main {
 
     public static void main(String[] args){
@@ -632,6 +634,106 @@ public class Main {
             System.out.println(lista2.print());
 
 
+        }
+        catch (Throwable t){
+            System.out.println(t.getMessage());
+        }
+
+
+        System.out.println("--------------- TEST TUPLAS ----------------------");
+
+
+        try {
+            ArrayList<PyObject> datosTupla = new ArrayList<>();
+            datosTupla.add(s);
+            datosTupla.add(o);
+            datosTupla.add(l);
+            datosTupla.add(raw_input);
+            datosTupla.add(new PyList());
+            datosTupla.add(new PyTuple());
+            PyTuple tupla = new PyTuple(datosTupla);
+
+
+
+            //Imprimo size
+            System.out.println(tupla.__getattr__("size").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios, null).print());
+
+
+            //imprimo elemento por indice
+            System.out.println(tupla.__get_index__(new PyInteger(0)).print());
+            System.out.println(tupla.__get_index__(new PyLong(2)).print());
+            System.out.println(tupla.__get_index__(PySingletons.True).print());
+            System.out.println(tupla.print());
+
+            System.out.println("\t---");
+            //pruebo iteracion
+            PyIterator iter = (PyIterator) tupla.__iter__();
+
+            while(iter.iterador.hasNext()){
+                System.out.println(iter.iterador.next().print());
+            }
+
+
+
+        }
+        catch (Throwable t){
+            System.out.println(t.getMessage());
+        }
+
+
+        System.out.println("--------------- TEST DICT ----------------------");
+
+
+        try {
+            PyDict dict = new PyDict();
+
+            dict.__set_index__(s,s);
+            dict.__set_index__(o,o);
+            dict.__set_index__(raw_input,raw_input);
+            dict.__set_index__(new PyString("Clave de prueba"),new PyList());
+            dict.__set_index__(new PyString("Clave de prueba2"),new PyTuple());
+            dict.__set_index__(new PyString("Clave de prueba3"),new PyDict());
+            dict.__set_index__(new PyString("booleano"),PySingletons.True);
+            dict.__set_index__(PySingletons.False,PySingletons.True);
+            dict.__set_index__(PySingletons.False,PySingletons.False);
+            dict.__set_index__(PySingletons.None,new PyString("None como clave"));
+
+
+            //imprimo elemento por indice
+            System.out.println(dict.__get_index__(s).print());
+            System.out.println(dict.__get_index__(o).print());
+            System.out.println(dict.__get_index__(raw_input).print());
+            System.out.println(dict.__get_index__(new PyString("Clave de prueba")).print());
+            System.out.println(dict.__get_index__(new PyString("Clave de prueba2")).print());
+            System.out.println(dict.__get_index__(new PyString("Clave de prueba3")).print());
+            System.out.println(dict.__get_index__(PySingletons.False).print());
+            System.out.println(dict.__get_index__(PySingletons.None).print());
+            System.out.println(dict.print());
+
+            System.out.println("\t---");
+            //pruebo iteracion
+            PyIterator iter = (PyIterator) dict.__iter__();
+
+            while(iter.iterador.hasNext()){
+                System.out.println(iter.iterador.next().print());
+            }
+
+
+            //deberia explotar
+            try{
+                System.out.println(dict.__get_index__(new PyString("Clave que no existe")).print());
+            }
+            catch (Throwable t){
+                System.out.println(t.getMessage());
+            }
+
+            //deberia explotar
+            try{
+                dict.__set_index__(dict,PySingletons.False);
+            }
+            catch (Throwable t){
+                System.out.println(t.getMessage());
+            }
         }
         catch (Throwable t){
             System.out.println(t.getMessage());

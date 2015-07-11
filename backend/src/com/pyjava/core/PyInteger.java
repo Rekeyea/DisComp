@@ -459,6 +459,12 @@ public class PyInteger extends PyObject {
     }
 
 
+    @Override
+    public int hashCode(){
+        return this.value;
+    }
+
+
     public static class Builtins{
         private static AttrDict builtins = null;
 

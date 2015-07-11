@@ -362,6 +362,11 @@ public class PyFloat extends PyObject {
     }
 
 
+    @Override
+    public int hashCode(){
+        return (int)this.value;
+    }
+
     public static class Builtins{
         private static AttrDict builtins = null;
 

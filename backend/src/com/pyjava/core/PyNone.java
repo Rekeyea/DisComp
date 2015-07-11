@@ -45,17 +45,23 @@ public class PyNone extends PyObject {
         return PySingletons.False;
     }
 
-    public static class Builtins{
-    private static AttrDict builtins = null;
 
-    public static AttrDict getBuiltins() {
-
-        if (builtins == null){
-            builtins = new AttrDict();
-        }
-        return builtins;
-
+    @Override
+    public int hashCode(){
+        return 0;
     }
+
+    public static class Builtins {
+        private static AttrDict builtins = null;
+
+        public static AttrDict getBuiltins() {
+
+            if (builtins == null) {
+                builtins = new AttrDict();
+            }
+            return builtins;
+
+        }
 
     }
 
