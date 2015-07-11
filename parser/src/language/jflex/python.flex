@@ -14,6 +14,7 @@ import java.util.LinkedList;
 %column
 
 %{
+    boolean DevolverNewline = true;
     Deque<Integer> Stack = new LinkedList<Integer>();
 
     StringBuffer string = new StringBuffer();
@@ -35,7 +36,13 @@ import java.util.LinkedList;
     }else{
         Stack.pop();
         yypushback(0);
-        return symbol(sym1.DEDENT,yytext());
+        if(DevolverNewline){
+            DevolverNewline = false;
+            return symbol(sym1.NEWLINE,"");
+        }else{
+            DevolverNewline = true;
+            return symbol(sym1.DEDENT,yytext());
+        }
     }
 %eofval}
 
@@ -148,8 +155,16 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {
         if(Stack.size()>0){
             yypushback(1);
-            Stack.pop();
-            return symbol(sym1.DEDENT,"");
+            if(DevolverNewline){
+                DevolverNewline = false;
+                return symbol(sym1.NEWLINE, yytext());
+            }else{
+                Stack.pop();
+                if(Stack.size()==0){
+                    DevolverNewline = true;
+                }
+                return symbol(sym1.DEDENT,"");
+            }
         }else{
             return symbol(sym1.NEWLINE, yytext());
         }

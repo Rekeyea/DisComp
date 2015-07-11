@@ -30,9 +30,11 @@ terminal            INDENT, DEDENT;
 non terminal number;
 non terminal atom;
 non terminal power;
+non terminal trailer;
 non terminal factor_op;
 non terminal factor_aux;
 non terminal factor;
+non terminal trailer_repeat;
 
 non terminal term_op;
 non terminal term_factor;
@@ -98,6 +100,8 @@ non terminal compund_stmt;
 
 non terminal single_input;
 
+non terminal dictorsetmaker;
+
 non terminal program;
 
 /* The grammar */
@@ -107,13 +111,18 @@ start with program;
 number ::= INTEGER | LONG | FLOAT;
 atom ::= NAME
         | number
-        | STRING;
+        | STRING
+        | LCURLY RCURLY
+        | LCURLY dictorsetmaker RCURLY;
 
 /* ************ FACTOR DEFINITION *****************
 ************************************************** */
 
+trailer_repeat ::=  trailer
+                    |trailer trailer_repeat;
 
-power ::= atom EXP factor;
+power ::=   atom EXP factor
+            |atom trailer_repeat;
 factor_aux ::=  atom
                 | power;
 factor_op ::=   PLUS
@@ -394,8 +403,34 @@ compund_stmt ::= if_stmt | while_stmt | for_stmt | func_def;
 /* ************************************************
 ************************************************** */
 
-single_input::= NEWLINE | simple_stmt | compund_stmt NEWLINE;
+
+/***************  TOP LEVEL ELEMENTS  *********************
+***********************************************************/
+
+single_input::= NEWLINE
+                | simple_stmt
+                | compund_stmt NEWLINE;
 
 
-program ::= single_input{: System.out.println("EL PROGRAMA ES CORRECTO"); :};
+/* ************************************************
+************************************************** */
+
+
+/***************  OTHER ELEMENTS  *********************
+***********************************************************/
+
+trailer ::= LPAREN RPAREN
+            |LPAREN arglist RPAREN;
+
+dictorsetmaker ::=  test COLON test
+                    |test COLON test COMA
+                    |test COLON test COMA dictorsetmaker;
+
+
+/* ************************************************
+************************************************** */
+
+
+program ::= single_input            {: System.out.println("EL PROGRAMA ES CORRECTO"); :}
+            | single_input program  {: System.out.println("EL PROGRAMA ES CORRECTO"); :};
 
