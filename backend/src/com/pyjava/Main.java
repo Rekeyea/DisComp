@@ -593,13 +593,43 @@ public class Main {
 
             lista.__getattr__("append").__call__(new PyObject[]{s}, PySingletons.kwargsVacios, null);
             lista.__getattr__("append").__call__(new PyObject[]{o}, PySingletons.kwargsVacios, null);
-            lista.__getattr__("append").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios, null); //agrego a si misma a la lista, count de esto me deberia dar 1.
+            lista.__getattr__("append").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios, null); //agrego a si misma a la lista
+            PySingletons.list.__getattr__("append").__call__(new PyObject[]{lista, PySingletons.True}, PySingletons.kwargsVacios, null);   //agrego uno llamando al metodo de clase en vez de instancia
+
+            //Agrego elemento por indice
+            lista.__set_index__(new PyInteger(2), lista);
+            lista.__set_index__(new PyLong(2), lista);
+            lista.__set_index__(PySingletons.True, lista);
 
             //Imprimo size
             System.out.println(lista.__getattr__("size").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios, null).print());
 
             //imprimo count
             System.out.println(lista.__getattr__("count").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios, null).print());
+
+            //imprimo elemento por indice
+            System.out.println(lista.__get_index__(new PyInteger(0)).print());
+            System.out.println(lista.__get_index__(new PyLong(2)).print());
+            System.out.println(lista.__get_index__(PySingletons.True).print());
+            System.out.println(lista.__get_index__(new PyInteger(4)).print());
+
+            System.out.println("\t---");
+            //pruebo iteracion
+            PyIterator iter = (PyIterator) lista.__iter__();
+
+            while(iter.iterador.hasNext()){
+                System.out.println(iter.iterador.next().print());
+            }
+
+            PyList lista2 = new PyList();
+
+            //Le agrego algunos elementos llamando la funcion append
+            lista2.__getattr__("append").__call__(new PyObject[]{s}, PySingletons.kwargsVacios, null);
+            lista2.__getattr__("append").__call__(new PyObject[]{s}, PySingletons.kwargsVacios, null);
+            lista2.__getattr__("append").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios, null);
+            lista.__getattr__("append").__call__(new PyObject[]{lista2}, PySingletons.kwargsVacios, null);
+
+            System.out.println(lista2.print());
 
 
         }
