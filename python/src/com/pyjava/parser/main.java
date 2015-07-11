@@ -2,9 +2,6 @@ package com.pyjava.parser; /**
  * Created by rekeyea on 6/17/15.
  */
 import java_cup.runtime.Symbol;
-import jflex.anttask.JFlexTask;
-import jflex.sym;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;

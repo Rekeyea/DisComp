@@ -1,4 +1,5 @@
 /*SECCIÓN DE CÓDIGO DE USUARIO*/
+package com.pyjava.parser;
 import java_cup.runtime.*;
 import jflex.sym;
 import java.util.Deque;
@@ -52,7 +53,7 @@ INPUTCHARACTER = [^\r\n]
 TAB = \t
 COMMENT     = "#" {INPUTCHARACTER}* {NEWLINE}?
 ASSIGN = "="
-INTEGER = [0-9]+
+INTEGER = (-)?[0-9]+
 LONG = {INTEGER}("L"|"l")
 _FRACTION = "."[0-9]+
 _POINTFLOAT = {INTEGER}? _FRACTION | {INTEGER}"."
@@ -61,6 +62,9 @@ _EXPNUM = ({INTEGER}|{_POINTFLOAT}) _EXP
 FLOAT = {_POINTFLOAT}|{_EXPNUM}
 STRING = \"|\'
 TRIPLE_STRING = (\"\"\")|(\'\'\')
+NONE = "None"
+TRUE = "True"
+FALSE = "False"
 
 
 NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
@@ -143,6 +147,9 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     "<="                      {return symbol(sym1.MINOREQ, yytext());}
     ">="                      {return symbol(sym1.MAJOREQ, yytext());}
     "="                       {return symbol(sym1.ASSIGN, yytext());}
+    {NONE}                    {return symbol(sym1.NONE, yytext());}
+    {TRUE}                    {return symbol(sym1.TRUE, yytext());}
+    {FALSE}                   {return symbol(sym1.FALSE, yytext());}
 
     {COMMENT}                 { }
 
