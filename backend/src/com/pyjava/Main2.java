@@ -28,7 +28,7 @@ public class Main2 {
          *     print 'Mayor a 0'
          * else:
          *     print 'Menor o igual a 0'
-         * for a in "Mayor a 0":
+         * for a in "Menor o igual a 0":
          *     if a == "a":
          *         break
          *     print a
@@ -112,8 +112,8 @@ public class Main2 {
         codigo.co_code.add(new Instruccion(8, OpCode.PRINT_NEWLINE,0));                     //25
 
 
-        //9: for a in "hola":
-        //10:     if a == "Menor o igual a 0":
+        //9: for a in "Menor o igual a 0":
+        //10:     if a == "a":
         //11:         break
         //12:     print a
         codigo.co_code.add(new Instruccion(9, OpCode.LOAD_CONST, 5));                           //26    : carga "Menor o igual a 0"
