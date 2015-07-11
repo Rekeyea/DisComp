@@ -42,9 +42,9 @@ public class main {
 
         try{
 
-            /*parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/program")));
-            Analizador.parse();*/
-            Lexer lexer = new Lexer(new FileReader("/home/rekeyea/Documents/python.py"));
+            parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
+            Analizador.parse();
+            /*Lexer lexer = new Lexer(new FileReader("/home/rekeyea/Documents/python.py"));
             Symbol s = lexer.next_token();
             while(s.sym!=sym1.EOF){
                 int symbol = s.sym;
@@ -61,7 +61,7 @@ public class main {
                     }
                 }
                 s = lexer.next_token();
-            }
+            }*/
             System.out.println("El archivo esta bien");
         }
         catch (Exception e){
