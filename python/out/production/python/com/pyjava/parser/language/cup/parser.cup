@@ -14,6 +14,9 @@ parser code
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
         System.out.println("Error de sintaxis "+s.sym);
     }
+    //MANTENGO UN STACK DE GENERADORES Y PUSHEO EL PRIMERO
+    Deque<Generador> StackGenerador = new LinkedList<Generador>();
+    StackGenerador.push(new Generador());
 :}
 
 
@@ -33,9 +36,9 @@ non terminal atom;
 non terminal program;
 
 
-program ::= atom:a NEWLINE {: System.out.println(a); :};
+program ::= atom:a NEWLINE {: System.out.println((Name)a.value); :};
 
-atom ::=    NAME:n            {: RESULT = n; :}
+atom ::=    NAME:n            {: RESULT = StackGenerador.peek().CreateName((String)n); :}
             |INTEGER
             |LONG
             |FLOAT
