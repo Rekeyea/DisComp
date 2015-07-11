@@ -26,14 +26,11 @@ import java.util.LinkedList;
         return new Symbol(type,yyline,yycolumn,value);
     }
 
-
-    public int indentLevel = 0;
-    public int indentSentence = 0;
-
 %}
 
 %eofval{
-    if(Stack.size()<=0){
+    if(Stack.size()<=0)
+    {
         return symbol(sym1.EOF);
     }else{
         Stack.pop();
@@ -43,8 +40,8 @@ import java.util.LinkedList;
 %eofval}
 
 NEWLINE = \r|\n|\r\n
-WHITESPACE = [ \t\f]
-INDENT_TOKEN = ("    ")*
+WHITESPACE = " "
+INDENT_WS = {WHITESPACE}{4}+
 INPUTCHARACTER = [^\r\n]
 TAB = \t
 COMMENT     = "#" {INPUTCHARACTER}* {NEWLINE}?
@@ -58,14 +55,15 @@ _EXPNUM = ({INTEGER}|{_POINTFLOAT}) _EXP
 FLOAT = {_POINTFLOAT}|{_EXPNUM}
 STRING = \"|\'
 TRIPLE_STRING = (\"\"\")|(\'\'\')
-INDENT = [ \t\f]{3}
+
 
 NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
 
 %state STRING
 %state TRIPLE_STRING
-%state INDENTATION
+%state INDENTATION_WS
+%state INDENTATION_TAB
 
 %%
 
@@ -142,11 +140,15 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
     {COMMENT}                 { }
 
-    {NEWLINE}"    "{INDENT_TOKEN}
+    {NEWLINE}{INDENT_WS}
     {
             yypushback(yylength());
-            String t = yytext();
-            yybegin(INDENTATION);
+            yybegin(INDENTATION_WS);
+    }
+    {NEWLINE}{TAB}
+    {
+            yypushback(yylength());
+            yybegin(INDENTATION_TAB);
     }
     {NEWLINE}                 {return symbol(sym1.NEWLINE, yytext());}
     {WHITESPACE}              {}
@@ -178,11 +180,11 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 }
 
 
-<INDENTATION>{
+<INDENTATION_WS>{
     {NEWLINE} {
         return symbol(sym1.NEWLINE,yytext());
     }
-    {INDENT_TOKEN}
+    {INDENT_WS}
     {
       //HAY QUE VER BIEN COMO FUNCIONA EL yypushback PERO ESE ES EL CAMINO
       int indentLevel = yylength() / 4;
@@ -198,14 +200,42 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
       }else{
           //aumento el nivel de indentacion
           nivelStack+=1;
-          yypushback((nivelStack-indentLevel)*4);
+          yypushback((indentLevel-nivelStack)*4);
           Stack.push(nivelStack);
           return symbol(sym1.INDENT,yytext());
       }
-      //return symbol(sym1.INDENT,"");
+    }
+    [^] {yypushback(1); yybegin(YYINITIAL);}
+}
+
+
+<INDENTATION_TAB>{
+    {NEWLINE} {
+        return symbol(sym1.NEWLINE,yytext());
+    }
+    {TAB}
+    {
+      //HAY QUE VER BIEN COMO FUNCIONA EL yypushback PERO ESE ES EL CAMINO
+      int indentLevel = yylength();
+      int nivelStack = Stack.size() == 0 ? 0 : Stack.peek();
+      if(indentLevel == nivelStack){
+          yybegin(YYINITIAL);
+      }else if(indentLevel < nivelStack){
+          //tengo que emitir tokens DEDENT hasta llegar al nivel del stack
+          Stack.pop();
+          indentLevel = Stack.peek();
+          yypushback((nivelStack-indentLevel));
+          return symbol(sym1.DEDENT,yytext());
+      }else{
+          //aumento el nivel de indentacion
+          nivelStack+=1;
+          yypushback((indentLevel-nivelStack));
+          Stack.push(nivelStack);
+          return symbol(sym1.INDENT,yytext());
+      }
 
     }
-    [^] {yypushback(1); System.out.println(yytext()); yybegin(YYINITIAL);}
+    [^] {yypushback(1); yybegin(YYINITIAL);}
 
 }
 
