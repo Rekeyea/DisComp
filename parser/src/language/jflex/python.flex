@@ -144,7 +144,16 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
             yypushback(yylength());
             yybegin(INDENTATION_TAB);
     }
-    {NEWLINE}                 {return symbol(sym1.NEWLINE, yytext());}
+    {NEWLINE}
+    {
+        if(Stack.size()>0){
+            yypushback(1);
+            Stack.pop();
+            return symbol(sym1.DEDENT,"");
+        }else{
+            return symbol(sym1.NEWLINE, yytext());
+        }
+    }
     {WHITESPACE}              {}
 
     {TAB}                     {return symbol(sym1.TAB, yytext());}
@@ -180,16 +189,19 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     }
     {TAB}+
     {
+
       //HAY QUE VER BIEN COMO FUNCIONA EL yypushback PERO ESE ES EL CAMINO
       int indentLevel = yylength();
       int nivelStack = Stack.size() == 0 ? 0 : Stack.peek();
+
+      System.out.println("El nivel del indent es: "+indentLevel);
+      System.out.println("El nivel del stack es: "+nivelStack);
       if(indentLevel == nivelStack){
           yybegin(YYINITIAL);
       }else if(indentLevel < nivelStack){
           //tengo que emitir tokens DEDENT hasta llegar al nivel del stack
           Stack.pop();
-          indentLevel = Stack.peek();
-          yypushback((nivelStack-indentLevel));
+          yypushback(indentLevel);
           return symbol(sym1.DEDENT,yytext());
       }else{
           //aumento el nivel de indentacion
