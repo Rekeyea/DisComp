@@ -563,6 +563,10 @@ public class Estado {
                 }
             }
         }
+        catch (PyException e){
+            System.out.println(String.format("[DEBUG] Error en instruccion numero: %s de la linea %s, con tamano de stack en frame actual %s", frameActual.f_instr, this.getLineaActual(), frameActual.f_stack.size()));
+            throw  e;
+        }
         catch (Throwable t) {
             //Por ahora para debug
             System.out.println(String.format("[DEBUG] Error en instruccion numero: %s de la linea %s, con tamano de stack en frame actual %s", frameActual.f_instr, this.getLineaActual(), frameActual.f_stack.size()));
