@@ -489,6 +489,13 @@ public class PyObject {
         throw new PyTypeError(String.format("'%s' no es un iterador.", getType().getClassName()));
     }
 
+    /**
+     * Devuelve un array de largo c de los objetos de este iterable, si es iterable
+     * Debe lanzar excepcion si no se puede pasar a un array de tamano c
+     */
+    public PyObject[] __unpack__(int c) throws PyException{
+        throw new PyTypeError(String.format("'%s' no es iterable.", getType().getClassName()));
+    }
 
     //*********** Operaciones de indices *********
 

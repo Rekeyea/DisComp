@@ -3,6 +3,7 @@ package com.pyjava.core;
 import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyIndexError;
 import com.pyjava.core.exceptions.PyTypeError;
+import com.pyjava.core.exceptions.PyValueError;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -102,6 +103,21 @@ public class PyList extends PyObject {
     public PyObject __iter__() throws PyException{
         return new PyIterator(this, this.lista.iterator());
     }
+
+
+    @Override
+    public PyObject[] __unpack__(int c) throws PyException{
+        if(lista.size() < c){
+            throw new PyValueError("No hay suficientes valores para iterar.");
+        }
+        if(lista.size() > c){
+            throw new PyValueError("Hay demasiados valores para iterar.");
+        }
+        PyObject[] res = lista.toArray(new PyObject[c]);
+
+        return res;
+    }
+
 
     @Override
     public PyObject __get_index__(PyObject i) throws PyException{

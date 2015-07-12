@@ -3,6 +3,7 @@ package com.pyjava.core;
 import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyIndexError;
 import com.pyjava.core.exceptions.PyTypeError;
+import com.pyjava.core.exceptions.PyValueError;
 
 import java.util.ArrayList;
 
@@ -97,6 +98,19 @@ public class PyTuple extends PyObject {
     @Override
     public PyObject __iter__() throws PyException{
         return new PyIterator(this, this.tupla.iterator());
+    }
+
+    @Override
+    public PyObject[] __unpack__(int c) throws PyException{
+        if(tupla.size() < c){
+            throw new PyValueError("No hay suficientes valores para iterar.");
+        }
+        if(tupla.size() > c){
+            throw new PyValueError("Hay demasiados valores para iterar.");
+        }
+        PyObject[] res = tupla.toArray(new PyObject[c]);
+
+        return res;
     }
 
     @Override
