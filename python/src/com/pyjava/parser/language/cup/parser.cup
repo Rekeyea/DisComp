@@ -2,8 +2,7 @@
 package com.pyjava.parser;
 
 import com.pyjava.core.exceptions.PyException;
-import com.pyjava.core.runtime.Instruccion;
-import com.pyjava.core.runtime.OpCode;
+import com.pyjava.core.runtime.*;
 import java_cup.runtime.*;
 import com.pyjava.parser.codegen.*;
 import com.pyjava.core.*;
@@ -58,13 +57,18 @@ terminal            NONE, TRUE, FALSE;
 
 non terminal atom;
 non terminal assignment;
+non terminal print_stmt;
 non terminal program;
 
 
-program ::= assignment:a NEWLINE    {:
-                                        System.out.println(((Bloque)a).instrucciones.size());
-
-                                    :};
+program ::= assignment:a NEWLINE print_stmt:b NEWLINE
+{:
+    Bloque b1 = (Bloque)a;
+    Bloque b2 = (Bloque)b;
+    Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(b1.instrucciones,null,b2.instrucciones);
+    Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",bRes);
+    RESULT = code;
+:};
 
 atom ::=    NAME:n            {: RESULT = ParserStatus.StackGenerador.peek().createName(((LexerToken)n).TokenValue); :}
             |INTEGER:n        {: RESULT = ParserStatus.StackGenerador.peek().createConst(ConstCreator.createPyInt(((LexerToken)n).TokenValue)); :}
@@ -87,6 +91,16 @@ assignment ::= atom:a ASSIGN:au atom:b {:
                                             instrucciones.add(new Instruccion(lineNumber,OpCode.STORE_NAME,((Name)a).index));
                                             RESULT = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
 
+                                    :};
+
+print_stmt ::= PRINT:p NAME:n       {:
+                                        int lineNumber = ((LexerToken)p).NumeroFila;
+                                        Name name = ParserStatus.StackGenerador.peek().createName(((LexerToken)n).TokenValue);
+                                        LinkedList<Instruccion> instrucciones = new LinkedList<>();
+                                        instrucciones.add(new Instruccion(lineNumber, OpCode.LOAD_NAME,(name).index));
+                                        instrucciones.add(new Instruccion(lineNumber, OpCode.PRINT_ITEM,0));
+                                        instrucciones.add(new Instruccion(lineNumber, OpCode.PRINT_NEWLINE,0));
+                                        RESULT = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
                                     :};
 
 

@@ -1,6 +1,9 @@
 package com.pyjava.parser; /**
  * Created by rekeyea on 6/17/15.
  */
+import com.pyjava.core.exceptions.PyException;
+import com.pyjava.core.exceptions.PyFinEjecucion;
+import com.pyjava.core.runtime.*;
 import java_cup.runtime.Symbol;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -40,7 +43,36 @@ public class main {
         try{
 
             parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
-            Analizador.parse();
+            Symbol s = Analizador.parse();
+            Code codigoModulo = (Code)s.value;
+
+            Frame frameInicial = new Frame();
+            frameInicial.f_code = codigoModulo;
+
+
+            Estado estado = new Estado(frameInicial);
+
+
+            //Inicio loop de interpretacion
+
+            //inicio loop de interpretacion
+            while(true){
+                try{
+                    estado.interpretarInstruccion();
+                }
+                catch (PyFinEjecucion e){
+                    System.out.println("-------- Fin de ejecucion ------");
+                    return;
+                }
+                catch (PyException e){
+                    System.out.println("Error: Stack trace:");
+                    estado.printStacktrace();
+                    System.out.println(e.getMessage());
+
+                    //Finalizo la ejecucion ante error.
+                    return;
+                }
+            }
             /*Lexer lexer = new Lexer(new FileReader("/home/rekeyea/Documents/python.py"));
             Symbol s = lexer.next_token();
             while(s.sym!=sym1.EOF){
@@ -59,7 +91,6 @@ public class main {
                 }
                 s = lexer.next_token();
             }*/
-            System.out.println("El archivo esta bien");
         }
         catch (Exception e){
             System.out.println(e.getMessage());
