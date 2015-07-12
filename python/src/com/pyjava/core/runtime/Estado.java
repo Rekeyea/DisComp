@@ -650,8 +650,28 @@ public class Estado {
                 }
 
 
+                case OpCode.GET_INDEX: {
 
-                //set/get index
+                    PyObject index = stack.pop();
+                    PyObject ele = stack.pop();
+                    stack.push(ele.__get_index__(index));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.SET_INDEX: {
+
+                    PyObject index = stack.pop();
+                    PyObject valor = stack.pop();
+                    PyObject ele = stack.pop();
+                    ele.__set_index__(index,valor);
+
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
 
                 case OpCode.UNPACK: {
 

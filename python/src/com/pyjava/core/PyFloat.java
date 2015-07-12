@@ -159,11 +159,11 @@ public class PyFloat extends PyObject {
     public PyObject __pow__(PyObject obj) throws PyException{
 
         if(obj instanceof PyInteger){
-            return new PyFloat((long)Math.pow (this.value, (double)((PyInteger)obj).value));
+            return new PyFloat(Math.pow (this.value, ((PyInteger)obj).value));
         }
 
         if(obj instanceof PyLong){
-            return new PyFloat((long)Math.pow (this.value, (double)((PyLong)obj).value));
+            return new PyFloat(Math.pow (this.value, ((PyLong)obj).value));
         }
 
         if(obj instanceof PyFloat){

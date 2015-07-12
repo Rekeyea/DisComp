@@ -147,11 +147,19 @@ public class PyLong extends PyObject {
     public PyObject __pow__(PyObject obj) throws PyException{
 
         if(obj instanceof PyInteger){
-            return new PyLong((long)Math.pow ((double)this.value, (double)((PyInteger)obj).value));
+            double r = Math.pow(this.value, ((PyInteger)obj).value);
+            if(r < 0){
+                return new PyFloat(r);
+            }
+            return new PyLong((long)r);
         }
 
         if(obj instanceof PyLong){
-            return new PyLong((long)Math.pow ((double)this.value, (double)((PyLong)obj).value));
+            double r = Math.pow ((double)this.value, (double)((PyLong)obj).value);
+            if(r < 0){
+                return new PyFloat(r);
+            }
+            return new PyLong((long)r);
         }
 
         if(obj instanceof PyFloat){

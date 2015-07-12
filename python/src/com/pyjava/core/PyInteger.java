@@ -134,17 +134,25 @@ public class PyInteger extends PyObject {
     public PyObject __pow__(PyObject obj) throws PyException{
 
         if(obj instanceof PyInteger){
-            long r = (long)Math.pow ((double)this.value, (double)((PyInteger)obj).value);
+            double r = Math.pow ((double)this.value, (double)((PyInteger)obj).value);
 
-            if( r > (long)Integer.MAX_VALUE || r < (long)Integer.MIN_VALUE){
-                return new PyLong(r);
+            if(r < 0){
+                return new PyFloat(r);
+            }
+
+            if( r > (double)Integer.MAX_VALUE || r < (double)Integer.MIN_VALUE){
+                return new PyLong((long)r);
             }
 
             return new PyInteger((int)r);
         }
 
         if(obj instanceof PyLong){
-            return new PyLong((long)Math.pow ((double)this.value, (double)((PyLong)obj).value));
+            double r = Math.pow ((double)this.value, (double)((PyLong)obj).value);
+            if(r < 0){
+                return new PyFloat(r);
+            }
+            return new PyLong((long)r);
         }
 
         if(obj instanceof PyFloat){
