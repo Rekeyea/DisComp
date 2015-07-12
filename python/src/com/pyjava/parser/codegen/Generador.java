@@ -25,7 +25,7 @@ public class Generador {
     /**
      * Crea y retorna una nueva constante
      */
-    public Const createConst(PyObject c){
+    public Const createOrGetConst(PyObject c){
 
         Const res = co_consts.get(c);
         if(res == null){
@@ -41,7 +41,7 @@ public class Generador {
     /**
      * Crea un nuevo nombre
      */
-    public Name createName(String n){
+    public Name createOrGetName(String n){
 
         Name res = co_names.get(n);
         if(res == null){

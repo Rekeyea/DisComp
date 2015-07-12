@@ -55,33 +55,82 @@ terminal            INDENT, DEDENT;
 terminal            NONE, TRUE, FALSE;
 
 
+non terminal constant;
 non terminal atom;
 non terminal assignment;
+non terminal binary_operator;
+non terminal unary_operator;
 non terminal print_stmt;
+non terminal expression;
 non terminal program;
 
+precedence left OR;
+precedence left AND;
+precedence left NOT;
+precedence left IN, MINOR, MAJOR, MINOREQ, MAJOREQ,DIFF, EQUALS;
+precedence left ORB;
+precedence left XORB;
+precedence left ANDB;
+precedence left SHIFTL, SHIFTR;
+precedence left PLUS, MINUS;
+precedence left MULT, DIV, MOD;
+precedence left NOTB;
+precedence right EXP;
 
-program ::= assignment:a NEWLINE print_stmt:b NEWLINE
+
+program ::= expression NEWLINE
 {:
-    Bloque b1 = (Bloque)a;
+    /*Bloque b1 = (Bloque)a;
     Bloque b2 = (Bloque)b;
     Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(b1.instrucciones,null,b2.instrucciones);
     Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",bRes);
-    RESULT = code;
+    RESULT = code;*/
 :};
 
-atom ::=    NAME:n            {: RESULT = ParserStatus.StackGenerador.peek().createName(((LexerToken)n).TokenValue); :}
-            |INTEGER:n        {: RESULT = ParserStatus.StackGenerador.peek().createConst(ConstCreator.createPyInt(((LexerToken)n).TokenValue)); :}
-            |LONG
-            |FLOAT
-            |STRING
-            |STRING3
-            |NONE
-            |TRUE
-            |FALSE;
+constant ::= INTEGER:n          {: RESULT = ((LexerToken)n).TokenValue;/*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
+             |LONG:n            {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
+             |FLOAT:n           {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/:}
+             |STRING:n          {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
+             |STRING3:n         {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
+             |NONE:n            {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
+             |TRUE:n            {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
+             |FALSE:n           {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :};
+
+atom ::=    NAME:n            {: RESULT = ((LexerToken)n).TokenValue;/*RESULT = RuleGenerator.generateName((LexerToken)n);*/ :}
+            |constant:n       {: RESULT = n;/*RESULT = n;*/ :};
+
+
+binary_operator ::= OR
+                    | AND
+                    | MINOR
+                    | MAJOR
+                    | MINOREQ
+                    | MAJOREQ
+                    | DIFF
+                    | EQUALS
+                    | ORB
+                    | XORB
+                    | ANDB
+                    | SHIFTL
+                    | SHIFTR
+                    | PLUS
+                    | MINUS
+                    | MULT
+                    | DIV
+                    | MOD;
+
+unary_operator ::=  NOT
+                    |NOTB;
+
+expression ::=  atom
+                |LPAREN expression:n RPAREN {: System.out.println("DETECTA PARENTESIS CON: "+n); :}
+                |expression:a binary_operator expression:b {: System.out.println("a: "+a+" b: "+b); :}
+                |unary_operator expression;
+
+
 
 assignment ::= atom:a ASSIGN:au atom:b {:
-                                            int lineNumber = ((LexerToken)au).NumeroFila;
+                                            /*int lineNumber = ((LexerToken)au).NumeroFila;
                                             LinkedList<Instruccion> instrucciones = new LinkedList<>();
                                             if(b instanceof Const){
                                                 instrucciones.add(new Instruccion(lineNumber, OpCode.LOAD_CONST,((Const)b).index));
@@ -90,10 +139,11 @@ assignment ::= atom:a ASSIGN:au atom:b {:
                                             }
                                             instrucciones.add(new Instruccion(lineNumber,OpCode.STORE_NAME,((Name)a).index));
                                             RESULT = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
-
+                                            */
                                     :};
 
 print_stmt ::= PRINT:p NAME:n       {:
+                                        /*
                                         int lineNumber = ((LexerToken)p).NumeroFila;
                                         Name name = ParserStatus.StackGenerador.peek().createName(((LexerToken)n).TokenValue);
                                         LinkedList<Instruccion> instrucciones = new LinkedList<>();
@@ -101,6 +151,7 @@ print_stmt ::= PRINT:p NAME:n       {:
                                         instrucciones.add(new Instruccion(lineNumber, OpCode.PRINT_ITEM,0));
                                         instrucciones.add(new Instruccion(lineNumber, OpCode.PRINT_NEWLINE,0));
                                         RESULT = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
+                                        */
                                     :};
 
 
