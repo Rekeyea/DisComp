@@ -1,9 +1,6 @@
 package com.pyjava.core;
 
-import com.pyjava.core.exceptions.PyException;
-import com.pyjava.core.exceptions.PyIndexError;
-import com.pyjava.core.exceptions.PyKeyError;
-import com.pyjava.core.exceptions.PyTypeError;
+import com.pyjava.core.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,6 +120,23 @@ public class PyDict extends PyObject {
     public PyObject __iter__() throws PyException{
         //como en python el iterador es por claves
         return new PyIterator(this, this.dict.keySet().iterator());
+    }
+
+    @Override
+    public PyObject[] __unpack__(int c) throws PyException{
+        if(dict.size() < c){
+            throw new PyValueError("No hay suficientes valores para iterar.");
+        }
+        if(dict.size() > c){
+            throw new PyValueError("Hay demasiados valores para iterar.");
+        }
+        PyObject[] res = new PyObject[c];
+        int i = 0;
+        for(PyObject v : dict.values()){
+            res[i] = v;
+            i++;
+        }
+        return res;
     }
 
     @Override

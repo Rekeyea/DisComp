@@ -648,6 +648,22 @@ public class Estado {
                     frameActual.f_instr += 1;
                     break;
                 }
+
+
+
+                //set/get index
+
+                case OpCode.UNPACK: {
+
+                    PyObject[] unpacked = stack.pop().__unpack__(instrArg);
+                    for(PyObject v : unpacked){
+                        stack.push(v);
+                    }
+
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
                 
 
 

@@ -212,6 +212,25 @@ public class PyString extends PyObject{
         );
     }
 
+
+    @Override
+    public PyObject[] __unpack__(int c) throws PyException{
+        if(value.length() < c){
+            throw new PyValueError("No hay suficientes valores para iterar.");
+        }
+        if(value.length() > c){
+            throw new PyValueError("Hay demasiados valores para iterar.");
+        }
+        int i = 0;
+        PyObject[] res = new PyObject[c];
+        for(char cr : value.toCharArray()){
+            res[i] = new PyString(String.valueOf(cr));
+        }
+
+        return res;
+    }
+
+
     /**
      * Al igual que python, llamar a list(string) retorna una lista de strings por cada char.
      * @return
