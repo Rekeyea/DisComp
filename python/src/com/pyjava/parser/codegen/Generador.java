@@ -30,6 +30,7 @@ public class Generador {
         Const res = co_consts.get(c);
         if(res == null){
             res = new Const(co_consts.size(),c);
+            co_consts.put(c,res);
         }
 
         return res;
@@ -45,6 +46,7 @@ public class Generador {
         Name res = co_names.get(n);
         if(res == null){
             res = new Name(co_names.size(),n);
+            co_names.put(n,res);
         }
 
         return res;
