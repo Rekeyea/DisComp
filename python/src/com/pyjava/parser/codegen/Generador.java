@@ -21,9 +21,12 @@ public class Generador {
      */
     public Const createConst(PyObject c){
 
+        Const res = co_consts.get(c);
+        if(res == null){
+            res = new Const(co_consts.size()+1,c);
+        }
 
-
-        return null;
+        return res;
     }
 
     /**
