@@ -9,8 +9,19 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+
+
+action code
+{:
+
+:};
+
+
 parser code
 {:
+
+
+
     public void syntax_error(Symbol s){
         System.out.println("Error de sintaxis "+s.sym+" en la linea "+(s.left+1)+" y la columna "+s.right);
         System.out.println(s.value);
@@ -18,10 +29,17 @@ parser code
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
         System.out.println("Error de sintaxis "+s.sym);
     }
+
+:};
+
+init with
+{:
     //MANTENGO UN STACK DE GENERADORES Y PUSHEO EL PRIMERO
-    Deque<Generador> StackGenerador = new LinkedList<Generador>();
-    StackGenerador.push(new Generador());
-:}
+    ParserStatus.StackGenerador.push(new Generador());
+:};
+
+
+
 
 
 /* Terminals (tokens returned by the scanner). */
@@ -40,9 +58,9 @@ non terminal atom;
 non terminal program;
 
 
-program ::= atom:a NEWLINE {: System.out.println((Name)a.value); :};
+program ::= atom:a NEWLINE {: System.out.println(((Name)a).value); :};
 
-atom ::=    NAME:n            {: RESULT = StackGenerador.peek().CreateName((String)n); :}
+atom ::=    NAME:n            {: System.out.println(n); RESULT = ParserStatus.StackGenerador.peek().createName((String)n); :}
             |INTEGER
             |LONG
             |FLOAT
