@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class main {
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws Exception {
 //        String input = "";
 //        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 //        InputStream stream;
@@ -44,7 +44,7 @@ public class main {
 
             parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
             Symbol s = Analizador.parse();
-            /*Code codigoModulo = (Code)s.value;
+            Code codigoModulo = (Code)s.value;
 
             Frame frameInicial = new Frame();
             frameInicial.f_code = codigoModulo;
@@ -72,7 +72,7 @@ public class main {
                     //Finalizo la ejecucion ante error.
                     return;
                 }
-            }*/
+            }
 
 
             /*Lexer lexer = new Lexer(new FileReader("/home/rekeyea/Documents/python.py"));
@@ -95,7 +95,7 @@ public class main {
             }*/
         }
         catch (Exception e){
-            System.out.println(e.getMessage());
+            throw e;
             /*System.out.println("El archivo tiene errores:");
             System.out.println(e.getMessage());*/
         }

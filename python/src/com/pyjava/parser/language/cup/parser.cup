@@ -100,89 +100,89 @@ precedence left XORB;
 precedence left ANDB;
 precedence left SHIFTL, SHIFTR;
 precedence left PLUS, MINUS;
-precedence left MULT, DIV, MOD;
-precedence left NOTB;
+precedence left MULT, DIV, MOD, DIVE;
 precedence right EXP;
+precedence left NOTB;
 precedence right COMA;
 precedence right ASSIGN;
 precedence left DOT;
 
-program ::= if_stmt
+program ::= print_stmt:b NEWLINE
 {:
     System.out.println("EL PROGRAMA ESTA BIEN");
-    /*Bloque b1 = (Bloque)a;
-    Bloque b2 = (Bloque)b;
-    Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(b1.instrucciones,null,b2.instrucciones);
-    Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",bRes);
-    RESULT = code;*/
+    Bloque bloq = ParseResult.getAs(b);
+    Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",bloq);
+    RESULT = code;
 :};
 
-integer ::=    INTEGER
-               |MINUS INTEGER;
-long ::=   LONG
-           |MINUS LONG;
+integer ::=    INTEGER:n                {: RESULT = RuleGenerator.generateConstant(n); :}
+               |MINUS INTEGER:n        {: RESULT = RuleGenerator.generateMinusConstant(n); :};
 
-float ::=   FLOAT
-            |MINUS FLOAT;
+long ::=   LONG:n                       {: RESULT = RuleGenerator.generateConstant(n); :}
+           |MINUS LONG:n               {: RESULT = RuleGenerator.generateMinusConstant(n); :};
 
-constant ::= integer:n          {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
-             |long:n            {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
-             |float:n           {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/:}
-             |STRING:n          {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
-             |STRING3:n         {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
-             |NONE:n            {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
-             |TRUE:n            {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :}
-             |FALSE:n           {: /*RESULT = RuleGenerator.generateConstant((LexerToken)n);*/ :};
+float ::=   FLOAT:n                     {: RESULT = RuleGenerator.generateConstant(n); :}
+            |MINUS FLOAT:n             {: RESULT = RuleGenerator.generateMinusConstant(n); :};
 
-name ::= NAME:n; {:RESULT = RuleGenerator.generateName((LexerToken)n); :}
+constant ::= integer:n          {: RESULT = n; :}
+             |long:n            {: RESULT = n; :}
+             |float:n           {: RESULT = n; :}
+             |STRING:n          {: RESULT = RuleGenerator.generateConstant(n); :}
+             |STRING3:n         {: RESULT = RuleGenerator.generateConstant(n); :}
+             |NONE:n            {: RESULT = RuleGenerator.generateConstant(n); :}
+             |TRUE:n            {: RESULT = RuleGenerator.generateConstant(n); :}
+             |FALSE:n           {: RESULT = RuleGenerator.generateConstant(n); :};
 
-atom ::=    name:n            {: /*RESULT = RuleGenerator.generateName((LexerToken)n);*/ :}
-            |constant:n       {: /*RESULT = n;*/ :}
+name ::= NAME:n  {:RESULT = RuleGenerator.generateName((LexerToken)n); :};
+
+atom ::=    name:n            {: RESULT = n; :}
+            |constant:n       {: RESULT = n; :}
             |func_call;
 
 
-
+/*
 argument ::=    expression;
 named_argument ::= NAME ASSIGN expression;
 named_argument_list ::= named_argument
                         |named_argument COMA named_argument_list;
 argument_list ::=   argument
                     |argument COMA argument_list
-                    |named_argument_list;
+                    |named_argument_list;*/
 
-binary_operator ::= OR
-                    | AND
-                    | MINOR
-                    | MAJOR
-                    | MINOREQ
-                    | MAJOREQ
-                    | DIFF
-                    | EQUALS
-                    | ORB
-                    | XORB
-                    | ANDB
-                    | SHIFTL
-                    | SHIFTR
-                    | PLUS
-                    | MINUS
-                    | MULT
-                    | DIV
-                    | MOD
-                    | EXP;
+binary_operator ::= OR:n            {: RESULT = n; :}
+                    | AND:n         {: RESULT = n; :}
+                    | MINOR:n       {: RESULT = n; :}
+                    | MAJOR:n       {: RESULT = n; :}
+                    | MINOREQ:n     {: RESULT = n; :}
+                    | MAJOREQ:n     {: RESULT = n; :}
+                    | DIFF:n        {: RESULT = n; :}
+                    | EQUALS:n      {: RESULT = n; :}
+                    | ORB:n         {: RESULT = n; :}
+                    | XORB:n        {: RESULT = n; :}
+                    | ANDB:n        {: RESULT = n; :}
+                    | SHIFTL:n      {: RESULT = n; :}
+                    | SHIFTR:n      {: RESULT = n; :}
+                    | PLUS:n        {: RESULT = n; :}
+                    | MINUS:n       {: RESULT = n; :}
+                    | MULT:n        {: RESULT = n; :}
+                    | DIV:n         {: RESULT = n; :}
+                    | MOD:n         {: RESULT = n; :}
+                    | DIVE:n        {: RESULT = n; :}
+                    | EXP:n         {: RESULT = n; :};
 
 unary_operator ::=  NOT
                     |NOTB;
 
-expression ::=  atom:n                                      {: System.out.println("ATOMO"); :}
-                |LPAREN expression:n RPAREN                 {: System.out.println("EXPRESION PARENTESIS"); :}
-                |expression:a binary_operator expression:b  {: System.out.println("EXPRESION binaria"); :}
-                |unary_operator expression                  {: System.out.println("EXPRESION UNARIA"); :};
+expression ::=  atom:n                                          {: RESULT = RuleGenerator.loadNameOrConst(n); :}
+                |LPAREN expression:n RPAREN                     {: RESULT = n; :}
+                |expression:a binary_operator:op expression:b   {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |unary_operator:op expression:a                 {: RESULT = RuleGenerator.generateUnaryOperation(op,a); :};
 
 
 
-assignment ::= atom:a ASSIGN:au expression:b
+/*assignment ::= atom:a ASSIGN:au expression:b
                                     {:
-                                            /*int lineNumber = ((LexerToken)au).NumeroFila;
+                                            int lineNumber = ((LexerToken)au).NumeroFila;
                                             LinkedList<Instruccion> instrucciones = new LinkedList<>();
                                             if(b instanceof Const){
                                                 instrucciones.add(new Instruccion(lineNumber, OpCode.LOAD_CONST,((Const)b).index));
@@ -191,24 +191,13 @@ assignment ::= atom:a ASSIGN:au expression:b
                                             }
                                             instrucciones.add(new Instruccion(lineNumber,OpCode.STORE_NAME,((Name)a).index));
                                             RESULT = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
-                                            */
-                                    :};
 
-print_stmt ::= PRINT:p expression:n
-                                    {:
-                                        /*
-                                        int lineNumber = ((LexerToken)p).NumeroFila;
-                                        Name name = ParserStatus.StackGenerador.peek().createName(((LexerToken)n).TokenValue);
-                                        LinkedList<Instruccion> instrucciones = new LinkedList<>();
-                                        instrucciones.add(new Instruccion(lineNumber, OpCode.LOAD_NAME,(name).index));
-                                        instrucciones.add(new Instruccion(lineNumber, OpCode.PRINT_ITEM,0));
-                                        instrucciones.add(new Instruccion(lineNumber, OpCode.PRINT_NEWLINE,0));
-                                        RESULT = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
-                                        */
-                                    :};
+                                    :};*/
+
+print_stmt ::= PRINT:p expression:n {: RESULT = RuleGenerator.generatePrint(p,n); :};
 
 
-
+/*
 testcoma ::=    COMA expression             {: System.out.println("TESTCOMA 1"); :}
                 |COMA expression testcoma   {: System.out.println("TESTCOMA 2"); :};
 
@@ -264,5 +253,5 @@ if_stmt ::=     IF expression COLON suite NEWLINE
                 |IF expression COLON suite NEWLINE ELSE COLON suite NEWLINE;
 
 
-
+*/
 
