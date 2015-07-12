@@ -4,6 +4,7 @@ import java_cup.runtime.*;
 import jflex.sym;
 import java.util.Deque;
 import java.util.LinkedList;
+import com.pyjava.parser.codegen.LexerToken;
 
 %%
 /*SECCIÓN DE DEFINICIONES*/
@@ -20,12 +21,9 @@ import java.util.LinkedList;
 
     StringBuffer string = new StringBuffer();
 
-    private Symbol symbol(int type){
-        return new Symbol(type,yyline,yycolumn);
-    }
-
-    private Symbol symbol(int type,Object value){
-        return new Symbol(type,yyline,yycolumn,value);
+    private Symbol symbol(int type,String name){
+        LexerToken token = new LexerToken(yycolumn,yyline,type,yytext());
+        return new Symbol(type,yyline,yycolumn,token);
     }
 
 %}
@@ -33,7 +31,7 @@ import java.util.LinkedList;
 %eofval{
     if(Stack.size()<=0)
     {
-        return symbol(sym1.EOF);
+        return symbol(sym1.EOF,"");
     }else{
         Stack.pop();
         yypushback(0);

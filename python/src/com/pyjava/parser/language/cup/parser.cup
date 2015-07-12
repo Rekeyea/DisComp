@@ -1,7 +1,9 @@
 // CUP specification for a simple expression evaluator (no actions)
 package com.pyjava.parser;
 
-
+import com.pyjava.core.exceptions.PyException;
+import com.pyjava.core.runtime.Instruccion;
+import com.pyjava.core.runtime.OpCode;
 import java_cup.runtime.*;
 import com.pyjava.parser.codegen.*;
 import com.pyjava.core.*;
@@ -55,13 +57,17 @@ terminal            NONE, TRUE, FALSE;
 
 
 non terminal atom;
+non terminal assignment;
 non terminal program;
 
 
-program ::= atom:a NEWLINE {: System.out.println(((Name)a).value); :};
+program ::= assignment:a NEWLINE    {:
+                                        System.out.println(((Bloque)a).instrucciones.size());
 
-atom ::=    NAME:n            {: System.out.println(n); RESULT = ParserStatus.StackGenerador.peek().createName((String)n); :}
-            |INTEGER
+                                    :};
+
+atom ::=    NAME:n            {: RESULT = ParserStatus.StackGenerador.peek().createName(((LexerToken)n).TokenValue); :}
+            |INTEGER:n        {: RESULT = ParserStatus.StackGenerador.peek().createConst(ConstCreator.createPyInt(((LexerToken)n).TokenValue)); :}
             |LONG
             |FLOAT
             |STRING
@@ -69,4 +75,19 @@ atom ::=    NAME:n            {: System.out.println(n); RESULT = ParserStatus.St
             |NONE
             |TRUE
             |FALSE;
+
+assignment ::= atom:a ASSIGN:au atom:b {:
+                                            int lineNumber = ((LexerToken)au).NumeroFila;
+                                            LinkedList<Instruccion> instrucciones = new LinkedList<>();
+                                            if(b instanceof Const){
+                                                instrucciones.add(new Instruccion(lineNumber, OpCode.LOAD_CONST,((Const)b).index));
+                                            }else{
+                                                instrucciones.add(new Instruccion(lineNumber, OpCode.LOAD_NAME, ((Name)b).index));
+                                            }
+                                            instrucciones.add(new Instruccion(lineNumber,OpCode.STORE_NAME,((Name)a).index));
+                                            RESULT = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
+
+                                    :};
+
+
 
