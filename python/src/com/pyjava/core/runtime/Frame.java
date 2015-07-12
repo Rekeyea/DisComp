@@ -22,6 +22,11 @@ public class Frame {
     public Stack<PyObject> f_stack = new Stack<PyObject>();
 
     /**
+     * Stack para manejo de loops
+     */
+    public Stack<LoopBlock> f_loopStack = new Stack<>();
+
+    /**
      * Variables globales del frame
      */
     public HashMap<String, PyObject> f_globals = new HashMap<String, PyObject>();

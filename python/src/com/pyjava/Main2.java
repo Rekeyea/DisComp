@@ -102,7 +102,7 @@ public class Main2 {
         codigo.co_code.add(new Instruccion(5, OpCode.LOAD_NAME, 2));
         codigo.co_code.add(new Instruccion(5, OpCode.LOAD_CONST, 3));
         codigo.co_code.add(new Instruccion(5, OpCode.COMPARE_OP, OpCode.CompareCode.GE));   //esta es la instruccion 17. (de 0 a N-1)
-        codigo.co_code.add(new Instruccion(5, OpCode.POP_JUMP_IF_FALSE, 23));                 //18
+        codigo.co_code.add(new Instruccion(5, OpCode.POP_JUMP_IF_FALSE, 5));                 //18
         codigo.co_code.add(new Instruccion(6, OpCode.LOAD_CONST, 4));                       //19: print 'Mayor a 0'
         codigo.co_code.add(new Instruccion(6, OpCode.PRINT_ITEM,0));                        //20
         codigo.co_code.add(new Instruccion(6, OpCode.PRINT_NEWLINE,0));                     //21
@@ -118,17 +118,19 @@ public class Main2 {
         //12:     print a
         codigo.co_code.add(new Instruccion(9, OpCode.LOAD_CONST, 5));                           //26    : carga "Menor o igual a 0"
         codigo.co_code.add(new Instruccion(9, OpCode.GET_ITER, 0));                             //27    : obtiene iterador
-        codigo.co_code.add(new Instruccion(9, OpCode.FOR_ITER, 11));                            //28    : obtiene proximo elemento o salta 11 posiciones si no tiene
-        codigo.co_code.add(new Instruccion(9, OpCode.STORE_NAME, 7));                           //29    : guarda el valor del proximo elemento en la variable a
-        codigo.co_code.add(new Instruccion(10, OpCode.LOAD_NAME, 7));                           //30    : carga la variable a en el stack para realizar comparacion
-        codigo.co_code.add(new Instruccion(10, OpCode.LOAD_CONST, 6));                          //31    : carga "a"
-        codigo.co_code.add(new Instruccion(10, OpCode.COMPARE_OP, OpCode.CompareCode.EQ));      //32    : compara a == "a"
-        codigo.co_code.add(new Instruccion(10, OpCode.POP_JUMP_IF_FALSE,35));                   //33    : si no es igual salta para continuar y evitar el break -- se podria optimizar
-        codigo.co_code.add(new Instruccion(11, OpCode.POP_JUMP_FORWARD, 5));                    //34    : aca llega si es igual, hace el break, o sea salta y sale del loop, popeando el stack.
-        codigo.co_code.add(new Instruccion(12, OpCode.LOAD_NAME, 7));                           //35    : carga la variable a en el stack para imprimirla
-        codigo.co_code.add(new Instruccion(12, OpCode.PRINT_ITEM,0));                           //36    : imprime
-        codigo.co_code.add(new Instruccion(12, OpCode.PRINT_NEWLINE,0));                        //37    : imprime salto de linea
-        codigo.co_code.add(new Instruccion(12, OpCode.JUMP_ABSOLUTE,28));                       //38    : vuelve a la iteracion, esto se podria optimizar.
+        codigo.co_code.add(new Instruccion(9, OpCode.CREATE_LOOP, 12));                         //28    : obtiene iterador
+        codigo.co_code.add(new Instruccion(9, OpCode.FOR_ITER, 11));                            //29    : obtiene proximo elemento o salta 11 posiciones si no tiene
+        codigo.co_code.add(new Instruccion(9, OpCode.STORE_NAME, 7));                           //30    : guarda el valor del proximo elemento en la variable a
+        codigo.co_code.add(new Instruccion(10, OpCode.LOAD_NAME, 7));                           //31    : carga la variable a en el stack para realizar comparacion
+        codigo.co_code.add(new Instruccion(10, OpCode.LOAD_CONST, 6));                          //32    : carga "a"
+        codigo.co_code.add(new Instruccion(10, OpCode.COMPARE_OP, OpCode.CompareCode.EQ));      //33    : compara a == "a"
+        codigo.co_code.add(new Instruccion(10, OpCode.POP_JUMP_IF_FALSE,2));                    //34    : si no es igual salta para continuar y evitar el break -- se podria optimizar
+        codigo.co_code.add(new Instruccion(11, OpCode.BREAK_LOOP, 0));                          //35    : break...
+        codigo.co_code.add(new Instruccion(12, OpCode.LOAD_NAME, 7));                           //36    : carga la variable a en el stack para imprimirla
+        codigo.co_code.add(new Instruccion(12, OpCode.PRINT_ITEM,0));                           //37    : imprime
+        codigo.co_code.add(new Instruccion(12, OpCode.PRINT_NEWLINE,0));                        //38    : imprime salto de linea
+        codigo.co_code.add(new Instruccion(12, OpCode.CONTINUE_LOOP,0));                        //39    : vuelve a la iteracion, esto se podria optimizar.
+        codigo.co_code.add(new Instruccion(12, OpCode.DESTROY_LOOP,1));                         //40    : Destruye el loop y hace pop de 1 elemento, o sea, del iterador.
 
 
         //print None -- Python en realidad optimiza un poco esto, y agrega siempre a None como constante para no irlo a buscar al namespace global.

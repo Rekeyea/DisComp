@@ -460,7 +460,7 @@ public class Estado {
                 case OpCode.POP_JUMP_IF_TRUE: {
 
                     if (stack.pop().__bool__().value) {
-                        frameActual.f_instr = instrArg;
+                        frameActual.f_instr += instrArg;
                     } else {
                         frameActual.f_instr += 1;
                     }
@@ -472,7 +472,7 @@ public class Estado {
 
 
                     if (!stack.pop().__bool__().value) {
-                        frameActual.f_instr = instrArg;
+                        frameActual.f_instr += instrArg;
                     } else {
                         frameActual.f_instr += 1;
                     }
@@ -484,7 +484,7 @@ public class Estado {
                 case OpCode.JUMP_IF_TRUE_OR_POP: {
 
                     if (stack.peek().__bool__().value) {
-                        frameActual.f_instr = instrArg;
+                        frameActual.f_instr += instrArg;
                     } else {
                         stack.pop();
                         frameActual.f_instr += 1;
@@ -496,7 +496,7 @@ public class Estado {
                 case OpCode.JUMP_IF_FALSE_OR_POP: {
 
                     if (!stack.peek().__bool__().value) {
-                        frameActual.f_instr = instrArg;
+                        frameActual.f_instr += instrArg;
                     } else {
                         stack.pop();
                         frameActual.f_instr += 1;
@@ -542,7 +542,6 @@ public class Estado {
                         frameActual.f_instr += 1;
                     }
                     catch (PyStopIteration e){
-                        stack.pop();
                         frameActual.f_instr += instrArg;
                     }
 
@@ -550,6 +549,45 @@ public class Estado {
                 }
 
 
+                case OpCode.CREATE_LOOP: {
+                    frameActual.f_loopStack.push(new LoopBlock(frameActual.f_instr+1, frameActual.f_instr + instrArg));
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.CONTINUE_LOOP: {
+                    if(frameActual.f_loopStack.empty()){
+                        throw new PyRuntimeException("Continue llamado fuera de un loop.");
+                    }
+
+                    frameActual.f_instr = frameActual.f_loopStack.peek().instr_inicio;
+
+                    break;
+                }
+
+                case OpCode.BREAK_LOOP: {
+                    if(frameActual.f_loopStack.empty()){
+                        throw new PyRuntimeException("Break llamado fuera de un loop.");
+                    }
+
+                    frameActual.f_instr = frameActual.f_loopStack.peek().instr_fin;
+
+                    break;
+                }
+
+                case OpCode.DESTROY_LOOP: {
+                    frameActual.f_loopStack.pop();
+
+                    if(instrArg > 0) {
+                        for (int i = 0; i < instrArg; i++) {
+                            stack.pop();
+                        }
+                    }
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
 
 
 
@@ -562,6 +600,9 @@ public class Estado {
                     throw new RuntimeException("Error fatal, instruccion desconocida.");
                 }
             }
+        }
+        catch (PyFinEjecucion e){
+            throw  e;
         }
         catch (PyException e){
             System.out.println(String.format("[DEBUG] Error en instruccion numero: %s de la linea %s, con tamano de stack en frame actual %s", frameActual.f_instr, this.getLineaActual(), frameActual.f_stack.size()));
