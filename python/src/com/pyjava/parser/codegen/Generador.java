@@ -65,8 +65,8 @@ public class Generador {
         }
 
         if (preInstr != null){
-            for(Instruccion i : preInstr){
-                res.instrucciones.addFirst(i);
+            for(int i = preInstr.size(); i >= 0; i--){
+                res.instrucciones.addFirst(preInstr.get(i));
             }
 
         }
