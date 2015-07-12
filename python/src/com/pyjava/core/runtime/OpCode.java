@@ -159,18 +159,49 @@ public class OpCode {
 
 
     //------------ Operaciones listas -----------
+    /**
+     * CREATE_LIST (i) : Construye una nueva lista y la pone en el stack, donde i indica la cantidad de elementos del stack a popear para utilizar al construir la lista.
+     *                   Donde el tope del stack representa el ultimo elemento de la lista
+     *
+     */
 
-    //Pendiente
+    public final static int CREATE_LIST = 42;
 
     //------------ Operaciones diccionarios -----------
 
-    //Pendiente
+    /**
+     * CREATE_DICT (i) : Construye un nuevo diccionario y lo pone en el stack, donde i indica la cantidad de elementos a agregar por defecto en el dict.
+     *                  Por cada i, deben haber dos elementos en el stack, clave y valor
+     *                  Ej de stack: base del stack : clave1, valor1, clave2, valor : tope del stack --> i = 2
+     */
+
+    public final static int CREATE_DICT = 43;
 
 
-    //------------ Operaciones tuplas -----------
+    //------------ Operaciones tuplas ----------------
 
-    //Pendiente
+    /**
+     * CREATE_TUPLE (i) : Construye una nueva tupla y la pone en el stack, donde i indica la cantidad de elementos del stack a popear para utilizar al construir la tupla.
+     *                    Donde el tope del stack representa el ultimo elemento de la tupla
+     */
 
+    public final static int CREATE_TUPLE = 44;
+
+
+    //------------ Operaciones de indices: son para listas, tuplas y dicts -------
+
+    /**
+     *  GET_INDEX : Hace TOS = TOS1[TOS] : Esto es, obtiene del objeto del TOS1, el valor en el indice TOS y lo pone en TOS.
+     *  SET_INDEX : Hace TOS2[TOS] = TOS1 : Esto es, setea en el objeto del TOS2, en la clave TOS el valor TOS1
+     */
+
+    public final static int GET_INDEX = 45;
+    public final static int SET_INDEX = 46;
+
+
+    //------------ Operaciones de slices -------------
+
+    //pendiente
 
 
     //------------ Operaciones de creacion de funciones -----------

@@ -3,6 +3,7 @@ package com.pyjava.core.runtime;
 import com.pyjava.core.*;
 import com.pyjava.core.exceptions.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -588,6 +589,66 @@ public class Estado {
                     frameActual.f_instr += 1;
                     break;
                 }
+
+
+                //***************************** Listas dicts y tuplas **************************************
+
+                case OpCode.CREATE_LIST: {
+
+                    PyList res = new PyList();
+                    if(instrArg > 0) {
+                        ArrayList<PyObject> datos = new ArrayList<>(instrArg);
+
+                        for (int i = instrArg -1 ; i >= 0; i--) {
+                            datos.set(i, stack.pop());
+                        }
+                        res.lista = datos;
+                    }
+
+                    stack.push(res);
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+                case OpCode.CREATE_DICT: {
+
+                    PyDict res = new PyDict();
+                    if(instrArg > 0) {
+
+                        for(int i = 0; i < instrArg; i++){
+                            PyObject valor = stack.pop();
+                            PyObject clave = stack.pop();
+
+                            res.dict.put(clave,valor);
+                        }
+                    }
+
+                    stack.push(res);
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+
+
+                case OpCode.CREATE_TUPLE: {
+
+                    PyTuple res = new PyTuple();
+                    if(instrArg > 0) {
+                        ArrayList<PyObject> datos = new ArrayList<>(instrArg);
+
+                        for (int i = instrArg -1 ; i >= 0; i--) {
+                            datos.set(i, stack.pop());
+                        }
+                        res.tupla = datos;
+                    }
+
+                    stack.push(res);
+
+                    frameActual.f_instr += 1;
+                    break;
+                }
+                
 
 
 
