@@ -1,6 +1,8 @@
 package com.pyjava.parser.codegen;
 
+import com.pyjava.core.runtime.Instruccion;
 import com.pyjava.parser.sym1;
+import jdk.nashorn.internal.parser.Lexer;
 
 import java.util.Objects;
 
@@ -9,30 +11,46 @@ import java.util.Objects;
  */
 public class RuleGenerator {
 
-    public static Const generateConstant(LexerToken token){
+    public static ParseResult generateConstant(Object t){
+        LexerToken token = (LexerToken)t;
+        int numLine = token.NumeroFila+1;
+        Object val = null;
         Generador gen = ParserStatus.StackGenerador.peek();
         switch (token.TokenType){
             case sym1.INTEGER:
-                return gen.createOrGetConst(ConstCreator.createPyInt(token.TokenValue));
+                val =  gen.createOrGetConst(ConstCreator.createPyInt(token.TokenValue));
             case sym1.LONG:
-                return gen.createOrGetConst(ConstCreator.createPyLong(token.TokenValue));
+                val =  gen.createOrGetConst(ConstCreator.createPyLong(token.TokenValue));
             case sym1.FLOAT:
-                return gen.createOrGetConst(ConstCreator.createPyFloat(token.TokenValue));
+                val =  gen.createOrGetConst(ConstCreator.createPyFloat(token.TokenValue));
             case sym1.STRING:
-                return gen.createOrGetConst(ConstCreator.createPyString(token.TokenValue));
+                val =  gen.createOrGetConst(ConstCreator.createPyString(token.TokenValue));
             case sym1.STRING3:
-                return gen.createOrGetConst(ConstCreator.createPyString(token.TokenValue));
+                val =  gen.createOrGetConst(ConstCreator.createPyString(token.TokenValue));
             case sym1.NONE:
-                return gen.createOrGetConst(ConstCreator.createPyNone());
+                val =  gen.createOrGetConst(ConstCreator.createPyNone());
             case sym1.TRUE:
-                return gen.createOrGetConst(ConstCreator.createPyTrue());
+                val =  gen.createOrGetConst(ConstCreator.createPyTrue());
             case sym1.FALSE:
-                return gen.createOrGetConst(ConstCreator.createPyFalse());
+                val =  gen.createOrGetConst(ConstCreator.createPyFalse());
             default:
-                return null;
+                val =  null;
         }
+        return new ParseResult(numLine,val);
     }
-    public static Name generateName(LexerToken token){
-        return ParserStatus.StackGenerador.peek().createOrGetName((token).TokenValue);
+
+    public static ParseResult generateName(Object t){
+        LexerToken token = (LexerToken)t;
+        int numLine = token.NumeroFila+1;
+        Object val = ParserStatus.StackGenerador.peek().createOrGetName((token).TokenValue);
+        return new ParseResult(numLine,val);
+    }
+
+    public static Instruccion loadName(Name n){
+        return null;
+    }
+
+    public static Instruccion loadConst(Const c){
+        return null;
     }
 }

@@ -117,8 +117,8 @@ program ::= if_stmt
     RESULT = code;*/
 :};
 
-integer ::=    INTEGER
-               |MINUS INTEGER;
+integer ::=    INTEGER:n                {: RESULT =  :}
+               |MINUS INTEGER:n;
 long ::=   LONG
            |MINUS LONG;
 
