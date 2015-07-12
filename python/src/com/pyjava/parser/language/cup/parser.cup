@@ -101,7 +101,7 @@ precedence left ANDB;
 precedence left SHIFTL, SHIFTR;
 precedence left PLUS, MINUS;
 precedence left MULT, DIV, MOD, DIVE;
-precedence right EXP;
+precedence left EXP;
 precedence left NOTB;
 precedence right COMA;
 precedence right ASSIGN;
