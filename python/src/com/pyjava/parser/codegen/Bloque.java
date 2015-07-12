@@ -11,5 +11,8 @@ public class Bloque {
 
     public LinkedList<Instruccion> instrucciones;       //Listas de instrucciones de este bloque
 
+    public Bloque(){
+        instrucciones = new LinkedList<>();
+    }
 
 }
