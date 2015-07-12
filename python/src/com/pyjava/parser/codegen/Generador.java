@@ -36,6 +36,8 @@ public class Generador {
         return res;
     }
 
+
+
     /**
      * Crea un nuevo nombre
      */
