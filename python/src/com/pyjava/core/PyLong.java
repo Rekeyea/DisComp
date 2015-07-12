@@ -148,7 +148,7 @@ public class PyLong extends PyObject {
 
         if(obj instanceof PyInteger){
             double r = Math.pow(this.value, ((PyInteger)obj).value);
-            if(r < 0){
+            if((r != Math.floor(r)) || Double.isInfinite(r)){
                 return new PyFloat(r);
             }
             return new PyLong((long)r);
@@ -156,7 +156,7 @@ public class PyLong extends PyObject {
 
         if(obj instanceof PyLong){
             double r = Math.pow ((double)this.value, (double)((PyLong)obj).value);
-            if(r < 0){
+            if((r != Math.floor(r)) || Double.isInfinite(r)){
                 return new PyFloat(r);
             }
             return new PyLong((long)r);
