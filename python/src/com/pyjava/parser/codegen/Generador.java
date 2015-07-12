@@ -65,14 +65,14 @@ public class Generador {
         }
 
         if (preInstr != null){
-            for(int i = preInstr.size(); i >= 0; i--){
+            for(int i = preInstr.size()-1; i >= 0; i--){
                 res.instrucciones.addFirst(preInstr.get(i));
             }
 
         }
 
         if (postInstr != null){
-            for(Instruccion i : preInstr){
+            for(Instruccion i : postInstr){
                 res.instrucciones.addLast(i);
             }
 
