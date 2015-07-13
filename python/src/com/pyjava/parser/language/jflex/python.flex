@@ -102,7 +102,6 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     "for"                     {return symbol(sym1.FOR, yytext());}
     "lambda"                  {return symbol(sym1.LAMBDA, yytext());}
     "try"                     {return symbol(sym1.TRY, yytext());}
-    "type"                    {return symbol(sym1.TYPE, yytext());}
     "print"                   {return symbol(sym1.PRINT, yytext());}
 
     ","                       {return symbol(sym1.COMA, yytext());}

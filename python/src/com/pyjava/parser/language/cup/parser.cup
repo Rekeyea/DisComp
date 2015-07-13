@@ -101,7 +101,7 @@ precedence left ANDB;
 precedence left SHIFTL, SHIFTR;
 precedence left PLUS, MINUS;
 precedence left MULT, DIV, MOD, DIVE;
-precedence left EXP;
+precedence right EXP;
 precedence left NOTB;
 precedence right COMA;
 precedence right ASSIGN;
@@ -136,8 +136,7 @@ constant ::= integer:n          {: RESULT = n; :}
 name ::= NAME:n  {:RESULT = RuleGenerator.generateName((LexerToken)n); :};
 
 atom ::=    name:n            {: RESULT = n; :}
-            |constant:n       {: RESULT = n; :}
-            |func_call;
+            |constant:n       {: RESULT = n; :};
 
 
 
@@ -165,10 +164,32 @@ binary_operator ::= OR:n            {: RESULT = n; :}
 unary_operator ::=  NOT
                     |NOTB;
 
+
 expression ::=  atom:n                                          {: RESULT = RuleGenerator.loadNameOrConst(n); :}
+				|func_call:f                                    {: RESULT = f; :}
                 |LPAREN expression:n RPAREN                     {: RESULT = n; :}
-                |expression:a binary_operator:op expression:b   {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
-                |unary_operator:op expression:a                 {: RESULT = RuleGenerator.generateUnaryOperation(op,a); :};
+                |expression:a OR:op expression:b                {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a AND:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MINOR:op expression:b             {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MAJOR:op expression:b             {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MINOREQ:op expression:b           {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MAJOREQ:op expression:b           {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a DIFF:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a EQUALS:op expression:b            {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a ORB:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a XORB:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a ANDB:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a SHIFTL:op expression:b            {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a SHIFTR:op expression:b            {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a PLUS:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MINUS:op expression:b             {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MULT:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a DIV:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MOD:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a DIVE:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a EXP:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |NOT:op expression:a                            {: RESULT = RuleGenerator.generateUnaryOperation(op,a); :}
+                |NOTB:op expression:a                           {: RESULT = RuleGenerator.generateUnaryOperation(op,a); :};
 
 
 
@@ -211,19 +232,25 @@ namelist ::=    NAME
 expr_stmt ::=   namelist ASSIGN testlist;
 
 
-argument ::=    expression;
+
+
 named_argument ::= NAME ASSIGN expression;
 named_argument_list ::= named_argument
                         |named_argument COMA named_argument_list;
-argument_list ::=   argument
-                    |argument COMA argument_list
+
+argument_list ::=   expression:e                            {: RESULT = RuleGenerator.generateArguments(null,e,null); :}
+                    |expression:e COMA:c argument_list:al   {: RESULT = RuleGenerator.generateArguments(c,e,al); :}
                     |named_argument_list;
 
-trailer ::= LPAREN RPAREN
-            |LPAREN argument_list RPAREN;
+trailer ::= LPAREN RPAREN                       {: RESULT = null; :}
+            |LPAREN argument_list:al RPAREN     {: RESULT = al; :};
 
 func_call ::=   expression DOT NAME trailer
-                |NAME trailer;
+                |name:n trailer:t               {: RESULT = RuleGenerator.generateFunctionCall(n,t); :};
+
+
+
+
 
 flow_stmt ::=   BREAK
                 |CONTINUE
