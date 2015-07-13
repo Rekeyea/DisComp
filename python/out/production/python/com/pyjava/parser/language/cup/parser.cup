@@ -1,12 +1,28 @@
 // CUP specification for a simple expression evaluator (no actions)
 package com.pyjava.parser;
 
-
+import com.pyjava.core.exceptions.PyException;
+import com.pyjava.core.runtime.*;
 import java_cup.runtime.*;
+import com.pyjava.parser.codegen.*;
+import com.pyjava.core.*;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Scanner;
+
+
+
+action code
+{:
+
+:};
+
 
 parser code
 {:
+
+
+
     public void syntax_error(Symbol s){
         System.out.println("Error de sintaxis "+s.sym+" en la linea "+(s.left+1)+" y la columna "+s.right);
         System.out.println(s.value);
@@ -14,10 +30,17 @@ parser code
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
         System.out.println("Error de sintaxis "+s.sym);
     }
+
+:};
+
+init with
+{:
     //MANTENGO UN STACK DE GENERADORES Y PUSHEO EL PRIMERO
-    Deque<Generador> StackGenerador = new LinkedList<Generador>();
-    StackGenerador.push(new Generador());
-:}
+    ParserStatus.StackGenerador.push(new Generador());
+:};
+
+
+
 
 
 /* Terminals (tokens returned by the scanner). */
@@ -32,19 +55,243 @@ terminal            INDENT, DEDENT;
 terminal            NONE, TRUE, FALSE;
 
 
+non terminal constant;
 non terminal atom;
+non terminal assignment;
+non terminal binary_operator;
+non terminal unary_operator;
+non terminal print_stmt;
+non terminal expression;
+non terminal testcoma;
+non terminal testlist;
+non terminal return_stmt;
+non terminal namecoma;
+non terminal namelist;
+non terminal expr_stmt;
+non terminal argument;
+non terminal named_argument;
+non terminal named_argument_list;
+non terminal argument_list;
+non terminal trailer;
+non terminal func_call;
+non terminal integer;
+non terminal float;
+non terminal long;
+non terminal flow_stmt;
+non terminal small_stmt;
+non terminal stmt;
+non terminal compound_stmt;
+non terminal if_stmt;
+non terminal while_stmt;
+non terminal for_stmt;
+non terminal func_def;
+non terminal stmt_list;
+non terminal suite;
+non terminal name;
+non terminal dictorsetmaker;
+non terminal dictorsetelement;
+non terminal dictionary;
+non terminal listmaker;
+non terminal list;
+non terminal tuple;
+non terminal tupletrail;
+non terminal tuplemaker;
+
 non terminal program;
 
 
-program ::= atom:a NEWLINE {: System.out.println((Name)a.value); :};
+precedence left OR;
+precedence left AND;
+precedence left NOT;
+precedence left IN, MINOR, MAJOR, MINOREQ, MAJOREQ,DIFF, EQUALS;
+precedence left ORB;
+precedence left XORB;
+precedence left ANDB;
+precedence left SHIFTL, SHIFTR;
+precedence left PLUS, MINUS;
+precedence left MULT, DIV, MOD, DIVE;
+precedence right EXP;
+precedence left NOTB;
+precedence right COMA;
+precedence right ASSIGN;
+precedence left DOT;
 
-atom ::=    NAME:n            {: RESULT = StackGenerador.peek().CreateName((String)n); :}
-            |INTEGER
-            |LONG
-            |FLOAT
-            |STRING
-            |STRING3
-            |NONE
-            |TRUE
-            |FALSE;
+
+program ::= print_stmt:b NEWLINE
+{:
+    System.out.println("EL PROGRAMA ESTA BIEN");
+    Bloque bloq = ParseResult.getAs(b);
+    Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",bloq);
+    RESULT = code;
+:};
+
+integer ::=    INTEGER:n                {: RESULT = RuleGenerator.generateConstant(n); :}
+               |MINUS INTEGER:n        {: RESULT = RuleGenerator.generateMinusConstant(n); :};
+
+long ::=   LONG:n                       {: RESULT = RuleGenerator.generateConstant(n); :}
+           |MINUS LONG:n               {: RESULT = RuleGenerator.generateMinusConstant(n); :};
+
+float ::=   FLOAT:n                     {: RESULT = RuleGenerator.generateConstant(n); :}
+            |MINUS FLOAT:n             {: RESULT = RuleGenerator.generateMinusConstant(n); :};
+
+constant ::= integer:n          {: RESULT = n; :}
+             |long:n            {: RESULT = n; :}
+             |float:n           {: RESULT = n; :}
+             |STRING:n          {: RESULT = RuleGenerator.generateConstant(n); :}
+             |STRING3:n         {: RESULT = RuleGenerator.generateConstant(n); :}
+             |NONE:n            {: RESULT = RuleGenerator.generateConstant(n); :}
+             |TRUE:n            {: RESULT = RuleGenerator.generateConstant(n); :}
+             |FALSE:n           {: RESULT = RuleGenerator.generateConstant(n); :};
+
+name ::= NAME:n  {:RESULT = RuleGenerator.generateName((LexerToken)n); :};
+
+atom ::=    name:n                              {: RESULT = n; :}
+            |constant:n                         {: RESULT = n; :};
+
+
+tuple               ::= LPAREN:b RPAREN                             {: System.out.println("CREO TUPLA"); RESULT = RuleGenerator.generateListTupleDict(b,null,OpCode.CREATE_TUPLE); :}
+                        |LPAREN:b tuplemaker:l RPAREN               {: RESULT = RuleGenerator.generateListTupleDict(b,l,OpCode.CREATE_TUPLE);  :};
+
+tupletrail          ::= expression:e                                {: RESULT = RuleGenerator.generateListElements(e,null,null); :}
+                        |expression:e COMA:c tupletrail:l           {: RESULT = RuleGenerator.generateListElements(e,c,l); :};
+
+tuplemaker          ::= expression:e COMA:c                         {: RESULT = RuleGenerator.generateListElements(e,null,null); :}
+                        |expression:e COMA:c tupletrail:l           {: RESULT = RuleGenerator.generateListElements(e,c,l); :};
+
+
+list                ::= LBRACKET:b RBRACKET                         {: System.out.println("CREO LISTA");RESULT = RuleGenerator.generateListTupleDict(b,null,OpCode.CREATE_LIST); :}
+                        |LBRACKET:b listmaker:l RBRACKET            {: RESULT = RuleGenerator.generateListTupleDict(b,l,OpCode.CREATE_LIST);  :};
+
+listmaker           ::= expression:e                            {: RESULT = RuleGenerator.generateListElements(e,null,null); :}
+                        |expression:e COMA:c listmaker:l        {: RESULT = RuleGenerator.generateListElements(e,c,l); :};
+
+
+dictionary          ::= LCURLY:c dictorsetmaker:e RCURLY            {: RESULT = RuleGenerator.generateListTupleDict(c,e,OpCode.CREATE_DICT); :}
+                        |LCURLY:c RCURLY                            {: RESULT = RuleGenerator.generateListTupleDict(c,null,OpCode.CREATE_DICT); :};
+
+dictorsetelement    ::= expression:e1 COLON:c expression:e2                 {: RESULT = RuleGenerator.generateDictItem(e1,c,e2); :};
+dictorsetmaker      ::= dictorsetelement:d                                  {: RESULT = RuleGenerator.generateListElements(d,null,null); :}
+                        |dictorsetelement:e1 COMA:c dictorsetmaker:e2       {: RESULT = RuleGenerator.generateListElements(e1,c,e2); :};
+
+
+
+expression ::=  atom:n                                          {: RESULT = RuleGenerator.loadNameOrConst(n); :}
+                |dictionary:n                                   {: RESULT = n; :}
+                |list:n                                         {: RESULT = n; :}
+                |tuple:n                                        {: RESULT = n; :}
+				|func_call:f                                    {: RESULT = f; :}
+                |LPAREN expression:n RPAREN                     {: RESULT = n; :}
+                |expression:a OR:op expression:b                {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a AND:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MINOR:op expression:b             {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MAJOR:op expression:b             {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MINOREQ:op expression:b           {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MAJOREQ:op expression:b           {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a DIFF:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a EQUALS:op expression:b            {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a ORB:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a XORB:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a ANDB:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a SHIFTL:op expression:b            {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a SHIFTR:op expression:b            {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a PLUS:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MINUS:op expression:b             {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MULT:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a DIV:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a MOD:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a DIVE:op expression:b              {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |expression:a EXP:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
+                |NOT:op expression:a                            {: RESULT = RuleGenerator.generateUnaryOperation(op,a); :}
+                |NOTB:op expression:a                           {: RESULT = RuleGenerator.generateUnaryOperation(op,a); :};
+
+
+
+/*assignment ::= atom:a ASSIGN:au expression:b
+                                    {:
+                                            int lineNumber = ((LexerToken)au).NumeroFila;
+                                            LinkedList<Instruccion> instrucciones = new LinkedList<>();
+                                            if(b instanceof Const){
+                                                instrucciones.add(new Instruccion(lineNumber, OpCode.LOAD_CONST,((Const)b).index));
+                                            }else{
+                                                instrucciones.add(new Instruccion(lineNumber, OpCode.LOAD_NAME, ((Name)b).index));
+                                            }
+                                            instrucciones.add(new Instruccion(lineNumber,OpCode.STORE_NAME,((Name)a).index));
+                                            RESULT = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
+
+                                    :};*/
+
+print_stmt ::= PRINT:p expression:n {: RESULT = RuleGenerator.generatePrint(p,n); :};
+
+
+
+testcoma ::=    COMA expression             {: System.out.println("TESTCOMA 1"); :}
+                |COMA expression testcoma   {: System.out.println("TESTCOMA 2"); :};
+
+testlist ::=    expression                  {: System.out.println("TESTLIST 1"); :}
+                |expression COMA            {: System.out.println("TESTLIST 2"); :}
+                |expression testcoma        {: System.out.println("TESTLIST 3"); :}
+                |expression testcoma COMA   {: System.out.println("TESTLIST 4"); :};
+
+
+return_stmt ::= RETURN
+                |RETURN testlist;
+
+namecoma ::=    COMA NAME
+                |COMA NAME namecoma;
+namelist ::=    NAME
+                |NAME namecoma;
+
+
+expr_stmt ::=   namelist ASSIGN testlist;
+
+
+
+
+named_argument ::= NAME ASSIGN expression;
+named_argument_list ::= named_argument
+                        |named_argument COMA named_argument_list;
+
+argument_list ::=   expression:e                            {: RESULT = RuleGenerator.generateArguments(null,e,null); :}
+                    |expression:e COMA:c argument_list:al   {: RESULT = RuleGenerator.generateArguments(c,e,al); :}
+                    |named_argument_list;
+
+trailer ::= LPAREN RPAREN                       {: RESULT = null; :}
+            |LPAREN argument_list:al RPAREN     {: RESULT = al; :};
+
+func_call ::=   expression DOT NAME trailer
+                |name:n trailer:t               {: RESULT = RuleGenerator.generateFunctionCall(n,t); :};
+
+
+
+
+
+flow_stmt ::=   BREAK
+                |CONTINUE
+                |return_stmt;
+
+small_stmt ::=  expr_stmt
+                |expression
+                |print_stmt
+                |flow_stmt;
+
+stmt ::=    small_stmt NEWLINE
+            |compound_stmt NEWLINE;
+
+compound_stmt ::=   if_stmt
+                    |while_stmt
+                    |for_stmt
+                    |func_def;
+
+stmt_list ::=   stmt
+                |stmt stmt_list;
+
+suite ::=   stmt
+            |NEWLINE INDENT stmt_list DEDENT;
+
+
+if_stmt ::=     IF expression COLON suite NEWLINE
+                |IF expression COLON suite NEWLINE ELSE COLON suite NEWLINE;
+
+
+
 

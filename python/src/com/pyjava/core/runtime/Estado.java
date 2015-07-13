@@ -593,7 +593,7 @@ public class Estado {
                         ArrayList<PyObject> datos = new ArrayList<>(instrArg);
 
                         for (int i = instrArg -1 ; i >= 0; i--) {
-                            datos.add(i, stack.pop());
+                            datos.add(0, stack.pop());
                         }
                         res.lista = datos;
                     }
@@ -631,7 +631,7 @@ public class Estado {
                         ArrayList<PyObject> datos = new ArrayList<>(instrArg);
 
                         for (int i = instrArg -1 ; i >= 0; i--) {
-                            datos.add(i, stack.pop());
+                            datos.add(0, stack.pop());
                         }
                         res.tupla = datos;
                     }
