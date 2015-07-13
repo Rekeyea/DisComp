@@ -21,8 +21,8 @@ import com.pyjava.parser.codegen.LexerToken;
 
     StringBuffer string = new StringBuffer();
 
-    private Symbol symbol(int type,String name){
-        LexerToken token = new LexerToken(yycolumn,yyline,type,yytext());
+    private Symbol symbol(int type,String value){
+        LexerToken token = new LexerToken(yycolumn,yyline,type,value);
         return new Symbol(type,yyline,yycolumn,token);
     }
 
@@ -102,7 +102,6 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     "for"                     {return symbol(sym1.FOR, yytext());}
     "lambda"                  {return symbol(sym1.LAMBDA, yytext());}
     "try"                     {return symbol(sym1.TRY, yytext());}
-    "type"                    {return symbol(sym1.TYPE, yytext());}
     "print"                   {return symbol(sym1.PRINT, yytext());}
 
     ","                       {return symbol(sym1.COMA, yytext());}
@@ -141,6 +140,8 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     "<="                      {return symbol(sym1.MINOREQ, yytext());}
     ">="                      {return symbol(sym1.MAJOREQ, yytext());}
     "="                       {return symbol(sym1.ASSIGN, yytext());}
+    {STRING}                  {string.setLength(0); yybegin(STRING);}
+    {TRIPLE_STRING}           {string.setLength(0); yybegin(TRIPLE_STRING);}
     {NONE}                    {return symbol(sym1.NONE, yytext());}
     {TRUE}                    {return symbol(sym1.TRUE, yytext());}
     {FALSE}                   {return symbol(sym1.FALSE, yytext());}
@@ -178,13 +179,15 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {INTEGER}                 {return symbol(sym1.INTEGER, yytext());}
     {FLOAT}                   {return symbol(sym1.FLOAT, yytext());}
     {NEWLINE}                 {return symbol(sym1.NEWLINE, yytext());}
-    {STRING}                  {string.setLength(0); yybegin(STRING);}
-    {TRIPLE_STRING}           {string.setLength(0); yybegin(TRIPLE_STRING);}
     {NAME}                    {return symbol(sym1.NAME, yytext());}
 }
 
 <STRING> {
-  \"|\'                       {yybegin(YYINITIAL); return symbol(sym1.STRING, string.toString());}
+  \"|\'                       {
+                                    String res = string.toString();
+                                    yybegin(YYINITIAL);
+                                    return symbol(sym1.STRING, res);
+                              }
   [^\r\n\"\\]+                {string.append( yytext() );}
   \\t                         {string.append('\t');}
   \\n                         {string.append('\n');}

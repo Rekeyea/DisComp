@@ -193,4 +193,42 @@ public class RuleGenerator {
         b.instrucciones.add(new Instruccion(lineNumber, OpCode.PRINT_NEWLINE,0));
         return new ParseResult(lineNumber,b);
     }
+
+    public static ParseResult generateFunctionCall(Object fName, Object fTrail){
+        ParseResult pr = (ParseResult)fName;
+        ParseResult tr = (ParseResult)fTrail;
+        //si me viene un bloque tiene un solo argumento
+        Arguments args = ParseResult.getAs(fTrail);
+        int cantArguments = args.cantidad;
+        Bloque trail = args.value;
+        int line = pr.linea;
+        Name name = ParseResult.getAs(pr);
+        trail.instrucciones.addFirst(new Instruccion(line,OpCode.LOAD_NAME,name.index));
+        trail.instrucciones.addLast(new Instruccion(line,OpCode.CALL_FUNCTION,cantArguments));
+        return new ParseResult(line,ParserStatus.StackGenerador.peek().crearBloque(trail.instrucciones,null,null));
+    }
+
+    public static ParseResult generateArguments(Object coma, Object left, Object right){
+        if(coma==null){
+            Arguments args = new Arguments();
+            args.cantidad=1;
+            ParseResult pr = (ParseResult)left;
+            int line = pr.linea;
+            Bloque b = ParseResult.getAs(left);
+            Bloque res = ParserStatus.StackGenerador.peek().crearBloque(null,b,null);
+            args.value = res;
+            return new ParseResult(line,args);
+        }else{
+            int line = ((LexerToken)coma).NumeroFila+1;
+            Bloque lBloque = ParseResult.getAs(left);
+            Arguments rArgs = ParseResult.getAs(right);
+            Bloque rBloque = rArgs.value;
+            Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(lBloque.instrucciones,rBloque,null);
+            Arguments args = new Arguments();
+            args.cantidad = line+1;
+            args.value = bRes;
+            return new ParseResult(line,args);
+        }
+
+    }
 }
