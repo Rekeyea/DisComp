@@ -613,7 +613,8 @@ public class Estado {
                             PyObject valor = stack.pop();
                             PyObject clave = stack.pop();
 
-                            res.dict.put(clave,valor);
+                            res.__set_index__(clave,valor);
+
                         }
                     }
 
