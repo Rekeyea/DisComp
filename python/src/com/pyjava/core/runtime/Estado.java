@@ -123,8 +123,9 @@ public class Estado {
 
                     //En este caso no importa el orden en que los inserto
                     for(int i = 0; i < instr.arg2; i++ ){
-                        PyObject val = stack.pop();
                         PyObject key = stack.pop();
+                        PyObject val = stack.pop();
+
                         try{
                             kwargs.put(((PyString)key).value,val);
                         }
@@ -610,8 +611,8 @@ public class Estado {
                     if(instrArg > 0) {
 
                         for(int i = 0; i < instrArg; i++){
-                            PyObject valor = stack.pop();
                             PyObject clave = stack.pop();
+                            PyObject valor = stack.pop();
 
                             res.dict.put(clave,valor);
                         }
