@@ -93,8 +93,11 @@ non terminal dictorsetelement;
 non terminal dictionary;
 non terminal listmaker;
 non terminal list;
+non terminal tuple;
+non terminal tuplemaker;
 
 non terminal program;
+
 
 precedence left OR;
 precedence left AND;
@@ -112,7 +115,8 @@ precedence right COMA;
 precedence right ASSIGN;
 precedence left DOT;
 
-program ::= list:b NEWLINE
+
+program ::= print_stmt:b NEWLINE
 {:
     System.out.println("EL PROGRAMA ESTA BIEN");
     Bloque bloq = ParseResult.getAs(b);
@@ -141,19 +145,22 @@ constant ::= integer:n          {: RESULT = n; :}
 name ::= NAME:n  {:RESULT = RuleGenerator.generateName((LexerToken)n); :};
 
 atom ::=    name:n                              {: RESULT = n; :}
-            |constant:n                         {: RESULT = n; :}
-            |dictionary:n                       {: RESULT = n; :}
-            |list:n                             {: RESULT = n; :};
+            |constant:n                         {: RESULT = n; :};
 
 
-list                ::= LBRACKET RBRACKET
-                        |LBRACKET listmaker RBRACKET;
-listmaker           ::= expression
-                        |expression COMA listmaker;
+tuple               ::= LPAREN RPAREN
+                        |LPAREN tuplemaker RPAREN;
 
 
-dictionary          ::= LCURLY dictorsetmaker RCURLY       {: System.out.println("DICCIONARIO"); :}
-                        |LCURLY RCURLY                     {: System.out.println("DICCIONARIO"); :};
+list                ::= LBRACKET:b RBRACKET                         {: RESULT = RuleGenerator.generateList(b,null); :}
+                        |LBRACKET:b listmaker:l RBRACKET            {: RESULT = RuleGenerator.generateList(b,l);  :};
+
+listmaker           ::= expression:e                            {: RESULT = RuleGenerator.generateListElements(e,null,null); :}
+                        |expression:e COMA:c listmaker:l        {: RESULT = RuleGenerator.generateListElements(e,c,l); :};
+
+
+dictionary          ::= LCURLY dictorsetmaker RCURLY            {: System.out.println("DICCIONARIO"); :}
+                        |LCURLY RCURLY                          {: System.out.println("DICCIONARIO"); :};
 
 dictorsetelement    ::= expression COLON expression;
 dictorsetmaker      ::= dictorsetelement
@@ -162,6 +169,9 @@ dictorsetmaker      ::= dictorsetelement
 
 
 expression ::=  atom:n                                          {: RESULT = RuleGenerator.loadNameOrConst(n); :}
+                |dictionary:n                                   {: RESULT = n; :}
+                |list:n                                         {: RESULT = n; :}
+                |tuple:n                                        {: RESULT = n; :}
 				|func_call:f                                    {: RESULT = f; :}
                 |LPAREN expression:n RPAREN                     {: RESULT = n; :}
                 |expression:a OR:op expression:b                {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}

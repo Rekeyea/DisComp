@@ -49,6 +49,7 @@ public class main {
             Code codigoModulo = (Code)s.value;
 
             Frame frameInicial = new Frame();
+            frameInicial.f_globals = frameInicial.f_locals;
             frameInicial.f_code = codigoModulo;
 
 
