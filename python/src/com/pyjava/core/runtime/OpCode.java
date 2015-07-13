@@ -166,7 +166,7 @@ public class OpCode {
     //------------ Operaciones listas -----------
     /**
      * CREATE_LIST (i) : Construye una nueva lista y la pone en el stack, donde i indica la cantidad de elementos del stack a popear para utilizar al construir la lista.
-     *                   Donde el tope del stack representa el ultimo elemento de la lista
+     *                   Donde el tope del stack representa el primer elemento de la lista
      *
      */
 
@@ -176,8 +176,8 @@ public class OpCode {
 
     /**
      * CREATE_DICT (i) : Construye un nuevo diccionario y lo pone en el stack, donde i indica la cantidad de elementos a agregar por defecto en el dict.
-     *                  Por cada i, deben haber dos elementos en el stack, clave y valor
-     *                  Ej de stack: base del stack : clave1, valor1, clave2, valor : tope del stack --> i = 2
+     *                  Por cada i, deben haber dos elementos en el stack, clave y valor, donde el primero es la clave y el segundo el valor.
+     *
      */
 
     public final static int CREATE_DICT = 43;
@@ -187,7 +187,7 @@ public class OpCode {
 
     /**
      * CREATE_TUPLE (i) : Construye una nueva tupla y la pone en el stack, donde i indica la cantidad de elementos del stack a popear para utilizar al construir la tupla.
-     *                    Donde el tope del stack representa el ultimo elemento de la tupla
+     *                    Donde el tope del stack representa el primero elemento de la tupla
      */
 
     public final static int CREATE_TUPLE = 44;
