@@ -12,7 +12,7 @@ public class OpCode {
      * Nota: TOS = Top of the stack, o sea, tope del stack del frame actual.
      CALL_FUNCTION(argc): Realiza la llamada a una función, donde el argumento (arg) indica cuantos argumentos posicionales tiene, y arg2 indica cuantos por nombre
         La estructura del stack debera ser la siguiente:
-        base del stack -- [arg_1, argN_1, ... , arg_arg2, argN_arg2,  ..., arg1, arg2, ... , arg_arg]
+        base del stack -- [argN_1, arg_1, ... , argN_arg2, arg_arg2,   ..., arg1, arg2, ... , arg_arg]
         Donde en el tope del stack se encuentran los argumentos posicionales de derecha a izquierda, seguido por los argumentos por nombre donde primero esta el valor y seguido el nombre
         tambien de derecha a izquierda
 
@@ -166,7 +166,7 @@ public class OpCode {
     //------------ Operaciones listas -----------
     /**
      * CREATE_LIST (i) : Construye una nueva lista y la pone en el stack, donde i indica la cantidad de elementos del stack a popear para utilizar al construir la lista.
-     *                   Donde el tope del stack representa el primer elemento de la lista
+     *                   Donde el tope del stack representa el ultimo elemento de la lista
      *
      */
 
@@ -176,7 +176,7 @@ public class OpCode {
 
     /**
      * CREATE_DICT (i) : Construye un nuevo diccionario y lo pone en el stack, donde i indica la cantidad de elementos a agregar por defecto en el dict.
-     *                  Por cada i, deben haber dos elementos en el stack, clave y valor, donde el primero es el valor y el segundo la clave, siendo el segundo el tope del stack
+     *                  Por cada i, deben haber dos elementos en el stack, clave y valor, donde el primero es la clave y el segundo el valor, siendo el segundo el tope del stack
      *
      */
 
@@ -187,7 +187,7 @@ public class OpCode {
 
     /**
      * CREATE_TUPLE (i) : Construye una nueva tupla y la pone en el stack, donde i indica la cantidad de elementos del stack a popear para utilizar al construir la tupla.
-     *                    Donde el tope del stack representa el primero elemento de la tupla
+     *                    Donde el tope del stack representa el ultimo elemento de la tupla
      */
 
     public final static int CREATE_TUPLE = 44;
