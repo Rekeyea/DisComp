@@ -25,9 +25,6 @@ public class AttrDict {
 
     /**
      * Retorna el atributo o null si no existe
-     * @param key
-     * @return
-     * @throws PyException
      */
     public PyObject get(String key){
         return attrs.get(key);

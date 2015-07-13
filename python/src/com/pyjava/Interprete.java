@@ -23,6 +23,8 @@ public class Interprete {
         codigoModulo.co_code.add(new Instruccion(0, OpCode.FIN_EJECUCION, 0));
 
         Frame frameInicial = new Frame();
+        frameInicial.f_globals = frameInicial.f_locals;
+
         frameInicial.f_code = codigoModulo;
 
 

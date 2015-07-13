@@ -1,6 +1,10 @@
 package com.pyjava.core.runtime;
 
+import com.pyjava.core.AttrDict;
 import com.pyjava.core.PyObject;
+import com.pyjava.core.PySingletons;
+import com.pyjava.core.exceptions.PyException;
+import com.pyjava.core.exceptions.PyTypeError;
 
 import java.util.ArrayList;
 
@@ -8,8 +12,32 @@ import java.util.ArrayList;
  * Created by Cristiano on 28/06/2015.
  *
  * Almacena informacion de codigo a ejecutar, ya sea de modulo o de funcion definida por usuario.
+ *
+ * Necesito que sea PyObject para poder utilizarlo en el stack u otras estructuras.
  */
-public class Code {
+public class Code extends PyObject{
+
+    public static final String __name__ = "code";
+
+    public static PyObject __new__(PyObject[] args, AttrDict kwargs) throws PyException {
+        throw new PyTypeError(String.format("No se pueden crear instancias de '%s'", __name__));
+    }
+
+    /**
+     * Solo para que pueda ser un pyobject
+     */
+    public static class Builtins{
+        private static AttrDict builtins = null;
+        public static AttrDict getBuiltins() {
+            if (builtins == null){
+                builtins = new AttrDict();
+            }
+            return builtins;
+
+        }
+
+    }
+
 
     /**
      * Nombre de funcion/modulo
@@ -22,19 +50,13 @@ public class Code {
     public String co_filename;
 
     /**
-     * Nombres de parametros y variables locales. Los primeros elementos deben ser los argumentos.
+     * Nombres de argumentos, en el orden en que fueron definidos. Deberan estar tambien en co_names para poder ser accedidos.
      */
-    public ArrayList<String> co_varnames = new ArrayList<String>();
+    public ArrayList<String> co_arguments = new ArrayList<String>();
 
     /**
-     * Cantidad de argumentos
-     */
-    public int co_argcount = 0;
-
-    /**
-     * Nombres utilizados en el codigo. No incluye aquellos en co_varnames.
+     * Nombres utilizados en el codigo.
      * Incluye atributos, metodos, variables globales, etc.
-     * En el caso especial de que este objeto de codigo corresponda a un modulo, todos los nombres estaran en este objeto, y no en co_varnames.
      */
     public ArrayList<String> co_names = new ArrayList<String>();
 

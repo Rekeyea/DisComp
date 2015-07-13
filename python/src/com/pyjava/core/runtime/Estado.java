@@ -104,6 +104,7 @@ public class Estado {
             Instruccion instr = frameActual.f_code.co_code.get(frameActual.f_instr);
             int instrCode = instr.instruccion;
             int instrArg = instr.arg;
+
             Stack<PyObject> stack = frameActual.f_stack;
 
             switch (instrCode) {
@@ -114,16 +115,30 @@ public class Estado {
 
                     //Obtengo argumentos. Estan en el stack de derecha a izquierda.
                     PyObject[] args = new PyObject[instrArg];
+                    AttrDict kwargs = new AttrDict();
 
                     for (int i = instrArg - 1; i >= 0; i--) {
                         args[i] = stack.pop();
+                    }
+
+                    //En este caso no importa el orden en que los inserto
+                    for(int i = 0; i < instr.arg2; i++ ){
+                        PyObject val = stack.pop();
+                        PyObject key = stack.pop();
+                        try{
+                            kwargs.put(((PyString)key).value,val);
+                        }
+                        catch (ClassCastException e){
+                            throw new PyRuntimeException("kwargs debe ser un PyString");
+                        }
+
                     }
 
                     //Objeto a llamar esta ultimo en el stack.
 
                     PyObject callable = stack.pop();
 
-                    PyObject res = callable.__call__(args, PySingletons.kwargsVacios, this);
+                    PyObject res = callable.__call__(args, kwargs, this);
 
                     //Si obtuve resultado, quiere decir que se llamo a una funcion nativa o que no modifica el frame,
                     //Por lo que hago un push del resultado.
@@ -165,22 +180,6 @@ public class Estado {
                     break;
                 }
 
-                case OpCode.LOAD_FAST: {
-
-                    //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
-                    String name = frameActual.f_code.co_varnames.get(instrArg);
-
-                    PyObject valor = frameActual.f_locals.get(name);
-
-                    if (valor == null) {
-                        throw new PyNameError(String.format("nombre local '%s' no esta definido.", name));
-                    }
-
-                    stack.push(valor);
-
-                    frameActual.f_instr += 1;
-                    break;
-                }
 
                 case OpCode.LOAD_NAME: {
 
@@ -219,18 +218,6 @@ public class Estado {
                     PyObject valor = stack.pop().__getattr__(name);
 
                     stack.push(valor);
-
-                    frameActual.f_instr += 1;
-                    break;
-                }
-
-
-                case OpCode.STORE_FAST: {
-
-                    //Es un error del parser si se intenta obtener un nombre fuera de rango, asi que no se chequea.
-                    String name = frameActual.f_code.co_varnames.get(instrArg);
-
-                    frameActual.f_locals.put(name, stack.pop());
 
                     frameActual.f_instr += 1;
                     break;

@@ -10,8 +10,13 @@ public class OpCode {
 
     /**
      * Nota: TOS = Top of the stack, o sea, tope del stack del frame actual.
-     CALL_FUNCTION(argc): Realiza la llamada a una función, donde argc indica la cantidad de argumentos involucrados en la llamada. En un principio, solo cantidad, en un futuro, el valor deberá indicar argumentos tanto posicionales como por nombre.
-     En el stack, se deberá encontrar lo siguiente [ argN, argN-1, …, arg1, obj_func ], donde a la izquierda se tiene el tope del stack, y obj_func es el objeto a invocar.
+     CALL_FUNCTION(argc): Realiza la llamada a una función, donde el argumento (arg) indica cuantos argumentos posicionales tiene, y arg2 indica cuantos por nombre
+        La estructura del stack debera ser la siguiente:
+        base del stack -- [argN_1, arg_1, ... , argN_arg2, arg_arg2, ..., arg1, arg2, ... , arg_arg]
+        Donde en el tope del stack se encuentran los argumentos posicionales de derecha a izquierda, seguido por los argumentos por nombre donde primero esta el valor y seguido el nombre
+        tambien de derecha a izquierda
+
+
      RETURN_VALUE: Retorna de la función actual, poniendo en el stack de la función que lo invocó el resultado de esta.
      */
 
@@ -24,19 +29,19 @@ public class OpCode {
      * Se hace referencia a variables tanto de frame y de code, definidas anteriormente.
      NO USADA -- LOAD_GLOBAL(i) : TOS = f_globals [ co_names[i] ] : Esta es a su vez un poco especial, en caso de no encontrar el nombre en f_globals, deberá finalmente buscar en los builtins.
      LOAD_CONST(i) : TOS = co_consts[i]
-     LOAD_FAST(i) : TOS = f_locals [ co_varnames[i] ]
+     // NO SE USA --- LOAD_FAST(i) : TOS = f_locals [ co_varnames[i] ]
      LOAD_NAME(i) : TOS = f_locals [ co_names[i] ] : Si no lo encuentra, busca en f_globals, y si no lo encuentra, en builtins.
      LOAD_ATTR(i) : TOS = TOS.__getattr__(co_names[i]) : llama al __getattr__ del objeto
-     STORE_FAST(i) : f_locals [ co_varnames[i] ] = TOS : Reemplaza o crea una nueva entrada en f_locals
+     // NO SE USA --- STORE_FAST(i) : f_locals [ co_varnames[i] ] = TOS : Reemplaza o crea una nueva entrada en f_locals
      STORE_NAME(i) : f_locals[ co_names[i] ] = TOS : Se usa más que nada para código de módulo
      */
 
     //public final static int LOAD_GLOBAL = 3; //Decidido no usarla, que LOAD_NAME busque en globals si no lo encuentra en locals, menos eficiente, pero facilita el parser.
     public final static int LOAD_CONST = 4;
-    public final static int LOAD_FAST = 5;
+    //public final static int LOAD_FAST = 5;
     public final static int LOAD_NAME = 6;
     public final static int LOAD_ATTR = 7;
-    public final static int STORE_FAST = 8;
+    //public final static int STORE_FAST = 8;
     public final static int STORE_NAME = 9;
 
 

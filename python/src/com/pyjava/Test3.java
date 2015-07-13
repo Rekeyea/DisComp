@@ -1,21 +1,82 @@
 package com.pyjava;
 
 import com.pyjava.core.PyInteger;
+import com.pyjava.core.PySingletons;
 import com.pyjava.core.PyString;
+import com.pyjava.core.PyUserFunction;
 import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyFinEjecucion;
 import com.pyjava.core.runtime.*;
 
 /**
- * Created by Cristiano on 28/06/2015.
+ * Created by Cristiano on 13/07/2015.
  */
-public class Test2 {
+public class Test3 {
 
     /**
      * Pruebo interprete.
      * @param args
      */
     public static void main(String[] args){
+
+
+
+        //Frame inicial
+        Frame frameInicial = new Frame();
+        frameInicial.f_globals = frameInicial.f_locals;
+
+        Code codigo = new Code("modulo<test.py>","C:/test/test.py");
+        frameInicial.f_code = codigo;
+
+        //Cargo algunas constantes...
+        codigo.co_consts.add(new PyInteger(1));                     //0
+
+
+
+        //Cargo nombres que voy a utilizar
+        codigo.co_names.add("function_test");   //0
+
+
+        //Agrego el codigo de la funcion en las variables globales a prepo porque no tengo el codigo aun
+        //para instancar funciones
+
+        frameInicial.f_locals.put("function_test", getUserFunction());
+
+        //instruccion para llamar a funcion
+        codigo.co_code.add(new Instruccion(0, OpCode.LOAD_NAME, 0));
+        codigo.co_code.add(new Instruccion(0, OpCode.CALL_FUNCTION, 0));
+        codigo.co_code.add(new Instruccion(0, OpCode.PRINT_ITEM, 0));
+        codigo.co_code.add(new Instruccion(0, OpCode.PRINT_NEWLINE, 0));
+
+        //instruccion especial de fin de ejecucion
+        codigo.co_code.add(new Instruccion(1, OpCode.FIN_EJECUCION, 0));
+
+
+        Estado estado = new Estado(frameInicial);
+
+        //inicio loop de interpretacion
+        while(true){
+            try{
+                estado.interpretarInstruccion();
+            }
+            catch (PyFinEjecucion e){
+                System.out.println("-------- Fin de ejecucion ------");
+                return;
+            }
+            catch (PyException e){
+                System.out.println("Error: Stack trace:");
+                estado.printStacktrace();
+                System.out.println(e.getMessage());
+
+                //Finalizo la ejecucion ante error.
+                return;
+            }
+        }
+
+    }
+
+    public static PyUserFunction getUserFunction(){
+        System.out.println("--------------- USER FUNCTION TEST ----------------------");
 
 
         /**
@@ -34,15 +95,11 @@ public class Test2 {
          *     print a
          * print None
          * print type(sumaRes)
-         * print var3 //Esto deberia explotar y dar un error acorde.
+         * return sumaRes
          */
 
-        //Frame inicial
-        Frame frameInicial = new Frame();
-        frameInicial.f_globals = frameInicial.f_locals;
 
-        Code codigo = new Code("modulo<test.py>","C:/test/test.py");
-        frameInicial.f_code = codigo;
+        Code codigo = new Code("function_test","Definida en....");
 
         //Cargo algunas constantes...
         codigo.co_consts.add(new PyInteger(1));                     //0
@@ -144,36 +201,14 @@ public class Test2 {
         codigo.co_code.add(new Instruccion(14, OpCode.PRINT_ITEM,0));
         codigo.co_code.add(new Instruccion(14, OpCode.PRINT_NEWLINE,0));
 
+        //return sumaRes
+        codigo.co_code.add(new Instruccion(15, OpCode.LOAD_NAME,2));
+        codigo.co_code.add(new Instruccion(15, OpCode.RETURN_VALUE,0));
 
-        //print var3
-        codigo.co_code.add(new Instruccion(15, OpCode.LOAD_NAME, 6));
-        codigo.co_code.add(new Instruccion(15, OpCode.PRINT_ITEM,0));
-        codigo.co_code.add(new Instruccion(15, OpCode.PRINT_NEWLINE,0));
+        //codigo.co_arguments.add("test");
 
-        //instruccion especial de fin de ejecucion
-        codigo.co_code.add(new Instruccion(15, OpCode.FIN_EJECUCION, 0));
+        return new PyUserFunction(codigo);
 
-
-        Estado estado = new Estado(frameInicial);
-
-        //inicio loop de interpretacion
-        while(true){
-            try{
-                estado.interpretarInstruccion();
-            }
-            catch (PyFinEjecucion e){
-                System.out.println("-------- Fin de ejecucion ------");
-                return;
-            }
-            catch (PyException e){
-                System.out.println("Error: Stack trace:");
-                estado.printStacktrace();
-                System.out.println(e.getMessage());
-
-                //Finalizo la ejecucion ante error.
-                return;
-            }
-        }
 
     }
 }

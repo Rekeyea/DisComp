@@ -3,6 +3,9 @@ package com.pyjava;
 import com.pyjava.core.*;
 import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyStopIteration;
+import com.pyjava.core.runtime.Code;
+import com.pyjava.core.runtime.Instruccion;
+import com.pyjava.core.runtime.OpCode;
 
 import java.util.ArrayList;
 
@@ -913,9 +916,8 @@ public class Test1 {
         }
 
 
+
         System.out.println("--------------- BUILTINS TEST ----------------------");
-
-
         try {
 
             PyObject result = PySingletons.raw_input.__call__(new PyObject[]{new PyString("Prueba de entrada: ")}, PySingletons.kwargsVacios,null);
@@ -928,6 +930,8 @@ public class Test1 {
         catch (Throwable t){
             System.out.println(t.getMessage());
         }
+
+
 
     }
 }

@@ -4,6 +4,7 @@ import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyRuntimeException;
 import com.pyjava.core.exceptions.PyStopIteration;
 import com.pyjava.core.exceptions.PyTypeError;
+import com.pyjava.core.runtime.Code;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,8 +43,10 @@ public class PySingletons {
     public static PyType tuple = null;
     public static PyType dict = null;
 
+    public static PyType code = null;
     public static PyType builtinFunc = null;
     public static PyType methodWrapper = null;
+    public static PyType userfunction = null;
 
     //INSTANCIAS DE SINGLETONS DE BUILTIN TYPES Y HELPERS.
     public static PyObject[] argsVacios = null;
@@ -92,9 +95,10 @@ public class PySingletons {
             tuple = type.crearClase(PyTuple.__name__, PyTuple.class, Arrays.asList(object));
             dict =  type.crearClase(PyDict.__name__, PyDict.class, Arrays.asList(object));
 
+            code = type.crearClase(Code.__name__, Code.class, Arrays.asList(object));
             builtinFunc = type.crearClase(PyNativeFunction.__name__, PyNativeFunction.class, Arrays.asList(object));
             methodWrapper = type.crearClase(PyMethodWrapper.__name__, PyMethodWrapper.class, Arrays.asList(object));
-
+            userfunction = type.crearClase(PyUserFunction.__name__, PyUserFunction.class, Arrays.asList(object));
 
             //INSTANCIAS DE SINGLETONS DE BUILTIN TYPES Y HELPERS
             argsVacios = new PyObject[0];
@@ -117,8 +121,10 @@ public class PySingletons {
             tuple.__dict__ = PyTuple.Builtins.getBuiltins();
             dict.__dict__ = PyDict.Builtins.getBuiltins();
 
+            code.__dict__ = Code.Builtins.getBuiltins();
             builtinFunc.__dict__ = PyNativeFunction.Builtins.getBuiltins();
             methodWrapper.__dict__ = PyMethodWrapper.Builtins.getBuiltins();
+            userfunction.__dict__ = PyUserFunction.Builtins.getBuiltins();
 
 
 
