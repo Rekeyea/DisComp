@@ -74,6 +74,19 @@ public class PyTuple extends PyObject {
 
     }
 
+    @Override
+    public PyObject __add__(PyObject obj) throws PyException{
+
+        if(obj instanceof PyTuple){
+            ArrayList<PyObject> res = new ArrayList<>(this.tupla);
+            res.addAll(((PyTuple)obj).tupla);
+            return new PyTuple(res);
+        }
+
+        throw AritmeticaHelper.getErrorBinary("+", this, obj);
+    }
+
+
 
     @Override
     public PyBool __bool__() throws PyException{

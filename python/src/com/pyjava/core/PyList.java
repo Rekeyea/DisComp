@@ -77,6 +77,18 @@ public class PyList extends PyObject {
     }
 
     @Override
+    public PyObject __add__(PyObject obj) throws PyException{
+
+        if(obj instanceof PyList){
+            ArrayList<PyObject> res = new ArrayList<>(this.lista);
+            res.addAll(((PyList)obj).lista);
+            return new PyList(res);
+        }
+
+        throw AritmeticaHelper.getErrorBinary("+", this, obj);
+    }
+
+    @Override
     public boolean __hasheable__(){
         return false;
     }
