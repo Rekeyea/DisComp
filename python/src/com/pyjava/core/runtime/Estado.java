@@ -692,6 +692,14 @@ public class Estado {
 
 
 
+                case OpCode.POP_TOP:{
+
+                    stack.pop();
+                    frameActual.f_instr+=1;
+                    break;
+                }
+
+
                 case OpCode.FIN_EJECUCION: {
                     System.out.println(String.format("[DEBUG] Ejecutando instruccion de FIN: Numero de instruccion = %s, tamanio del stack del frame actual = %s", frameActual.f_instr, stack.size()));
                     throw new PyFinEjecucion("Fin de ejecucicion.");

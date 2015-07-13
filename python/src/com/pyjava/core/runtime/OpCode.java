@@ -211,6 +211,11 @@ public class OpCode {
 
 
 
+    // ---------- Adicionales de stack -------------------------
+
+    //Hace pop del stack.
+    public final static int POP_TOP = 70;
+
     //Fin de ejecucion.
     public final static int FIN_EJECUCION = -1;
 
