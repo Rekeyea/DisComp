@@ -135,8 +135,7 @@ public class PyList extends PyObject {
     public PyObject __get_index__(PyObject i) throws PyException{
 
         try{
-            int index = ((PyInteger)i.__int__()).value;
-            return this.lista.get(index);
+            return this.lista.get(i.__getint__());
         }
         catch (PyException e){
             throw new PyTypeError(String.format("%s no es un indice valido", i.getType().getClassName()));
@@ -149,8 +148,7 @@ public class PyList extends PyObject {
     @Override
     public PyObject __set_index__(PyObject i, PyObject v) throws PyException{
         try{
-            int index = ((PyInteger)i.__int__()).value;
-            return this.lista.set(index, v);
+            return this.lista.set(i.__getint__(), v);
         }
         catch (PyException e){
             throw new PyTypeError(String.format("%s no es un indice valido", i.getType().getClassName()));

@@ -223,6 +223,15 @@ public class PyObject {
     }
 
     /**
+     * Metodo helper para obtener un int de un objeto que puede funcionar como int.
+     * DISTINTO a un objeto que se convierte a int (como un string).
+     * Esto es, long, int, y bool, todos funcionan como int si estan dentro del rango.
+     */
+    public int __getint__() throws PyException{
+        throw new PyTypeError(String.format("'%s' no es un %s valido", getType().getClassName(), PyInteger.__name__));
+    }
+
+    /**
      * Castea un objeto a long, object lanza error, pero puede ser implementado por otras clases.
      */
     public PyObject __long__() throws PyException{

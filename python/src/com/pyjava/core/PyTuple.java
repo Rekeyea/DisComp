@@ -130,8 +130,7 @@ public class PyTuple extends PyObject {
     public PyObject __get_index__(PyObject i) throws PyException{
 
         try{
-            int index = ((PyInteger)i.__int__()).value;
-            return this.tupla.get(index);
+            return this.tupla.get(i.__getint__());
         }
         catch (PyException e){
             throw new PyTypeError(String.format("%s no es un indice valido", i.getType().getClassName()));

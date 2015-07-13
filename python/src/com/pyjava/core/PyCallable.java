@@ -12,10 +12,6 @@ public interface PyCallable {
     /**
      * Todos los metodos deberan recibir posiblemente argumentos y argumentos por clave.
      * Ademas todos deben retornar un PyObject.
-     * @param args
-     * @param kwargs
-     * @return
-     * @throws PyException
      */
     PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException;
 

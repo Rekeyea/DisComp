@@ -1,9 +1,6 @@
 package com.pyjava.core;
 
-import com.pyjava.core.exceptions.PyException;
-import com.pyjava.core.exceptions.PyIndexError;
-import com.pyjava.core.exceptions.PyTypeError;
-import com.pyjava.core.exceptions.PyValueError;
+import com.pyjava.core.exceptions.*;
 import org.w3c.dom.Attr;
 
 
@@ -325,6 +322,172 @@ public class PyString extends PyObject{
                 );
 
                 builtins.put(count.funcionNativaNombre, count);
+
+
+                //find: localiza la subcadena en S, start opcional
+                PyNativeFunction find = new PyNativeFunction("find", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 2 && args.length != 3) {
+                                    throw new PyTypeError(String.format("find necesita 2 o 3 argumentos, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyString) || !(args[1] instanceof PyString)) {
+                                    throw new PyTypeError(String.format("Los primeros 2 argumentos de find deben ser de tipo '%s'.", PyString.__name__));
+                                }
+
+                                PyString str1 = (PyString) args[0];
+                                PyString str2 = (PyString) args[1];
+
+                                if(args.length == 2) {
+                                    return new PyInteger(str1.value.indexOf(str2.value));
+                                }
+                                else {
+                                    int index = 0;
+                                    try{
+                                        index = args[2].__getint__();
+                                    }
+                                    catch (PyException e){
+                                        throw new PyTypeError(String.format("El argumento 3 debe ser de tipo '%s'.", PyInteger.__name__));
+                                    }
+
+                                    return new PyInteger(str1.value.indexOf(str2.value,index ));
+                                }
+
+
+                            }
+                        }
+                );
+
+                builtins.put(find.funcionNativaNombre, find);
+
+
+
+                PyNativeFunction join = new PyNativeFunction("join", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 2) {
+                                    throw new PyTypeError(String.format("join necesita 2 argumentos, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyString)) {
+                                    throw new PyTypeError(String.format("El primer argumento de join debe ser de tipo '%s'.", PyString.__name__));
+                                }
+
+                                String sep = ((PyString) args[0]).value;
+
+                                //El segundo argumento debe ser iterable
+                                PyObject iterador = null;
+                                try{
+                                    iterador = args[1].__iter__();
+                                }
+                                catch (PyTypeError e){
+                                    throw new PyTypeError(String.format("El segundo argumento de join debe ser un iterable."));
+                                }
+
+                                StringBuilder res = new StringBuilder("");
+                                try{
+                                    while (true) {
+                                        PyObject next = iterador.__next__();
+                                        if (next instanceof PyString) {
+                                            res.append(((PyString) next).value);
+                                            res.append(sep);
+
+                                        } else {
+                                            throw new PyTypeError(String.format("Se esperaba '%s' en la secuencia, encontrado '%s'.", PyString.__name__, next.getType().getClassName()));
+                                        }
+                                    }
+                                }
+                                catch (PyStopIteration e){
+                                    if(res.length() > 0) {
+                                        for (int i = 0; i < sep.length(); i++) {
+                                            res.deleteCharAt(res.length() - 1);
+                                        }
+                                    }
+                                }
+
+                                return new PyString(res.toString());
+                            }
+                        }
+                );
+
+                builtins.put(join.funcionNativaNombre, join);
+
+
+
+                PyNativeFunction split = new PyNativeFunction("split", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 2) {
+                                    throw new PyTypeError(String.format("split necesita 2 argumentos, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyString) || !(args[1] instanceof PyString)) {
+                                    throw new PyTypeError(String.format("Los argumentos de split deben ser de tipo '%s'.", PyString.__name__));
+                                }
+
+                                String val = ((PyString) args[0]).value;
+                                String sep = ((PyString) args[1]).value;
+
+                                ArrayList<PyObject> res = new ArrayList<>();
+                                for(String s : val.split(sep)){
+                                    res.add(new PyString(s));
+                                }
+                                return new PyList(res);
+
+                            }
+                        }
+                );
+
+                builtins.put(split.funcionNativaNombre, split);
+
+
+
+                PyNativeFunction replace = new PyNativeFunction("replace", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 3) {
+                                    throw new PyTypeError(String.format("replace necesita 3 argumentos, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyString) || !(args[1] instanceof PyString) || !(args[2] instanceof PyString)) {
+                                    throw new PyTypeError(String.format("Los argumentos de replace deben ser de tipo '%s'.", PyString.__name__));
+                                }
+
+                                String val = ((PyString) args[0]).value;
+                                String old = ((PyString) args[1]).value;
+                                String nnew = ((PyString) args[2]).value;
+
+                                return new PyString(val.replaceFirst(old, nnew));
+
+                            }
+                        }
+                );
+
+                builtins.put(replace.funcionNativaNombre, replace);
+
+
+                PyNativeFunction length = new PyNativeFunction("length", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 1) {
+                                    throw new PyTypeError(String.format("length necesita 1 argumento, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyString)) {
+                                    throw new PyTypeError(String.format("El argumento de length deben ser de tipo '%s'.", PyString.__name__));
+                                }
+
+                                String val = ((PyString) args[0]).value;
+
+                                return new PyInteger(val.length());
+
+                            }
+                        }
+                );
+
+                builtins.put(length.funcionNativaNombre, length);
+
             }
 
 

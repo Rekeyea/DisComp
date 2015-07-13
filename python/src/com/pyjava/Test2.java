@@ -9,7 +9,7 @@ import com.pyjava.core.runtime.*;
 /**
  * Created by Cristiano on 28/06/2015.
  */
-public class Main2 {
+public class Test2 {
 
     /**
      * Pruebo interprete.

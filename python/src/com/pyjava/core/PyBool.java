@@ -2,6 +2,7 @@ package com.pyjava.core;
 
 import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyTypeError;
+import com.pyjava.core.exceptions.PyValueError;
 
 /**
  * Created by Cristiano on 17/06/2015.
@@ -55,6 +56,12 @@ public class PyBool extends PyObject {
             return new PyInteger(0);
         }
     }
+
+    @Override
+    public int __getint__() throws PyException{
+        return this.value ? 1 : 0;
+    }
+
 
     @Override
     public PyObject __long__() throws PyException {

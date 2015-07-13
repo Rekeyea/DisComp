@@ -53,6 +53,11 @@ public class PyInteger extends PyObject {
     }
 
     @Override
+    public int __getint__() throws PyException{
+        return this.value;
+    }
+
+    @Override
     public PyObject __long__() throws PyException {
         //int es siempre convertible a long, no chequeo nada.
         return new PyLong((long)this.value);
