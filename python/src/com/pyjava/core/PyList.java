@@ -1,9 +1,6 @@
 package com.pyjava.core;
 
-import com.pyjava.core.exceptions.PyException;
-import com.pyjava.core.exceptions.PyIndexError;
-import com.pyjava.core.exceptions.PyTypeError;
-import com.pyjava.core.exceptions.PyValueError;
+import com.pyjava.core.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -135,10 +132,14 @@ public class PyList extends PyObject {
     public PyObject __get_index__(PyObject i) throws PyException{
 
         try{
-            return this.lista.get(i.__getint__());
+            int index = i.__getint__();
+            if(index < 0){
+                index = lista.size() + index;
+            }
+            return this.lista.get(index);
         }
         catch (PyException e){
-            throw new PyTypeError(String.format("%s no es un indice valido", i.getType().getClassName()));
+            throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
         }
         catch (IndexOutOfBoundsException e){
             throw new PyIndexError();
@@ -148,16 +149,36 @@ public class PyList extends PyObject {
     @Override
     public PyObject __set_index__(PyObject i, PyObject v) throws PyException{
         try{
-            return this.lista.set(i.__getint__(), v);
+            int index = i.__getint__();
+            if(index < 0){
+                index = lista.size() + index;
+            }
+            return this.lista.set(index, v);
         }
         catch (PyException e){
-            throw new PyTypeError(String.format("%s no es un indice valido", i.getType().getClassName()));
+            throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
         }
         catch (IndexOutOfBoundsException e){
             throw new PyIndexError();
         }
     }
 
+    public PyObject popIndex(PyObject i) throws PyException{
+
+        try{
+            int index = i.__getint__();
+            if(index < 0){
+                index = lista.size() + index;
+            }
+            return this.lista.remove(index);
+        }
+        catch (PyException e){
+            throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
+        }
+        catch (IndexOutOfBoundsException e){
+            throw new PyIndexError();
+        }
+    }
 
     public static class Builtins{
 
@@ -171,6 +192,30 @@ public class PyList extends PyObject {
 
                 PyType clase = PySingletons.types.get(__name__);
 
+                //Agrega el objeto al final del primer arugmento, siendo este una PyList.
+                PyNativeFunction append = new PyNativeFunction("append", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 2) {
+                                    throw new PyTypeError(String.format("append necesita 2 argumentos, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyList)) {
+                                    throw new PyTypeError(String.format("El primer argumento de append debe ser de tipo '%s'.", PyList.__name__));
+                                }
+
+                                PyList lista = (PyList) args[0];
+                                lista.lista.add((PyObject) args[1]);
+
+                                return PySingletons.None;
+
+
+                            }
+                        }
+                );
+                builtins.put(append.funcionNativaNombre, append);
+
+
                 //cuenta las ocurrencias del objeto en args[1] en arg[0], usando el comparador de igualdad.
                 PyNativeFunction count = new PyNativeFunction("count", clase,
                         new PyCallable() {
@@ -180,7 +225,7 @@ public class PyList extends PyObject {
                                     throw new PyTypeError(String.format("count necesita 2 argumentos, %s encontrados.", args.length));
                                 }
                                 if (!(args[0] instanceof PyList)) {
-                                    throw new PyTypeError(String.format("El primer argumento de count deben ser de tipo '%s'.", PyList.__name__));
+                                    throw new PyTypeError(String.format("El primer argumento de count debe ser de tipo '%s'.", PyList.__name__));
                                 }
 
                                 PyList lista = (PyList) args[0];
@@ -201,28 +246,145 @@ public class PyList extends PyObject {
                 );
                 builtins.put(count.funcionNativaNombre, count);
 
-                //Agrega el objeto al final del primer arugmento, siendo este una PyList.
-                PyNativeFunction append = new PyNativeFunction("append", clase,
+
+
+
+                PyNativeFunction extend = new PyNativeFunction("extend", clase,
                         new PyCallable() {
                             @Override
                             public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
                                 if (args.length != 2) {
-                                    throw new PyTypeError(String.format("append necesita 2 argumentos, %s encontrados.", args.length));
+                                    throw new PyTypeError(String.format("extend necesita 2 argumentos, %s encontrados.", args.length));
                                 }
                                 if (!(args[0] instanceof PyList)) {
-                                    throw new PyTypeError(String.format("El primer argumento de append deben ser de tipo '%s'.", PyList.__name__));
+                                    throw new PyTypeError(String.format("El primer argumento de extend debe ser de tipo '%s'.", PyList.__name__));
                                 }
 
                                 PyList lista = (PyList) args[0];
-                                lista.lista.add((PyObject) args[1]);
 
+                                //El segundo argumento debe ser iterable
+                                PyObject iterador = null;
+                                try{
+                                    iterador = args[1].__iter__();
+                                }
+                                catch (PyTypeError e){
+                                    throw new PyTypeError(String.format("El segundo argumento de extend debe ser un iterable."));
+                                }
+
+                                ArrayList<PyObject> res = new ArrayList<>();
+                                try{
+                                    while (true) {
+                                        res.add(iterador.__next__());   //LO HAGO ASI PORQUE JAVA ES CACA Y NO PUEDE ITERAR Y AGREGAR DATOS AL MISMO TIEMPO
+                                    }
+                                }
+                                catch (PyStopIteration e){
+                                }
+
+                                lista.lista.addAll(res);
                                 return PySingletons.None;
 
 
                             }
                         }
                 );
-                builtins.put(append.funcionNativaNombre, append);
+                builtins.put(extend.funcionNativaNombre, extend);
+
+
+                PyNativeFunction index = new PyNativeFunction("index", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 2 && args.length != 3) {
+                                    throw new PyTypeError(String.format("index necesita 2 or 3 argumentos, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyList)) {
+                                    throw new PyTypeError(String.format("El primer argumento de index debe ser de tipo '%s'.", PyList.__name__));
+                                }
+
+                                PyList lista = (PyList) args[0];
+                                if(args.length == 2) {
+                                    int res = lista.lista.indexOf(args[1]);
+                                    if(res == -1){
+                                        throw new PyValueError(String.format("El valor %s no se encuentra en la lista.", args[1].__repr__().value));
+                                    }
+                                    return new PyInteger(res);
+                                }
+                                else {
+                                    int index = 0;
+                                    try{
+                                        index = args[2].__getint__();
+                                    }
+                                    catch (PyException e){
+                                        throw new PyTypeError(String.format("El argumento 3 debe ser de tipo '%s'.", PyInteger.__name__));
+                                    }
+
+                                    int res = -1;
+                                    try {
+                                        res = lista.lista.subList(index, lista.lista.size()).indexOf(args[1]);
+                                    }
+                                    catch (IndexOutOfBoundsException e){
+                                    }
+                                    catch (IllegalArgumentException e){
+                                    }
+
+                                    if(res == -1){
+                                        throw new PyValueError(String.format("El valor %s no se encuentra en la lista.", args[1].__repr__().value));
+                                    }
+
+                                    return new PyInteger(res + index);
+                                }
+
+
+                            }
+                        }
+                );
+                builtins.put(index.funcionNativaNombre, index);
+
+
+                PyNativeFunction insert = new PyNativeFunction("insert", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 3) {
+                                    throw new PyTypeError(String.format("insert necesita 3 argumentos, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyList)) {
+                                    throw new PyTypeError(String.format("El primer argumento de insert debe ser de tipo '%s'.", PyList.__name__));
+                                }
+
+                                PyList lista = (PyList) args[0];
+
+                                lista.__set_index__(args[1], args[2]);
+
+                                return PySingletons.None;
+
+                            }
+                        }
+                );
+                builtins.put(insert.funcionNativaNombre, insert);
+
+
+                PyNativeFunction pop = new PyNativeFunction("pop", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 2) {
+                                    throw new PyTypeError(String.format("pop necesita 2 argumentos, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyList)) {
+                                    throw new PyTypeError(String.format("El primer argumento de pop debe ser de tipo '%s'.", PyList.__name__));
+                                }
+
+                                PyList lista = (PyList) args[0];
+
+                                return lista.popIndex(args[1]);
+
+                            }
+                        }
+                );
+                builtins.put(pop.funcionNativaNombre, pop);
+
+
 
                 //Devuelve el tamano del a lista
                 PyNativeFunction size = new PyNativeFunction("size", clase,

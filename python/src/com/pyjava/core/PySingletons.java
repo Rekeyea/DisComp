@@ -1,7 +1,13 @@
 package com.pyjava.core;
 
 import com.pyjava.core.exceptions.PyException;
+import com.pyjava.core.exceptions.PyRuntimeException;
+import com.pyjava.core.exceptions.PyStopIteration;
+import com.pyjava.core.exceptions.PyTypeError;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +53,9 @@ public class PySingletons {
     public static PyBool True = null;
     public static PyBool False = null;
     public static PyNone None = null;
+
+    public static PyNativeFunction raw_input = null;
+    public static PyNativeFunction __hash__ = null;
 
     private static boolean inicializado = false;
 
@@ -112,6 +121,53 @@ public class PySingletons {
             methodWrapper.__dict__ = PyMethodWrapper.Builtins.getBuiltins();
 
 
+
+            /**
+             * Funciones builtin que no pertenecen a ninguna clase y no son una clase en si mismo.
+             */
+
+            raw_input = new PyNativeFunction("raw_input", builtinFunc,
+                    new PyCallable() {
+                        @Override
+                        public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                            if (args.length != 1 && args.length != 0) {
+                                throw new PyTypeError(String.format("raw_input necesita 0 o 1 argumentos, %s encontrados.", args.length));
+                            }
+
+                            //Si hay argumentos, lo despliega en pantalla.
+                            if(args.length == 1){
+                                System.out.print(args[0].print());
+                            }
+
+                            //leo de la consola
+                            BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+                            try {
+                                String s = bufferRead.readLine();
+
+                                return new PyString(s);
+
+                            } catch (IOException e) {
+                                throw new PyRuntimeException("Error al leer de la entrada.");
+                            }
+
+                        }
+                    }
+            );
+
+            __hash__ = new PyNativeFunction("__hash__", builtinFunc,
+                    new PyCallable() {
+                        @Override
+                        public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                            if (args.length != 1) {
+                                throw new PyTypeError(String.format("__hash__ necesita 1 argumento, %s encontrados.", args.length));
+                            }
+
+                            return args[0].__hash__();
+
+                        }
+                    }
+            );
+
             inicializado = true;
 
         }
@@ -124,5 +180,10 @@ public class PySingletons {
     static {
         init();
     }
+
+
+
+
+
 
 }

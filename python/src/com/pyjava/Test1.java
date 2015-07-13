@@ -663,6 +663,7 @@ public class Test1 {
             System.out.println(tupla.__get_index__(new PyInteger(0)).print());
             System.out.println(tupla.__get_index__(new PyLong(2)).print());
             System.out.println(tupla.__get_index__(PySingletons.True).print());
+            System.out.println(tupla.__get_index__(new PyLong(-1)).print());
             System.out.println(tupla.print());
 
             System.out.println("\t---");
@@ -778,5 +779,155 @@ public class Test1 {
         catch (Throwable t){
             System.out.println(t.getMessage());
         }
+
+
+
+        System.out.println("--------------- TEST FUNCIONES DICT ----------------------");
+
+
+        try {
+
+            PyDict dict = new PyDict();
+
+            dict.__set_index__(s,s);
+            dict.__set_index__(o,o);
+            dict.__set_index__(raw_input,raw_input);
+            dict.__set_index__(new PyString("Clave de prueba"),new PyList());
+            dict.__set_index__(new PyString("Clave de prueba2"),new PyTuple());
+            dict.__set_index__(new PyString("Clave de prueba3"),new PyDict());
+            dict.__set_index__(new PyString("booleano"),PySingletons.True);
+
+            PyString claveNoValida = new PyString("caca");
+
+            System.out.println(dict.__getattr__("has_key").__call__(new PyObject[]{s}, PySingletons.kwargsVacios,null).print());
+            System.out.println(dict.__getattr__("has_key").__call__(new PyObject[]{PySingletons.None}, PySingletons.kwargsVacios,null).print());
+            System.out.println(dict.__getattr__("has_key").__call__(new PyObject[]{claveNoValida}, PySingletons.kwargsVacios,null).print());
+
+            System.out.println(dict.__getattr__("items").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios,null).print());
+            System.out.println(dict.__getattr__("items").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios,null).__get_index__(new PyInteger(3)).print());
+
+            System.out.println(dict.__getattr__("keys").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios,null).print());
+            System.out.println(dict.__getattr__("values").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios,null).print());
+
+            System.out.println(dict.__getattr__("length").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios,null).print());
+
+            System.out.println(dict.__getattr__("pop").__call__(new PyObject[]{new PyString("Clave de prueba2")}, PySingletons.kwargsVacios,null).print());
+
+            //Deberia explotar pq ya le hice pop
+            try{
+                System.out.println(dict.__getattr__("pop").__call__(new PyObject[]{new PyString("Clave de prueba2")}, PySingletons.kwargsVacios,null).print());
+            }
+            catch (Throwable t){
+                System.out.println(t.getMessage());
+            }
+            System.out.println(dict.__getattr__("length").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios,null).print());
+
+        }
+        catch (Throwable t){
+            System.out.println(t.getMessage());
+        }
+
+
+
+        System.out.println("--------------- TEST FUNCIONES LISTA ----------------------");
+
+
+        try {
+
+            PyList lista = new PyList();
+
+            //Le agrego algunos elementos llamando la funcion append
+            lista.__getattr__("append").__call__(new PyObject[]{s}, PySingletons.kwargsVacios, null);
+            lista.__getattr__("append").__call__(new PyObject[]{s}, PySingletons.kwargsVacios, null);
+            lista.__getattr__("append").__call__(new PyObject[]{o}, PySingletons.kwargsVacios, null);
+            lista.__getattr__("append").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios, null);
+            PySingletons.list.__getattr__("append").__call__(new PyObject[]{lista, PySingletons.True}, PySingletons.kwargsVacios, null);
+
+
+
+            System.out.println(lista.__getattr__("count").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios,null).print());
+            System.out.println(lista.__getattr__("size").__call__(new PyObject[]{}, PySingletons.kwargsVacios,null).print());
+            System.out.println(lista.__getattr__("extend").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios,null).print());
+            System.out.println(lista.__getattr__("size").__call__(new PyObject[]{}, PySingletons.kwargsVacios,null).print());
+            System.out.println(lista.print());
+
+            System.out.println(lista.__getattr__("index").__call__(new PyObject[]{lista}, PySingletons.kwargsVacios,null).print());
+            System.out.println(lista.__getattr__("index").__call__(new PyObject[]{s}, PySingletons.kwargsVacios,null).print());
+            System.out.println(lista.__getattr__("index").__call__(new PyObject[]{s, new PyInteger(6)}, PySingletons.kwargsVacios,null).print());
+
+            //deberia explotar
+            try{
+                System.out.println(lista.__getattr__("index").__call__(new PyObject[]{s, new PyInteger(7)}, PySingletons.kwargsVacios,null).print());
+            }
+            catch (Throwable t){
+                System.out.println(t.getMessage());
+            }
+
+            //deberia explotar
+            try{
+                System.out.println(lista.__getattr__("index").__call__(new PyObject[]{s, new PyInteger(546)}, PySingletons.kwargsVacios,null).print());
+            }
+            catch (Throwable t){
+                System.out.println(t.getMessage());
+            }
+
+
+            System.out.println(lista.__getattr__("insert").__call__(new PyObject[]{new PyInteger(0), new PyString("ZERO")}, PySingletons.kwargsVacios,null).print());
+            System.out.println(lista.__get_index__(new PyInteger(0)).print());
+
+            //deberia explotar
+            try{
+                System.out.println(lista.__getattr__("insert").__call__(new PyObject[]{ new PyString("ZERO"), new PyString("ZERO")}, PySingletons.kwargsVacios,null).print());
+            }
+            catch (Throwable t){
+                System.out.println(t.getMessage());
+            }
+
+            System.out.println(lista.__getattr__("size").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios,null).print());
+            System.out.println(lista.__getattr__("pop").__call__(new PyObject[]{new PyInteger(0)}, PySingletons.kwargsVacios, null).print());
+            System.out.println(lista.__getattr__("pop").__call__(new PyObject[]{new PyInteger(5)}, PySingletons.kwargsVacios,null).print());
+            System.out.println(lista.__getattr__("size").__call__(PySingletons.argsVacios, PySingletons.kwargsVacios,null).print());
+
+            System.out.println(lista.print());
+
+            System.out.println(lista.__get_index__(new PyLong(-1)).print());
+            System.out.println(lista.__get_index__(new PyInteger(-2)).print());
+            System.out.println(lista.__get_index__(new PyInteger(-3)).print());
+            System.out.println(lista.__get_index__(new PyInteger(-4)).print());
+            System.out.println(lista.__get_index__(new PyInteger(-5)).print());
+            System.out.println(lista.__get_index__(new PyInteger(-6)).print());
+            System.out.println(lista.__get_index__(new PyInteger(-7)).print());
+            System.out.println(lista.__get_index__(new PyInteger(-8)).print());
+
+            //deberia explotar
+            try{
+                System.out.println(lista.__get_index__(new PyInteger(-9)).print());
+            }
+            catch (Throwable t){
+                System.out.println(t.getMessage());
+            }
+
+        }
+        catch (Throwable t){
+            System.out.println(t.getMessage());
+        }
+
+
+        System.out.println("--------------- BUILTINS TEST ----------------------");
+
+
+        try {
+
+            PyObject result = PySingletons.raw_input.__call__(new PyObject[]{new PyString("Prueba de entrada: ")}, PySingletons.kwargsVacios,null);
+            System.out.println(result.print());
+            System.out.println(PySingletons.__hash__.__call__(new PyObject[]{result}, PySingletons.kwargsVacios,null).print());
+            System.out.println(PySingletons.__hash__.__call__(new PyObject[]{new PyInteger(2)}, PySingletons.kwargsVacios,null).print());
+            System.out.println(PySingletons.__hash__.__call__(new PyObject[]{new PyString("Prueba de entrada: ")}, PySingletons.kwargsVacios,null).print());
+            System.out.println(PySingletons.__hash__.__call__(new PyObject[]{new PyString("Prueba de entrada: ")}, PySingletons.kwargsVacios,null).print());
+        }
+        catch (Throwable t){
+            System.out.println(t.getMessage());
+        }
+
     }
 }

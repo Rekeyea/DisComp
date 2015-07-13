@@ -144,6 +144,8 @@ public class PyDict extends PyObject {
         return false;
     }
 
+
+
     @Override
     public PyObject __get_index__(PyObject i) throws PyException{
 
@@ -162,11 +164,23 @@ public class PyDict extends PyObject {
     public PyObject __set_index__(PyObject i, PyObject v) throws PyException{
 
         if (!i.__hasheable__()) {
-            throw new PyTypeError(String.format("'%s' no es hasheable y no es clave valida", i.getType().getClassName()));
+            throw new PyTypeError(String.format("'%s' no es hasheable y no es clave valida para dict", i.getType().getClassName()));
         }
 
         return this.dict.put(i, v);
 
+    }
+
+    public PyObject popIndex(PyObject i) throws PyException{
+        if (!i.__hasheable__()) {
+            throw new PyTypeError(String.format("'%s' no es hasheable y no es clave valida para dict", i.getType().getClassName()));
+        }
+
+        PyObject res = this.dict.remove(i);
+        if (res == null){
+            throw new PyKeyError(String.format("Clave no encontrada: %s", i.__repr__().value));
+        }
+        return res;
     }
 
 
@@ -180,6 +194,157 @@ public class PyDict extends PyObject {
                 builtins = new AttrDict();
 
                 PyType clase = PySingletons.types.get(__name__);
+
+                PyNativeFunction has_key = new PyNativeFunction("has_key", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 2) {
+                                    throw new PyTypeError(String.format("has_key necesita 2 argumentos, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyDict)) {
+                                    throw new PyTypeError(String.format("El primer argumento de has_key debe ser de tipo '%s'.", PyDict.__name__));
+                                }
+
+                                PyDict d = (PyDict) args[0];
+                                try{
+                                    d.__get_index__(args[1]);
+                                    return PySingletons.True;
+                                }
+                                catch (PyKeyError e){
+                                    return PySingletons.False;
+                                }
+
+
+                            }
+                        }
+                );
+
+                builtins.put(has_key.funcionNativaNombre, has_key);
+
+
+
+                PyNativeFunction items = new PyNativeFunction("items", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 1) {
+                                    throw new PyTypeError(String.format("items necesita 1 argumento, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyDict)) {
+                                    throw new PyTypeError(String.format("El primer argumento de items debe ser de tipo '%s'.", PyDict.__name__));
+                                }
+
+                                PyDict d = (PyDict) args[0];
+
+                                ArrayList<PyObject> res = new ArrayList<>(d.dict.size());
+                                for (Map.Entry<PyObject, PyObject> cursor : d.dict.entrySet()) {
+
+                                    ArrayList<PyObject> tupla = new ArrayList<>(2);
+                                    tupla.add(0, cursor.getKey());
+                                    tupla.add(1, cursor.getValue());
+                                    res.add(new PyTuple(tupla));
+
+                                }
+
+                                return new PyList(res);
+                            }
+                        }
+                );
+
+                builtins.put(items.funcionNativaNombre, items);
+
+
+
+                PyNativeFunction keys = new PyNativeFunction("keys", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 1) {
+                                    throw new PyTypeError(String.format("keys necesita 1 argumento, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyDict)) {
+                                    throw new PyTypeError(String.format("El primer argumento de keys debe ser de tipo '%s'.", PyDict.__name__));
+                                }
+
+                                PyDict d = (PyDict) args[0];
+
+                                ArrayList<PyObject> res = new ArrayList<>(d.dict.keySet());
+                                return new PyList(res);
+                            }
+                        }
+                );
+
+                builtins.put(keys.funcionNativaNombre, keys);
+
+
+
+                PyNativeFunction pop = new PyNativeFunction("pop", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 2) {
+                                    throw new PyTypeError(String.format("pop necesita 2 argumentos, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyDict)) {
+                                    throw new PyTypeError(String.format("El primer argumento de pop debe ser de tipo '%s'.", PyDict.__name__));
+                                }
+
+                                PyDict d = (PyDict) args[0];
+
+                                return d.popIndex(args[1]);
+
+
+                            }
+                        }
+                );
+
+                builtins.put(pop.funcionNativaNombre, pop);
+
+
+
+                PyNativeFunction values = new PyNativeFunction("values", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 1) {
+                                    throw new PyTypeError(String.format("values necesita 1 argumento, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyDict)) {
+                                    throw new PyTypeError(String.format("El primer argumento de values debe ser de tipo '%s'.", PyDict.__name__));
+                                }
+
+                                PyDict d = (PyDict) args[0];
+
+                                ArrayList<PyObject> res = new ArrayList<>(d.dict.values());
+                                return new PyList(res);
+                            }
+                        }
+                );
+
+                builtins.put(values.funcionNativaNombre, values);
+
+
+                PyNativeFunction length = new PyNativeFunction("length", clase,
+                        new PyCallable() {
+                            @Override
+                            public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                                if (args.length != 1) {
+                                    throw new PyTypeError(String.format("length necesita 1 argumento, %s encontrados.", args.length));
+                                }
+                                if (!(args[0] instanceof PyDict)) {
+                                    throw new PyTypeError(String.format("El primer argumento de length debe ser de tipo '%s'.", PyDict.__name__));
+                                }
+
+                                PyDict d = (PyDict) args[0];
+
+                                return new PyInteger(d.dict.size());
+
+                            }
+                        }
+                );
+
+                builtins.put(length.funcionNativaNombre, length);
 
             }
             return builtins;

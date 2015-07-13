@@ -475,7 +475,7 @@ public class PyString extends PyObject{
                                     throw new PyTypeError(String.format("length necesita 1 argumento, %s encontrados.", args.length));
                                 }
                                 if (!(args[0] instanceof PyString)) {
-                                    throw new PyTypeError(String.format("El argumento de length deben ser de tipo '%s'.", PyString.__name__));
+                                    throw new PyTypeError(String.format("El argumento de length debe ser de tipo '%s'.", PyString.__name__));
                                 }
 
                                 String val = ((PyString) args[0]).value;

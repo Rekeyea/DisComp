@@ -41,6 +41,8 @@ public class Estado {
         builtins.put(PyDict.__name__, PySingletons.dict);
         builtins.put(PyTuple.__name__, PySingletons.tuple);
         builtins.put(PyString.__name__, PySingletons.string);
+        builtins.put(PySingletons.raw_input.funcionNativaNombre, PySingletons.raw_input);
+        builtins.put(PySingletons.__hash__.funcionNativaNombre, PySingletons.__hash__);
 
         //singletons de objetos
         builtins.put("True", PySingletons.True);
@@ -604,7 +606,7 @@ public class Estado {
                         ArrayList<PyObject> datos = new ArrayList<>(instrArg);
 
                         for (int i = instrArg -1 ; i >= 0; i--) {
-                            datos.set(i, stack.pop());
+                            datos.add(i, stack.pop());
                         }
                         res.lista = datos;
                     }
@@ -642,7 +644,7 @@ public class Estado {
                         ArrayList<PyObject> datos = new ArrayList<>(instrArg);
 
                         for (int i = instrArg -1 ; i >= 0; i--) {
-                            datos.set(i, stack.pop());
+                            datos.add(i, stack.pop());
                         }
                         res.tupla = datos;
                     }
