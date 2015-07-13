@@ -45,6 +45,7 @@ public class main {
 
             parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
             Symbol s = Analizador.parse();
+
             Code codigoModulo = (Code)s.value;
 
             Frame frameInicial = new Frame();
