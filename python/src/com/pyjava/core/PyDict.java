@@ -56,7 +56,7 @@ public class PyDict extends PyObject {
                     k = "(...)";
                 }
                 else if(clave instanceof PyList) {
-                    k = "(...)";
+                    k = "[...]";
                 }
                 else {
                     k = clave.__repr__().value;
