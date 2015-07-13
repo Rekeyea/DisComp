@@ -88,6 +88,11 @@ non terminal func_def;
 non terminal stmt_list;
 non terminal suite;
 non terminal name;
+non terminal dictorsetmaker;
+non terminal dictorsetelement;
+non terminal dictionary;
+non terminal listmaker;
+non terminal list;
 
 non terminal program;
 
@@ -107,7 +112,7 @@ precedence right COMA;
 precedence right ASSIGN;
 precedence left DOT;
 
-program ::= print_stmt:b NEWLINE
+program ::= list:b NEWLINE
 {:
     System.out.println("EL PROGRAMA ESTA BIEN");
     Bloque bloq = ParseResult.getAs(b);
@@ -135,34 +140,25 @@ constant ::= integer:n          {: RESULT = n; :}
 
 name ::= NAME:n  {:RESULT = RuleGenerator.generateName((LexerToken)n); :};
 
-atom ::=    name:n            {: RESULT = n; :}
-            |constant:n       {: RESULT = n; :};
+atom ::=    name:n                              {: RESULT = n; :}
+            |constant:n                         {: RESULT = n; :}
+            |dictionary:n                       {: RESULT = n; :}
+            |list:n                             {: RESULT = n; :};
 
 
+list                ::= LBRACKET RBRACKET
+                        |LBRACKET listmaker RBRACKET;
+listmaker           ::= expression
+                        |expression COMA listmaker;
 
-binary_operator ::= OR:n            {: RESULT = n; :}
-                    | AND:n         {: RESULT = n; :}
-                    | MINOR:n       {: RESULT = n; :}
-                    | MAJOR:n       {: RESULT = n; :}
-                    | MINOREQ:n     {: RESULT = n; :}
-                    | MAJOREQ:n     {: RESULT = n; :}
-                    | DIFF:n        {: RESULT = n; :}
-                    | EQUALS:n      {: RESULT = n; :}
-                    | ORB:n         {: RESULT = n; :}
-                    | XORB:n        {: RESULT = n; :}
-                    | ANDB:n        {: RESULT = n; :}
-                    | SHIFTL:n      {: RESULT = n; :}
-                    | SHIFTR:n      {: RESULT = n; :}
-                    | PLUS:n        {: RESULT = n; :}
-                    | MINUS:n       {: RESULT = n; :}
-                    | MULT:n        {: RESULT = n; :}
-                    | DIV:n         {: RESULT = n; :}
-                    | MOD:n         {: RESULT = n; :}
-                    | DIVE:n        {: RESULT = n; :}
-                    | EXP:n         {: RESULT = n; :};
 
-unary_operator ::=  NOT
-                    |NOTB;
+dictionary          ::= LCURLY dictorsetmaker RCURLY       {: System.out.println("DICCIONARIO"); :}
+                        |LCURLY RCURLY                     {: System.out.println("DICCIONARIO"); :};
+
+dictorsetelement    ::= expression COLON expression;
+dictorsetmaker      ::= dictorsetelement
+                        |dictorsetelement COMA dictorsetelement;
+
 
 
 expression ::=  atom:n                                          {: RESULT = RuleGenerator.loadNameOrConst(n); :}
