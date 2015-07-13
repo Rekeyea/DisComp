@@ -37,6 +37,10 @@ public class Estado {
         builtins.put(PyLong.__name__, PySingletons.longint);
         builtins.put(PyFloat.__name__, PySingletons.pfloat);
         builtins.put(PyBool.__name__, PySingletons.bool);
+        builtins.put(PyList.__name__, PySingletons.list);
+        builtins.put(PyDict.__name__, PySingletons.dict);
+        builtins.put(PyTuple.__name__, PySingletons.tuple);
+        builtins.put(PyString.__name__, PySingletons.string);
 
         //singletons de objetos
         builtins.put("True", PySingletons.True);
