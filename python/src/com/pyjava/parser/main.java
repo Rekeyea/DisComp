@@ -4,6 +4,7 @@ package com.pyjava.parser; /**
 import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyFinEjecucion;
 import com.pyjava.core.runtime.*;
+import com.pyjava.parser.codegen.LexerToken;
 import java_cup.runtime.Symbol;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -86,7 +87,7 @@ public class main {
                 }else if (symbol==sym1.NEWLINE){
                     System.out.println("NEW LINE");
                 }else{
-                    String texto = (String)s.value;
+                    String texto = ((LexerToken)s.value).TokenValue;
                     if(!texto.isEmpty()){
                         System.out.println(texto);
                     }

@@ -140,14 +140,6 @@ atom ::=    name:n            {: RESULT = n; :}
             |func_call;
 
 
-/*
-argument ::=    expression;
-named_argument ::= NAME ASSIGN expression;
-named_argument_list ::= named_argument
-                        |named_argument COMA named_argument_list;
-argument_list ::=   argument
-                    |argument COMA argument_list
-                    |named_argument_list;*/
 
 binary_operator ::= OR:n            {: RESULT = n; :}
                     | AND:n         {: RESULT = n; :}
@@ -197,7 +189,7 @@ expression ::=  atom:n                                          {: RESULT = Rule
 print_stmt ::= PRINT:p expression:n {: RESULT = RuleGenerator.generatePrint(p,n); :};
 
 
-/*
+
 testcoma ::=    COMA expression             {: System.out.println("TESTCOMA 1"); :}
                 |COMA expression testcoma   {: System.out.println("TESTCOMA 2"); :};
 
@@ -218,6 +210,14 @@ namelist ::=    NAME
 
 expr_stmt ::=   namelist ASSIGN testlist;
 
+
+argument ::=    expression;
+named_argument ::= NAME ASSIGN expression;
+named_argument_list ::= named_argument
+                        |named_argument COMA named_argument_list;
+argument_list ::=   argument
+                    |argument COMA argument_list
+                    |named_argument_list;
 
 trailer ::= LPAREN RPAREN
             |LPAREN argument_list RPAREN;
@@ -253,5 +253,5 @@ if_stmt ::=     IF expression COLON suite NEWLINE
                 |IF expression COLON suite NEWLINE ELSE COLON suite NEWLINE;
 
 
-*/
+
 
