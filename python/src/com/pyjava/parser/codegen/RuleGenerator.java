@@ -254,11 +254,11 @@ public class RuleGenerator {
         }
     }
 
-    public static ParseResult generateList(Object bracket, Object elements){
+    public static ParseResult generateListTupleDict(Object bracket, Object elements, int tipoInstruccion){
         int linea = ((LexerToken)bracket).NumeroFila+1;
         int argumentos = 0;
         Bloque b;
-        Instruccion instLista = new Instruccion(linea,OpCode.CREATE_LIST,argumentos);
+        Instruccion instLista = new Instruccion(linea,tipoInstruccion,argumentos);
         if(elements==null){
             LinkedList<Instruccion> instrucciones = new LinkedList<>();
             instrucciones.add(instLista);
@@ -273,5 +273,17 @@ public class RuleGenerator {
         ParseResult res = new ParseResult(linea,b);
         return res;
     }
+
+    public static ParseResult generateDictItem(Object e1, Object coma, Object e2){
+        int linea = ((LexerToken)coma).NumeroFila;
+        Bloque bE1 = ParseResult.getAs(e1);
+        Bloque bE2 = ParseResult.getAs(e2);
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bE1.instrucciones,bE2,null);
+        ParseResult res = new ParseResult(linea,bRes);
+        res.argumentos=1;
+        return res;
+    }
+
+
 
 }

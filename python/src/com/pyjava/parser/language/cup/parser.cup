@@ -94,6 +94,7 @@ non terminal dictionary;
 non terminal listmaker;
 non terminal list;
 non terminal tuple;
+non terminal tupletrail;
 non terminal tuplemaker;
 
 non terminal program;
@@ -148,23 +149,29 @@ atom ::=    name:n                              {: RESULT = n; :}
             |constant:n                         {: RESULT = n; :};
 
 
-tuple               ::= LPAREN RPAREN
-                        |LPAREN tuplemaker RPAREN;
+tuple               ::= LPAREN:b RPAREN                             {: RESULT = RuleGenerator.generateListTupleDict(b,null,OpCode.CREATE_TUPLE); :}
+                        |LPAREN:b tuplemaker:l RPAREN               {: RESULT = RuleGenerator.generateListTupleDict(b,l,OpCode.CREATE_TUPLE);  :};
+
+tupletrail          ::= expression:e                                {: RESULT = RuleGenerator.generateListElements(e,null,null); :}
+                        |expression:e COMA:c tupletrail:l           {: RESULT = RuleGenerator.generateListElements(e,c,l); :};
+
+tuplemaker          ::= expression:e COMA:c                         {: RESULT = RuleGenerator.generateListElements(e,null,null); :}
+                        |expression:e COMA:c tupletrail:l           {: RESULT = RuleGenerator.generateListElements(e,c,l); :};
 
 
-list                ::= LBRACKET:b RBRACKET                         {: RESULT = RuleGenerator.generateList(b,null); :}
-                        |LBRACKET:b listmaker:l RBRACKET            {: RESULT = RuleGenerator.generateList(b,l);  :};
+list                ::= LBRACKET:b RBRACKET                         {: RESULT = RuleGenerator.generateListTupleDict(b,null,OpCode.CREATE_LIST); :}
+                        |LBRACKET:b listmaker:l RBRACKET            {: RESULT = RuleGenerator.generateListTupleDict(b,l,OpCode.CREATE_LIST);  :};
 
 listmaker           ::= expression:e                            {: RESULT = RuleGenerator.generateListElements(e,null,null); :}
                         |expression:e COMA:c listmaker:l        {: RESULT = RuleGenerator.generateListElements(e,c,l); :};
 
 
-dictionary          ::= LCURLY dictorsetmaker RCURLY            {: System.out.println("DICCIONARIO"); :}
-                        |LCURLY RCURLY                          {: System.out.println("DICCIONARIO"); :};
+dictionary          ::= LCURLY:c dictorsetmaker:e RCURLY            {: RESULT = RuleGenerator.generateListTupleDict(c,e,OpCode.CREATE_DICT); :}
+                        |LCURLY:c RCURLY                            {: RESULT = RuleGenerator.generateListTupleDict(c,null,OpCode.CREATE_DICT); :};
 
-dictorsetelement    ::= expression COLON expression;
-dictorsetmaker      ::= dictorsetelement
-                        |dictorsetelement COMA dictorsetelement;
+dictorsetelement    ::= expression:e1 COLON:c expression:e2                 {: RESULT = RuleGenerator.generateDictItem(e1,c,e2); :};
+dictorsetmaker      ::= dictorsetelement:d                                  {: RESULT = RuleGenerator.generateListElements(d,null,null); :}
+                        |dictorsetelement:e1 COMA:c dictorsetmaker:e2       {: RESULT = RuleGenerator.generateListElements(e1,c,e2); :};
 
 
 
