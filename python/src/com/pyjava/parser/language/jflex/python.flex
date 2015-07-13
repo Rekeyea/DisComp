@@ -53,7 +53,7 @@ COMMENT     = "#" {INPUTCHARACTER}* {NEWLINE}?
 ASSIGN = "="
 INTEGER = [0-9]+
 LONG = {INTEGER}("L"|"l")
-FLOAT = [0-9]*"."[0-9]+([eE][-+]?[0-9]+)?
+FLOAT = [0-9]*(".")?[0-9]+([eE][-+]?[0-9]+)?
 STRING = \"|\'
 TRIPLE_STRING = (\"\"\")|(\'\'\')
 NONE = "None"

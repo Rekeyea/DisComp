@@ -3,6 +3,7 @@ package com.pyjava.parser.codegen;
 import com.pyjava.core.runtime.Instruccion;
 import com.pyjava.core.runtime.OpCode;
 import com.pyjava.parser.sym1;
+import java_cup.parse_action_table;
 import jdk.nashorn.internal.parser.Lexer;
 import sun.util.locale.ParseStatus;
 
@@ -220,8 +221,7 @@ public class RuleGenerator {
             ParseResult pr = (ParseResult)left;
             int line = pr.linea;
             Bloque b = ParseResult.getAs(left);
-            Bloque res = ParserStatus.StackGenerador.peek().crearBloque(null,b,null);
-            ParseResult p = new ParseResult(line,res);
+            ParseResult p = new ParseResult(line,b);
             p.argumentos = 1;
             return p;
         }else{
@@ -235,4 +235,43 @@ public class RuleGenerator {
         }
 
     }
+
+    public static ParseResult generateListElements(Object head,Object coma, Object tail){
+        if(coma==null){
+            ParseResult pr = (ParseResult)head;
+            pr.argumentos = 1;
+            return pr;
+        }else {
+            ParseResult pTail = (ParseResult)tail;
+            int line = ((LexerToken)coma).NumeroFila+1;
+            int cantArgs = pTail.argumentos;
+            Bloque bHead = ParseResult.getAs(head);
+            Bloque bTail = ParseResult.getAs(pTail);
+            Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bHead.instrucciones,bTail,null);
+            ParseResult res = new ParseResult(line,bRes);
+            res.argumentos = pTail.argumentos+1;
+            return res;
+        }
+    }
+
+    public static ParseResult generateList(Object bracket, Object elements){
+        int linea = ((LexerToken)bracket).NumeroFila+1;
+        int argumentos = 0;
+        Bloque b;
+        Instruccion instLista = new Instruccion(linea,OpCode.CREATE_LIST,argumentos);
+        if(elements==null){
+            LinkedList<Instruccion> instrucciones = new LinkedList<>();
+            instrucciones.add(instLista);
+            b = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
+        }else{
+            ParseResult pr = (ParseResult)elements;
+            argumentos = pr.argumentos;
+            instLista.arg = argumentos;
+            b = ParseResult.getAs(elements);
+            b.instrucciones.addLast(instLista);
+        }
+        ParseResult res = new ParseResult(linea,b);
+        return res;
+    }
+
 }
