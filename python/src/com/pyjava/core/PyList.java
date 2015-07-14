@@ -3,6 +3,7 @@ package com.pyjava.core;
 import com.pyjava.core.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -111,6 +112,47 @@ public class PyList extends PyObject {
     @Override
     public PyObject __iter__() throws PyException{
         return new PyIterator(this, this.lista.iterator());
+    }
+
+    @Override
+    public PyObject __dict__()throws PyException{
+        //Construye un dict a partir de la lista.
+        //La lista debe tener objetos iterables, donde el primer valor es la clave y el segundo el valor
+        //Si no tiene exactamente 2 iterables, error.
+
+        PyDict res = new PyDict();
+        PyObject iterador;
+        PyObject k;
+        PyObject v;
+
+        for(PyObject ele : this.lista){
+            try {
+                iterador = ele.__iter__();
+            }
+            catch (PyException e){
+                throw new PyValueError(String.format("Conversion de %s a %s: Los elementos deben ser iterables con exactamente 2 elementos.", PyList.__name__, PyDict.__name__));
+            }
+
+            try{
+                k = iterador.__next__();
+                v = iterador.__next__();
+
+                try{
+                    iterador.__next__();
+                    //hay elementos, error.
+                    throw new PyTypeError();
+                }
+                catch (PyStopIteration e){
+                    //ok, no hago nada
+                }
+            }
+            catch (PyException e){
+                throw new PyValueError(String.format("Conversion de %s a %s: Los elementos deben ser iterables con exactamente 2 elementos.", PyList.__name__, PyDict.__name__));
+            }
+            res.__set_index__(k, v);
+
+        }
+        return res;
     }
 
 
@@ -274,7 +316,7 @@ public class PyList extends PyObject {
                                 ArrayList<PyObject> res = new ArrayList<>();
                                 try{
                                     while (true) {
-                                        res.add(iterador.__next__());   //LO HAGO ASI PORQUE JAVA ES CACA Y NO PUEDE ITERAR Y AGREGAR DATOS AL MISMO TIEMPO
+                                        res.add(iterador.__next__());
                                     }
                                 }
                                 catch (PyStopIteration e){
