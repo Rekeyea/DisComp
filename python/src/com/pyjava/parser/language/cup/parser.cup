@@ -96,6 +96,7 @@ non terminal list;
 non terminal tuple;
 non terminal tupletrail;
 non terminal tuplemaker;
+non terminal printtrail;
 
 non terminal program;
 
@@ -117,11 +118,14 @@ precedence right ASSIGN;
 precedence left DOT;
 
 
-program ::= print_stmt:b NEWLINE
+program ::= expr_stmt:e NEWLINE print_stmt:b NEWLINE
 {:
     System.out.println("EL PROGRAMA ESTA BIEN");
+    Bloque as = ParseResult.getAs(e);
     Bloque bloq = ParseResult.getAs(b);
-    Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",bloq);
+    as.instrucciones.addAll(bloq.instrucciones);
+
+    Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",as);
     RESULT = code;
 :};
 
@@ -206,21 +210,10 @@ expression ::=  atom:n                                          {: RESULT = Rule
 
 
 
-/*assignment ::= atom:a ASSIGN:au expression:b
-                                    {:
-                                            int lineNumber = ((LexerToken)au).NumeroFila;
-                                            LinkedList<Instruccion> instrucciones = new LinkedList<>();
-                                            if(b instanceof Const){
-                                                instrucciones.add(new Instruccion(lineNumber, OpCode.LOAD_CONST,((Const)b).index));
-                                            }else{
-                                                instrucciones.add(new Instruccion(lineNumber, OpCode.LOAD_NAME, ((Name)b).index));
-                                            }
-                                            instrucciones.add(new Instruccion(lineNumber,OpCode.STORE_NAME,((Name)a).index));
-                                            RESULT = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
+printtrail ::=  expression:e                            {: RESULT = RuleGenerator.generatePrint(e,null,null); :}
+                |expression:e COMA:c printtrail:p       {: RESULT = RuleGenerator.generatePrint(e,c,p); :};
 
-                                    :};*/
-
-print_stmt ::= PRINT:p expression:n {: RESULT = RuleGenerator.generatePrint(p,n); :};
+print_stmt ::= PRINT:p printtrail:n                     {: RESULT = RuleGenerator.generatePrintNewline(p,n); :};
 
 
 
@@ -236,14 +229,15 @@ testlist ::=    expression                  {: System.out.println("TESTLIST 1");
 return_stmt ::= RETURN
                 |RETURN testlist;
 
-namecoma ::=    COMA NAME
-                |COMA NAME namecoma;
-namelist ::=    NAME
-                |NAME namecoma;
+namecoma ::=    COMA name:n                                 {: RESULT = RuleGenerator.storeName(n); :}
+                |COMA:c name:n namecoma:nc                  {: RESULT = RuleGenerator.joinNames(n,nc); :};
+
+namelist ::=    name:n namecoma:nc                          {: RESULT = RuleGenerator.joinNames(n,nc); :};
 
 
-expr_stmt ::=   namelist ASSIGN testlist;
-
+expr_stmt ::=   name:n ASSIGN:au expression:e              {: RESULT = RuleGenerator.generateAssignation(n,au,e); :}
+                |namelist:n ASSIGN:au tuplemaker:tr        {: RESULT = RuleGenerator.generateTupleMakerAssignation(n,au,tr); :}
+                |namelist:n ASSIGN:au expression:tr        {: RESULT = RuleGenerator.generateUnpackAssignation(n,au,tr); :};
 
 
 

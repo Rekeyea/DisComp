@@ -5,6 +5,7 @@ import com.pyjava.core.runtime.OpCode;
 import com.pyjava.parser.sym1;
 import java_cup.parse_action_table;
 import jdk.nashorn.internal.parser.Lexer;
+import org.omg.CosNaming._NamingContextImplBase;
 import sun.util.locale.ParseStatus;
 
 import java.util.LinkedList;
@@ -70,6 +71,15 @@ public class RuleGenerator {
         Name name = (Name)pr.value;
         LinkedList<Instruccion> instrucciones = new LinkedList<>();
         instrucciones.add(new Instruccion(line, OpCode.LOAD_NAME,name.index));
+        return new ParseResult(line,ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null));
+    }
+
+    public static ParseResult storeName(Object n){
+        ParseResult pr = (ParseResult)n;
+        int line = pr.linea;
+        Name name = (Name)pr.value;
+        LinkedList<Instruccion> instrucciones = new LinkedList<>();
+        instrucciones.add(new Instruccion(line, OpCode.STORE_NAME,name.index));
         return new ParseResult(line,ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null));
     }
 
@@ -186,13 +196,27 @@ public class RuleGenerator {
         return expresion;
     }
 
-    public static ParseResult generatePrint(Object p, Object exp){
-        int lineNumber = ((LexerToken)p).NumeroFila;
-        ParseResult pr = (ParseResult)exp;
-        Bloque b = ParseResult.getAs(pr);
-        b.instrucciones.add(new Instruccion(lineNumber, OpCode.PRINT_ITEM,0));
-        b.instrucciones.add(new Instruccion(lineNumber, OpCode.PRINT_NEWLINE,0));
-        return new ParseResult(lineNumber,b);
+    public static ParseResult generatePrint(Object p,Object coma, Object exp){
+        if(coma==null){
+            ParseResult pr = (ParseResult)p;
+            Bloque bloque = ParseResult.getAs(pr);
+            bloque.instrucciones.addLast(new Instruccion(pr.linea, OpCode.PRINT_ITEM,0));
+            return new ParseResult(pr.linea,bloque);
+        }else{
+            int line = ((LexerToken)coma).NumeroFila+1;
+            Bloque bFirst = ParseResult.getAs(p);
+            Bloque bLast = ParseResult.getAs(exp);
+            bFirst.instrucciones.add(new Instruccion(line,OpCode.PRINT_ITEM,0));
+            bFirst.instrucciones.addAll(bLast.instrucciones);
+            return new ParseResult(line,bFirst);
+        }
+    }
+
+    public static ParseResult generatePrintNewline(Object p,Object trail){
+        int line = ((LexerToken)p).NumeroFila+1;
+        Bloque bRes = ParseResult.getAs(trail);
+        bRes.instrucciones.add(new Instruccion(line,OpCode.PRINT_NEWLINE,0));
+        return new ParseResult(line,bRes);
     }
 
     public static ParseResult generateFunctionCall(Object fName, Object fTrail){
@@ -306,6 +330,44 @@ public class RuleGenerator {
         return new ParseResult(linea,bRes);
     }
 
+    public static ParseResult generateAssignation(Object e, Object au, Object r){
+        int lineNumber = ((LexerToken)au).NumeroFila;
+        Bloque expression = ParseResult.getAs(r);
+        Name b = ParseResult.getAs(e);
+        expression.instrucciones.addLast(new Instruccion(lineNumber, OpCode.STORE_NAME, b.index));
+        return new ParseResult(lineNumber,expression);
+    }
 
+    public static ParseResult joinNames(Object m, Object nc){
+        ParseResult pr = (ParseResult)nc;
+        int line = pr.linea;
+        Name nombre = ParseResult.getAs(m);
+        Bloque b = ParseResult.getAs(nc);
+        b.instrucciones.addLast(new Instruccion(line,OpCode.STORE_NAME,nombre.index));
+        return new ParseResult(line,b);
+    }
+
+    public static ParseResult generateUnpackAssignation(Object namelist,Object assign,Object expression){
+        int linea = ((LexerToken)assign).NumeroFila+1;
+        Bloque bNames = ParseResult.getAs(namelist);
+        Instruccion unpack = new Instruccion(linea,OpCode.UNPACK,bNames.instrucciones.size());
+        Bloque bTrail = ParseResult.getAs(expression);
+        bTrail.instrucciones.addLast(unpack);
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bTrail.instrucciones,bNames,null);
+        return new ParseResult(linea,bRes);
+    }
+
+    public static ParseResult generateTupleMakerAssignation(Object namelist,Object assign,Object tuplemaker){
+        int linea = ((LexerToken)assign).NumeroFila+1;
+        Bloque bNames = ParseResult.getAs(namelist);
+        ParseResult pTrail = (ParseResult)tuplemaker;
+        Bloque bTrail = ParseResult.getAs(tuplemaker);
+        Instruccion instLista = new Instruccion(linea,OpCode.CREATE_TUPLE,pTrail.argumentos);
+        Instruccion unpack = new Instruccion(linea,OpCode.UNPACK,bNames.instrucciones.size());
+        bTrail.instrucciones.addLast(instLista);
+        bTrail.instrucciones.addLast(unpack);
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bTrail.instrucciones,bNames,null);
+        return new ParseResult(linea,bRes);
+    }
 
 }
