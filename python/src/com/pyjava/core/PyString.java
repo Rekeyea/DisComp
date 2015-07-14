@@ -246,8 +246,8 @@ public class PyString extends PyObject{
     public PyObject __get_index__(PyObject i) throws PyException{
 
         try{
-            int index = ((PyInteger)i.__int__()).value;
-            return new PyString(String.valueOf(index));
+            int index = i.__getint__();
+            return new PyString(String.valueOf(value.charAt(index)));
         }
         catch (PyException e){
             throw new PyTypeError(String.format("%s no es un indice valido", i.getType().getClassName()));
