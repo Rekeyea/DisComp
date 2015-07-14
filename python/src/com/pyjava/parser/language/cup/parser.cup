@@ -97,6 +97,7 @@ non terminal tuple;
 non terminal tupletrail;
 non terminal tuplemaker;
 non terminal printtrail;
+non terminal subscript;
 
 non terminal program;
 
@@ -118,13 +119,10 @@ precedence right ASSIGN;
 precedence left DOT;
 
 
-program ::= expr_stmt:e NEWLINE print_stmt:b NEWLINE
+program ::= for_stmt:f
 {:
     System.out.println("EL PROGRAMA ESTA BIEN");
-    Bloque as = ParseResult.getAs(e);
-    Bloque bloq = ParseResult.getAs(b);
-    as.instrucciones.addAll(bloq.instrucciones);
-
+    Bloque as = ParseResult.getAs(f);
     Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",as);
     RESULT = code;
 :};
@@ -184,6 +182,7 @@ expression ::=  atom:n                                          {: RESULT = Rule
                 |list:n                                         {: RESULT = n; :}
                 |tuple:n                                        {: RESULT = n; :}
 				|func_call:f                                    {: RESULT = f; :}
+				|expression:exp1 subscript:sub                  {: RESULT = RuleGenerator.joinBloques(exp1,sub); :}
                 |LPAREN expression:n RPAREN                     {: RESULT = n; :}
                 |expression:a OR:op expression:b                {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
                 |expression:a AND:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
@@ -235,6 +234,9 @@ namecoma ::=    COMA name:n                                 {: RESULT = RuleGene
 namelist ::=    name:n namecoma:nc                          {: RESULT = RuleGenerator.joinNames(n,nc); :};
 
 
+subscript ::=   LBRACKET:l expression:e RBRACKET                    {: RESULT = RuleGenerator.generateSubscript(l,e,null); :}
+                |LBRACKET:l expression:e RBRACKET subscript:s       {: RESULT = RuleGenerator.generateSubscript(l,e,s); :};
+
 expr_stmt ::=   name:n ASSIGN:au expression:e              {: RESULT = RuleGenerator.generateAssignation(n,au,e); :}
                 |namelist:n ASSIGN:au tuplemaker:tr        {: RESULT = RuleGenerator.generateTupleMakerAssignation(n,au,tr); :}
                 |namelist:n ASSIGN:au expression:tr        {: RESULT = RuleGenerator.generateUnpackAssignation(n,au,tr); :};
@@ -263,12 +265,12 @@ flow_stmt ::=   BREAK
                 |CONTINUE
                 |return_stmt;
 
-small_stmt ::=  expr_stmt
-                |expression
-                |print_stmt
+small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
+                |expression:e               {: RESULT = e; :}
+                |print_stmt:p               {: RESULT = p; :}
                 |flow_stmt;
 
-stmt ::=    small_stmt NEWLINE
+stmt ::=    small_stmt:p NEWLINE            {: RESULT = p; :}
             |compound_stmt NEWLINE;
 
 compound_stmt ::=   if_stmt
@@ -276,8 +278,8 @@ compound_stmt ::=   if_stmt
                     |for_stmt
                     |func_def;
 
-stmt_list ::=   stmt
-                |stmt stmt_list;
+stmt_list ::=   stmt:s                      {: RESULT = s; :}
+                |stmt:s stmt_list:l         {: RESULT = RuleGenerator.joinBloques(s,l); :};
 
 suite ::=   stmt
             |NEWLINE INDENT stmt_list DEDENT;
@@ -285,6 +287,9 @@ suite ::=   stmt
 
 if_stmt ::=     IF expression COLON suite NEWLINE
                 |IF expression COLON suite NEWLINE ELSE COLON suite NEWLINE;
+
+
+for_stmt ::= FOR name:n IN expression:exp COLON NEWLINE INDENT stmt_list:b DEDENT NEWLINE       {: RESULT=RuleGenerator.generateFor(n,exp,b); :};
 
 
 
