@@ -370,6 +370,58 @@ public class RuleGenerator {
         return new ParseResult(linea,bRes);
     }
 
+
+    public static ParseResult generateFor(Object name, Object expression, Object body){
+        ParseResult pName = (ParseResult)name;
+        ParseResult pExp = (ParseResult)expression;
+        ParseResult pBody = (ParseResult)body;
+        Bloque bExp = ParseResult.getAs(pExp);
+        Bloque bBody = ParseResult.getAs(body);
+        Name nombre = ParseResult.getAs(pName);
+
+        LinkedList<Instruccion> instrucionesComienzoIteracion = new LinkedList<>();
+        instrucionesComienzoIteracion.addLast(new Instruccion(pExp.linea, OpCode.GET_ITER, 0));
+        instrucionesComienzoIteracion.addLast(new Instruccion(pExp.linea, OpCode.CREATE_LOOP, bBody.instrucciones.size() + 4));
+        instrucionesComienzoIteracion.addLast(new Instruccion(pExp.linea, OpCode.FOR_ITER, bBody.instrucciones.size() + 3));
+        instrucionesComienzoIteracion.addLast(new Instruccion(pExp.linea, OpCode.STORE_NAME, nombre.index));
+
+        bExp.instrucciones.addAll(instrucionesComienzoIteracion);
+
+        LinkedList<Instruccion> instruccionesFinIteracion = new LinkedList<>();
+        instruccionesFinIteracion.add(new Instruccion(bBody.instrucciones.getLast().linea,OpCode.CONTINUE_LOOP,0));
+        instruccionesFinIteracion.add(new Instruccion(bBody.instrucciones.getLast().linea,OpCode.DESTROY_LOOP,1));
+
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bExp.instrucciones,bBody,instruccionesFinIteracion);
+        return new ParseResult(bBody.instrucciones.getLast().linea,bRes);
+        //primero cargo la expresion
+        //get iter
+        //create loop N
+        //for iter N-1
+        //bloque (N-3 instrucciones)
+        //continue loop
+        //destroy loop 1
+
+    }
+
+    public static ParseResult joinBloques(Object stmt, Object stmtlist){
+        Bloque bStmt = ParseResult.getAs(stmt);
+        Bloque bList = ParseResult.getAs(stmtlist);
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bStmt.instrucciones,bList,null);
+        return new ParseResult(bStmt.instrucciones.getLast().linea,bRes);
+    }
+
+    public static ParseResult generateSubscript(Object br, Object exp, Object rest){
+        int line = ((LexerToken)br).NumeroFila+1;
+        if(rest==null){
+            return (ParseResult)exp;
+        }else{
+            Bloque bExp = ParseResult.getAs(exp);
+            bExp.instrucciones.addLast(new Instruccion(line, OpCode.GET_INDEX, 0));
+            Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(null,bExp,ParseResult.getAs(rest));
+            return new ParseResult(line,bExp);
+        }
+    }
+
     public static ParseResult generateIfStatement(Object exp,Object colon1,Object suite1,Object
             colon2,Object suite2){
         int linea = ((LexerToken)colon1).NumeroFila+1;
@@ -389,6 +441,15 @@ public class RuleGenerator {
         }
         Bloque b = ParserStatus.StackGenerador.peek().crearBloque(lBloque.instrucciones,rBloque,null);
         return new ParseResult(linea,b);
+    }
+      
+    public static ParseResult generateFullSubscript(Object exp1, Object sub){
+        int line = ((ParseResult)exp1).linea;
+        Bloque bExp = ParseResult.getAs(exp1);
+        Bloque bSub = ParseResult.getAs(sub);
+        bSub.instrucciones.add(new Instruccion(line,OpCode.GET_INDEX,0));
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bExp.instrucciones,bSub,null);
+        return new ParseResult(line,bRes);
     }
 
 }

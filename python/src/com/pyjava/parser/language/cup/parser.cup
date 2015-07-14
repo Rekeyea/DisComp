@@ -63,7 +63,6 @@ non terminal unary_operator;
 non terminal print_stmt;
 non terminal expression;
 non terminal testcoma;
-non terminal testlist;
 non terminal return_stmt;
 non terminal namecoma;
 non terminal namelist;
@@ -97,6 +96,7 @@ non terminal tuple;
 non terminal tupletrail;
 non terminal tuplemaker;
 non terminal printtrail;
+non terminal subscript;
 
 non terminal program;
 
@@ -118,15 +118,10 @@ precedence right ASSIGN;
 precedence left DOT;
 
 
-
-
-program ::= if_stmt:i
+program ::= print_stmt:f NEWLINE
 {:
     System.out.println("EL PROGRAMA ESTA BIEN");
-    Bloque as = ParseResult.getAs(i);
-    //Bloque bloq = ParseResult.getAs(b);
-    //as.instrucciones.addAll(bloq.instrucciones);
-
+    Bloque as = ParseResult.getAs(f);
     Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",as);
     RESULT = code;
 :};
@@ -219,23 +214,18 @@ print_stmt ::= PRINT:p printtrail:n                     {: RESULT = RuleGenerato
 
 
 
-testcoma ::=    COMA expression             {: System.out.println("TESTCOMA 1"); :}
-                |COMA expression testcoma   {: System.out.println("TESTCOMA 2"); :};
-
-testlist ::=    expression                  {: System.out.println("TESTLIST 1"); :}
-                |expression COMA            {: System.out.println("TESTLIST 2"); :}
-                |expression testcoma        {: System.out.println("TESTLIST 3"); :}
-                |expression testcoma COMA   {: System.out.println("TESTLIST 4"); :};
-
 
 return_stmt ::= RETURN
-                |RETURN testlist;
+                |RETURN tuplemaker;
 
 namecoma ::=    COMA name:n                                 {: RESULT = RuleGenerator.storeName(n); :}
                 |COMA:c name:n namecoma:nc                  {: RESULT = RuleGenerator.joinNames(n,nc); :};
 
 namelist ::=    name:n namecoma:nc                          {: RESULT = RuleGenerator.joinNames(n,nc); :};
 
+
+subscript ::=   LBRACKET:l expression:e RBRACKET                    {: RESULT = RuleGenerator.generateSubscript(l,e,null); :}
+                |LBRACKET:l expression:e RBRACKET subscript:s       {: RESULT = RuleGenerator.generateSubscript(l,e,s); :};
 
 expr_stmt ::=   name:n ASSIGN:au expression:e              {: RESULT = RuleGenerator.generateAssignation(n,au,e); :}
                 |namelist:n ASSIGN:au tuplemaker:tr        {: RESULT = RuleGenerator.generateTupleMakerAssignation(n,au,tr); :}
@@ -265,30 +255,33 @@ flow_stmt ::=   BREAK
                 |CONTINUE
                 |return_stmt;
 
-small_stmt ::=  expr_stmt
-                |expression
-                |print_stmt
+small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
+                |expression:e               {: RESULT = e; :}
+                |print_stmt:p               {: RESULT = p; :}
                 |flow_stmt;
 
-stmt ::=    small_stmt NEWLINE
-            |compound_stmt NEWLINE;
+stmt ::=    small_stmt:p NEWLINE            {: RESULT = p; :}
+            |compound_stmt:c NEWLINE        {: RESULT = c; :};
 
-compound_stmt ::=   if_stmt
+compound_stmt ::=   if_stmt:if              {: RESULT = if; :}
                     |while_stmt
-                    |for_stmt
+                    |for_stmt:for           {: RESULT = for; :}
                     |func_def;
 
-stmt_list ::=   stmt
-                |stmt stmt_list;
+stmt_list ::=   stmt:s                      {: RESULT = s; :}
+                |stmt:s stmt_list:l         {: RESULT = RuleGenerator.joinBloques(s,l); :};
 
-suite ::=   stmt
-            |NEWLINE INDENT stmt_list DEDENT;
+suite ::=   stmt:s                                  {: RESULT = s; :}
+            |NEWLINE INDENT stmt_list:s DEDENT      {: RESULT = s; :};
 
 
 
 
 if_stmt ::=     IF expression:e COLON:c print_stmt:s1 NEWLINE                                            {: RESULT = RuleGenerator.generateIfStatement(e,c,s1,null,null); :}
                 | IF expression:e COLON:c1 print_stmt:s1 NEWLINE ELSE COLON:c2 print_stmt:s2 NEWLINE     {: RESULT = RuleGenerator.generateIfStatement(e,c1,s1,c2,s2); :};
+
+
+for_stmt ::= FOR name:n IN expression:exp COLON NEWLINE INDENT stmt_list:b DEDENT NEWLINE       {: RESULT=RuleGenerator.generateFor(n,exp,b); :};
 
 
 
