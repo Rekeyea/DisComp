@@ -285,8 +285,10 @@ suite ::=   stmt
             |NEWLINE INDENT stmt_list DEDENT;
 
 
-if_stmt ::=     IF expression COLON suite NEWLINE
-                |IF expression COLON suite NEWLINE ELSE COLON suite NEWLINE;
+
+
+if_stmt ::=     IF expression:e COLON:c print_stmt:s1 NEWLINE                                            {: RESULT = RuleGenerator.generateIfStatement(e,c,s1,null,null); :}
+                | IF expression:e COLON:c1 print_stmt:s1 NEWLINE ELSE COLON:c2 print_stmt:s2 NEWLINE     {: RESULT = RuleGenerator.generateIfStatement(e,c1,s1,c2,s2); :};
 
 
 for_stmt ::= FOR name:n IN expression:exp COLON NEWLINE INDENT stmt_list:b DEDENT NEWLINE       {: RESULT=RuleGenerator.generateFor(n,exp,b); :};

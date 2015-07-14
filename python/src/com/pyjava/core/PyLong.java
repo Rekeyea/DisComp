@@ -146,6 +146,10 @@ public class PyLong extends PyObject {
             return AritmeticaHelper.__mul__long_bool(this, (PyBool) obj);
         }
 
+        if(obj instanceof PyString){
+            return obj.__mul__(this);
+        }
+
         throw AritmeticaHelper.getErrorBinary("*", this, obj);
 
 

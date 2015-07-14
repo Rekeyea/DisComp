@@ -133,6 +133,9 @@ public class PyBool extends PyObject {
         if(obj instanceof PyBool){
             return AritmeticaHelper.__mul__bool_bool(this, (PyBool) obj);
         }
+        if(obj instanceof PyString){
+            return obj.__mul__(this);
+        }
 
         throw AritmeticaHelper.getErrorBinary("*", this, obj);
 

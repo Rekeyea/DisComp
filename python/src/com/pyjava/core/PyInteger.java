@@ -132,6 +132,10 @@ public class PyInteger extends PyObject {
             return AritmeticaHelper.__mul__int_bool(this, (PyBool) obj);
         }
 
+        if(obj instanceof PyString){
+            return obj.__mul__(this);
+        }
+
         throw AritmeticaHelper.getErrorBinary("*", this, obj);
     }
 

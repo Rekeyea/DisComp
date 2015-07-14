@@ -1,6 +1,7 @@
 package com.pyjava.parser.codegen;
 
 import com.pyjava.core.PyObject;
+import com.pyjava.core.PyType;
 import com.pyjava.core.runtime.Code;
 import com.pyjava.core.runtime.Instruccion;
 import com.pyjava.core.runtime.OpCode;
@@ -15,7 +16,8 @@ public class Generador {
 
 
     public HashMap<String, Name> co_names;          //Diccionario de nombres
-    public HashMap<PyObject, Const> co_consts;      //Diccionario de constantes
+    public HashMap<Const, Const> co_consts;      //Diccionario de constantes
+
 
     public Generador(){
         co_names = new HashMap<>();
@@ -27,10 +29,12 @@ public class Generador {
      */
     public Const createOrGetConst(PyObject c){
 
-        Const res = co_consts.get(c);
+        Const find = new Const(-1,c);
+        Const res = co_consts.get(find);
         if(res == null){
-            res = new Const(co_consts.size(),c);
-            co_consts.put(c,res);
+            find.index = co_consts.size();
+            res = find;
+            co_consts.put(res,res);
         }
 
         return res;
@@ -110,5 +114,7 @@ public class Generador {
         return res;
 
     }
+
+
 
 }
