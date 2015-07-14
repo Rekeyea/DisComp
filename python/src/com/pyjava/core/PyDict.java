@@ -132,7 +132,7 @@ public class PyDict extends PyObject {
         }
         PyObject[] res = new PyObject[c];
         int i = 0;
-        for(PyObject v : dict.values()){
+        for(PyObject v : dict.keySet()){
             res[i] = v;
             i++;
         }
