@@ -63,7 +63,6 @@ non terminal unary_operator;
 non terminal print_stmt;
 non terminal expression;
 non terminal testcoma;
-non terminal testlist;
 non terminal return_stmt;
 non terminal namecoma;
 non terminal namelist;
@@ -119,7 +118,7 @@ precedence right ASSIGN;
 precedence left DOT;
 
 
-program ::= for_stmt:f
+program ::= print_stmt:f NEWLINE
 {:
     System.out.println("EL PROGRAMA ESTA BIEN");
     Bloque as = ParseResult.getAs(f);
@@ -182,7 +181,6 @@ expression ::=  atom:n                                          {: RESULT = Rule
                 |list:n                                         {: RESULT = n; :}
                 |tuple:n                                        {: RESULT = n; :}
 				|func_call:f                                    {: RESULT = f; :}
-				|expression:exp1 subscript:sub                  {: RESULT = RuleGenerator.joinBloques(exp1,sub); :}
                 |LPAREN expression:n RPAREN                     {: RESULT = n; :}
                 |expression:a OR:op expression:b                {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
                 |expression:a AND:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
@@ -216,17 +214,9 @@ print_stmt ::= PRINT:p printtrail:n                     {: RESULT = RuleGenerato
 
 
 
-testcoma ::=    COMA expression             {: System.out.println("TESTCOMA 1"); :}
-                |COMA expression testcoma   {: System.out.println("TESTCOMA 2"); :};
-
-testlist ::=    expression                  {: System.out.println("TESTLIST 1"); :}
-                |expression COMA            {: System.out.println("TESTLIST 2"); :}
-                |expression testcoma        {: System.out.println("TESTLIST 3"); :}
-                |expression testcoma COMA   {: System.out.println("TESTLIST 4"); :};
-
 
 return_stmt ::= RETURN
-                |RETURN testlist;
+                |RETURN tuplemaker;
 
 namecoma ::=    COMA name:n                                 {: RESULT = RuleGenerator.storeName(n); :}
                 |COMA:c name:n namecoma:nc                  {: RESULT = RuleGenerator.joinNames(n,nc); :};
@@ -271,18 +261,18 @@ small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
                 |flow_stmt;
 
 stmt ::=    small_stmt:p NEWLINE            {: RESULT = p; :}
-            |compound_stmt NEWLINE;
+            |compound_stmt:c NEWLINE        {: RESULT = c; :};
 
-compound_stmt ::=   if_stmt
+compound_stmt ::=   if_stmt:if              {: RESULT = if; :}
                     |while_stmt
-                    |for_stmt
+                    |for_stmt:for           {: RESULT = for; :}
                     |func_def;
 
 stmt_list ::=   stmt:s                      {: RESULT = s; :}
                 |stmt:s stmt_list:l         {: RESULT = RuleGenerator.joinBloques(s,l); :};
 
-suite ::=   stmt
-            |NEWLINE INDENT stmt_list DEDENT;
+suite ::=   stmt:s                                  {: RESULT = s; :}
+            |NEWLINE INDENT stmt_list:s DEDENT      {: RESULT = s; :};
 
 
 

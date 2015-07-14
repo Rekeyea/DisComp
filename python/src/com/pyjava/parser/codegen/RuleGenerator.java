@@ -413,13 +413,11 @@ public class RuleGenerator {
     public static ParseResult generateSubscript(Object br, Object exp, Object rest){
         int line = ((LexerToken)br).NumeroFila+1;
         if(rest==null){
-            Bloque bExp = ParseResult.getAs(exp);
-            bExp.instrucciones.add(new Instruccion(line,OpCode.GET_INDEX,0));
-            return new ParseResult(line,bExp);
+            return (ParseResult)exp;
         }else{
             Bloque bExp = ParseResult.getAs(exp);
-            bExp.instrucciones.add(new Instruccion(line,OpCode.GET_INDEX,0));
-            Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(null,ParseResult.getAs(rest),bExp.instrucciones);
+            bExp.instrucciones.addLast(new Instruccion(line, OpCode.GET_INDEX, 0));
+            Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(null,bExp,ParseResult.getAs(rest));
             return new ParseResult(line,bExp);
         }
     }
@@ -443,6 +441,15 @@ public class RuleGenerator {
         }
         Bloque b = ParserStatus.StackGenerador.peek().crearBloque(lBloque.instrucciones,rBloque,null);
         return new ParseResult(linea,b);
+    }
+      
+    public static ParseResult generateFullSubscript(Object exp1, Object sub){
+        int line = ((ParseResult)exp1).linea;
+        Bloque bExp = ParseResult.getAs(exp1);
+        Bloque bSub = ParseResult.getAs(sub);
+        bSub.instrucciones.add(new Instruccion(line,OpCode.GET_INDEX,0));
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bExp.instrucciones,bSub,null);
+        return new ParseResult(line,bRes);
     }
 
 }
