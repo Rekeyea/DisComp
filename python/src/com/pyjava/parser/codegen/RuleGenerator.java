@@ -284,6 +284,28 @@ public class RuleGenerator {
         return res;
     }
 
+    public static ParseResult generateNameFunctionCall(Object exp,Object punto,Object nomF, Object trail){
+        int linea = ((LexerToken)punto).NumeroFila+1;
+        Bloque b = ParseResult.getAs(exp);
+        Name n = ParseResult.getAs(nomF);
+        Instruccion nombreAtributo = new Instruccion(linea,OpCode.LOAD_ATTR,n.index);
+        ParseResult argumentos = (ParseResult)trail;
+        int cantArgumentos = 0;
+        Bloque bRes;
+        b.instrucciones.addLast(nombreAtributo);
+        if(argumentos==null){
+            b.instrucciones.addLast(new Instruccion(linea,OpCode.CALL_FUNCTION,cantArgumentos));
+            bRes = b;
+        }else{
+            cantArgumentos = argumentos.argumentos;
+            Bloque tail = (Bloque)argumentos.value;
+            Instruccion llamaFuncion = new Instruccion(linea,OpCode.CALL_FUNCTION,cantArgumentos);
+            tail.instrucciones.addLast(llamaFuncion);
+            bRes = ParserStatus.StackGenerador.peek().crearBloque(b.instrucciones,tail,null);
+        }
+        return new ParseResult(linea,bRes);
+    }
+
 
 
 }
