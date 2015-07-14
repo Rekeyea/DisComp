@@ -100,7 +100,8 @@ non terminal subscript;
 
 non terminal program;
 
-
+precedence right LBRACKET;
+precedence left RBRACKET;
 precedence left OR;
 precedence left AND;
 precedence left NOT;
@@ -181,6 +182,7 @@ expression ::=  atom:n                                          {: RESULT = Rule
                 |list:n                                         {: RESULT = n; :}
                 |tuple:n                                        {: RESULT = n; :}
 				|func_call:f                                    {: RESULT = f; :}
+				|expression:exp1 subscript:sub                  {: RESULT = RuleGenerator.generateFullSubscript(exp1,sub); :}
                 |LPAREN expression:n RPAREN                     {: RESULT = n; :}
                 |expression:a OR:op expression:b                {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
                 |expression:a AND:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
@@ -263,9 +265,9 @@ small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
 stmt ::=    small_stmt:p NEWLINE            {: RESULT = p; :}
             |compound_stmt:c NEWLINE        {: RESULT = c; :};
 
-compound_stmt ::=   if_stmt:if              {: RESULT = if; :}
+compound_stmt ::=   if_stmt:f               {: RESULT = f; :}
                     |while_stmt
-                    |for_stmt:for           {: RESULT = for; :}
+                    |for_stmt:f             {: RESULT = f; :}
                     |func_def;
 
 stmt_list ::=   stmt:s                      {: RESULT = s; :}
