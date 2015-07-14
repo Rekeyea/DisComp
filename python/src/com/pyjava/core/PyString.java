@@ -128,28 +128,18 @@ public class PyString extends PyObject{
     public PyObject __mul__(PyObject obj) throws PyException{
         if(obj instanceof PyInteger){
             int val = ((PyInteger)obj).value;
-            String res = this.value;
-            if(val <= 0){
-                res = "";
-            }
-            else {
-                for (int i = 0; i < val; i++) {
-                    res += this.value;
-                }
+            String res = "";
+            for (int i = 0; i < val; i++) {
+                res += this.value;
             }
             return new PyString(res);
         }
 
         if(obj instanceof PyLong){
             long val = ((PyLong)obj).value;
-            String res = this.value;
-            if(val <= 0){
-                res = "";
-            }
-            else {
-                for (int i = 0; i < val; i++) {
-                    res += this.value;
-                }
+            String res = "";
+            for (int i = 0; i < val; i++) {
+                res += this.value;
             }
             return new PyString(res);
 

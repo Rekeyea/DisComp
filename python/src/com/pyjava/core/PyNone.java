@@ -48,7 +48,7 @@ public class PyNone extends PyObject {
 
     @Override
     public int hashCode(){
-        return 0;
+        return Integer.MIN_VALUE;
     }
 
     public static class Builtins {

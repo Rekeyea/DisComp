@@ -15,4 +15,19 @@ public class Const {
         this.value = value;
     }
 
+
+    @Override
+    public boolean equals(Object o){
+        if( o instanceof Const){
+            Const k = (Const) o;
+            return this.value.equals(k.value) && this.value.getType() == k.value.getType();     //ademas de comparar valores, comparo tipo, puedo comparar la instancia ya que mismos objetos apuntan a la misma clase
+        }
+        return false;
+    };
+
+    @Override
+    public int hashCode(){
+        return this.value.hashCode() + this.value.getType().hashCode();
+    }
+
 }
