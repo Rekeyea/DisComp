@@ -370,4 +370,25 @@ public class RuleGenerator {
         return new ParseResult(linea,bRes);
     }
 
+    public static ParseResult generateIfStatement(Object exp,Object colon1,Object suite1,Object
+            colon2,Object suite2){
+        int linea = ((LexerToken)colon1).NumeroFila+1;
+        Bloque expBloque = ParseResult.getAs(exp);
+        Bloque ifBloque = ParseResult.getAs(suite1);
+        Bloque rBloque = null;
+        Bloque lBloque = null;
+        if (suite2 == null) {
+            expBloque.instrucciones.addLast(new Instruccion(linea, OpCode.JUMP_IF_FALSE_OR_POP, ifBloque.instrucciones.size() + 1));
+            lBloque = ParserStatus.StackGenerador.peek().crearBloque(expBloque.instrucciones,ifBloque,null);
+        } else {
+            expBloque.instrucciones.addLast(new Instruccion(linea, OpCode.JUMP_IF_FALSE_OR_POP, ifBloque.instrucciones.size() + 2));
+            lBloque = ParserStatus.StackGenerador.peek().crearBloque(expBloque.instrucciones,ifBloque,null);
+            int linea2 = ((LexerToken)colon2).NumeroFila+1;
+            rBloque = ParseResult.getAs(suite2);
+            lBloque.instrucciones.addLast(new Instruccion(linea2, OpCode.JUMP_FORWARD, rBloque.instrucciones.size() + 1));
+        }
+        Bloque b = ParserStatus.StackGenerador.peek().crearBloque(lBloque.instrucciones,rBloque,null);
+        return new ParseResult(linea,b);
+    }
+
 }

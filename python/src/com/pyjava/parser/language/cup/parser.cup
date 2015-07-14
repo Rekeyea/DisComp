@@ -118,12 +118,14 @@ precedence right ASSIGN;
 precedence left DOT;
 
 
-program ::= expr_stmt:e NEWLINE print_stmt:b NEWLINE
+
+
+program ::= if_stmt:i
 {:
     System.out.println("EL PROGRAMA ESTA BIEN");
-    Bloque as = ParseResult.getAs(e);
-    Bloque bloq = ParseResult.getAs(b);
-    as.instrucciones.addAll(bloq.instrucciones);
+    Bloque as = ParseResult.getAs(i);
+    //Bloque bloq = ParseResult.getAs(b);
+    //as.instrucciones.addAll(bloq.instrucciones);
 
     Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",as);
     RESULT = code;
@@ -283,8 +285,10 @@ suite ::=   stmt
             |NEWLINE INDENT stmt_list DEDENT;
 
 
-if_stmt ::=     IF expression COLON suite NEWLINE
-                |IF expression COLON suite NEWLINE ELSE COLON suite NEWLINE;
+
+
+if_stmt ::=     IF expression:e COLON:c print_stmt:s1 NEWLINE                                            {: RESULT = RuleGenerator.generateIfStatement(e,c,s1,null,null); :}
+                | IF expression:e COLON:c1 print_stmt:s1 NEWLINE ELSE COLON:c2 print_stmt:s2 NEWLINE     {: RESULT = RuleGenerator.generateIfStatement(e,c1,s1,c2,s2); :};
 
 
 
