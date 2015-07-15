@@ -252,6 +252,7 @@ namelist ::=    name:n namecoma:nc                          {: RESULT = RuleGene
 
 
 expr_stmt ::=   name:n ASSIGN:au expression:e                       {: RESULT = RuleGenerator.generateAssignation(n,au,e); :}
+                |name:n ASSIGN:au tuplemaker:tr                     {: RESULT = RuleGenerator.generateTupleMakerSingleAssignation(n,au,tr); :}
                 |assign_exprsub:e  ASSIGN:au expression:exp         {: RESULT = RuleGenerator.generateSubscriptAssignation(e,au,exp); :}
                 |namelist:n ASSIGN:au tuplemaker:tr                 {: RESULT = RuleGenerator.generateTupleMakerAssignation(n,au,tr); :}
                 |namelist:n ASSIGN:au expression:tr                 {: RESULT = RuleGenerator.generateUnpackAssignation(n,au,tr); :};

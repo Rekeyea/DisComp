@@ -383,6 +383,20 @@ public class RuleGenerator {
         return new ParseResult(linea,bRes);
     }
 
+    public static ParseResult generateTupleMakerSingleAssignation(Object name,Object assign,Object tuplemaker){
+        int linea = ((LexerToken)assign).NumeroFila+1;
+
+        ParseResult pTrail = (ParseResult)tuplemaker;
+        Bloque bTrail = ParseResult.getAs(tuplemaker);
+        Instruccion instLista = new Instruccion(linea,OpCode.CREATE_TUPLE,pTrail.argumentos);
+        bTrail.instrucciones.addLast(instLista);
+        Name b = ParseResult.getAs(name);
+        bTrail.instrucciones.addLast(new Instruccion(linea, OpCode.STORE_NAME, b.index));
+
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bTrail.instrucciones,null,null);
+        return new ParseResult(linea,bRes);
+    }
+
 
     public static ParseResult generateFor(Object name, Object expression, Object body){
         ParseResult pName = (ParseResult)name;
