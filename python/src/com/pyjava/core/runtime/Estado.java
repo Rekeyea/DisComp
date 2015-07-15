@@ -691,6 +691,23 @@ public class Estado {
                 }
 
 
+
+
+                case OpCode.CREATE_FUNC:{
+
+                    //Construyo un PyUserFunction con el codigo obtenido del stack.
+                    //Si en el top del stack no hay un Code. Error
+                    Code code = (Code)stack.pop();
+
+                    PyObject f = new PyUserFunction(code);
+
+                    //Lo agrega a variables locales.
+                    frameActual.f_locals.put(code.co_name, f);
+
+                    frameActual.f_instr+=1;
+                    break;
+                }
+
                 case OpCode.FIN_EJECUCION: {
                     System.out.println(String.format("[DEBUG] Ejecutando instruccion de FIN: Numero de instruccion = %s, tamanio del stack del frame actual = %s", frameActual.f_instr, stack.size()));
                     throw new PyFinEjecucion("Fin de ejecucicion.");

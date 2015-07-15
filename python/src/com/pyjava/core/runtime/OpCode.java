@@ -211,8 +211,8 @@ public class OpCode {
 
 
     //------------ Operaciones de creacion de funciones -----------
-
-        //Pendiente
+    //CREATE_FUNC : Crea una nueva funcion. En TOS debe haber una instancia de Code. La crea y la agrega como variable local.
+    public final static int CREATE_FUNC = 48;
 
 
 
