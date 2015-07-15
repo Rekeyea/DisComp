@@ -657,8 +657,8 @@ public class Estado {
                 case OpCode.SET_INDEX: {
 
                     PyObject index = stack.pop();
-                    PyObject valor = stack.pop();
                     PyObject ele = stack.pop();
+                    PyObject valor = stack.pop();
                     ele.__set_index__(index,valor);
 
 

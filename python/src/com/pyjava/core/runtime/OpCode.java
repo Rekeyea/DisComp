@@ -197,7 +197,7 @@ public class OpCode {
 
     /**
      *  GET_INDEX : Hace TOS = TOS1[TOS] : Esto es, obtiene del objeto del TOS1, el valor en el indice TOS y lo pone en TOS.
-     *  SET_INDEX : Hace TOS2[TOS] = TOS1 : Esto es, setea en el objeto del TOS2, en la clave TOS el valor TOS1. Popea todo del stack.
+     *  SET_INDEX : Hace TOS1[TOS] = TOS2 : Popea todo del stack.
      *  UNPACK (i) : parte el iterable en TOS en i elementos y los deja en el stack
      */
 
