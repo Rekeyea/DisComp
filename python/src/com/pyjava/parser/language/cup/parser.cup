@@ -97,6 +97,8 @@ non terminal tupletrail;
 non terminal tuplemaker;
 non terminal printtrail;
 non terminal subscript;
+non terminal exprsub;
+non terminal assign_exprsub;
 
 non terminal program;
 
@@ -119,7 +121,7 @@ precedence right ASSIGN;
 precedence left DOT;
 
 
-program ::= print_stmt:f NEWLINE
+program ::= expr_stmt:f NEWLINE
 {:
     System.out.println("EL PROGRAMA ESTA BIEN");
     Bloque as = ParseResult.getAs(f);
@@ -175,14 +177,17 @@ dictorsetelement    ::= expression:e1 COLON:c expression:e2                 {: R
 dictorsetmaker      ::= dictorsetelement:d                                  {: RESULT = RuleGenerator.generateListElements(d,null,null); :}
                         |dictorsetelement:e1 COMA:c dictorsetmaker:e2       {: RESULT = RuleGenerator.generateListElements(e1,c,e2); :};
 
+subscript ::=   LBRACKET:l expression:e RBRACKET                    {: RESULT = RuleGenerator.generateSubscript(l,e,null); :}
+                |LBRACKET:l expression:e RBRACKET subscript:s       {: RESULT = RuleGenerator.generateSubscript(l,e,s); :};
 
+exprsub ::= expression:exp1 subscript:sub                           {: RESULT = RuleGenerator.generateFullSubscript(exp1,sub); :};
 
 expression ::=  atom:n                                          {: RESULT = RuleGenerator.loadNameOrConst(n); :}
                 |dictionary:n                                   {: RESULT = n; :}
                 |list:n                                         {: RESULT = n; :}
                 |tuple:n                                        {: RESULT = n; :}
 				|func_call:f                                    {: RESULT = f; :}
-				|expression:exp1 subscript:sub                  {: RESULT = RuleGenerator.generateFullSubscript(exp1,sub); :}
+				|exprsub:e                                      {: RESULT = e; :}
                 |LPAREN expression:n RPAREN                     {: RESULT = n; :}
                 |expression:a OR:op expression:b                {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
                 |expression:a AND:op expression:b               {: RESULT = RuleGenerator.generateBinaryOperation(op,a,b); :}
@@ -220,18 +225,34 @@ print_stmt ::= PRINT:p printtrail:n                     {: RESULT = RuleGenerato
 return_stmt ::= RETURN
                 |RETURN tuplemaker;
 
+
+
+
+
+
+assign_exprsub ::= expression:exp1 subscript:sub            {: RESULT = RuleGenerator.generateSubscriptForAssign(exp1,sub); :};
+
 namecoma ::=    COMA name:n                                 {: RESULT = RuleGenerator.storeName(n); :}
                 |COMA:c name:n namecoma:nc                  {: RESULT = RuleGenerator.joinNames(n,nc); :};
 
-namelist ::=    name:n namecoma:nc                          {: RESULT = RuleGenerator.joinNames(n,nc); :};
+namelist ::=    name:n namecoma:nc                          {: RESULT = RuleGenerator.joinNames(n,nc); :}
+                |exprsub:e namecoma:nc                      {: RESULT = null; :};
 
 
-subscript ::=   LBRACKET:l expression:e RBRACKET                    {: RESULT = RuleGenerator.generateSubscript(l,e,null); :}
-                |LBRACKET:l expression:e RBRACKET subscript:s       {: RESULT = RuleGenerator.generateSubscript(l,e,s); :};
 
-expr_stmt ::=   name:n ASSIGN:au expression:e              {: RESULT = RuleGenerator.generateAssignation(n,au,e); :}
-                |namelist:n ASSIGN:au tuplemaker:tr        {: RESULT = RuleGenerator.generateTupleMakerAssignation(n,au,tr); :}
-                |namelist:n ASSIGN:au expression:tr        {: RESULT = RuleGenerator.generateUnpackAssignation(n,au,tr); :};
+
+expr_stmt ::=   name:n ASSIGN:au expression:e                       {: RESULT = RuleGenerator.generateAssignation(n,au,e); :}
+                |assign_exprsub:e  ASSIGN:au expression:exp         {: RESULT = RuleGenerator.generateSubscriptAssignation(e,au,exp); :}
+                |namelist:n ASSIGN:au tuplemaker:tr                 {: RESULT = RuleGenerator.generateTupleMakerAssignation(n,au,tr); :}
+                |namelist:n ASSIGN:au expression:tr                 {: RESULT = RuleGenerator.generateUnpackAssignation(n,au,tr); :};
+
+
+
+
+
+
+
+
 
 
 

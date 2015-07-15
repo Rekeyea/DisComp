@@ -452,4 +452,22 @@ public class RuleGenerator {
         return new ParseResult(line,bRes);
     }
 
+    public static ParseResult generateSubscriptAssignation(Object m, Object au,Object nc){
+        int line = ((LexerToken)au).NumeroFila+1;
+        Bloque bExpSub = ParseResult.getAs(m);
+        Bloque bAs = ParseResult.getAs(nc);
+        bExpSub.instrucciones.add(new Instruccion(line,OpCode.SET_INDEX,0));
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bAs.instrucciones,bExpSub,null);
+        return new ParseResult(line,bRes);
+    }
+
+    public static ParseResult generateSubscriptForAssign(Object exp1, Object sub){
+        int line = ((ParseResult)exp1).linea;
+        Bloque bExp = ParseResult.getAs(exp1);
+        Bloque bSub = ParseResult.getAs(sub);
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bExp.instrucciones,bSub,null);
+        return new ParseResult(line,bRes);
+    }
+
+
 }
