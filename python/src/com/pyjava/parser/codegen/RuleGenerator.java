@@ -457,10 +457,10 @@ public class RuleGenerator {
         Bloque rBloque = null;
         Bloque lBloque = null;
         if (suite2 == null) {
-            expBloque.instrucciones.addLast(new Instruccion(linea, OpCode.JUMP_IF_FALSE_OR_POP, ifBloque.instrucciones.size() + 1));
+            expBloque.instrucciones.addLast(new Instruccion(linea, OpCode.POP_JUMP_IF_FALSE, ifBloque.instrucciones.size() + 1));
             lBloque = ParserStatus.StackGenerador.peek().crearBloque(expBloque.instrucciones,ifBloque,null);
         } else {
-            expBloque.instrucciones.addLast(new Instruccion(linea, OpCode.JUMP_IF_FALSE_OR_POP, ifBloque.instrucciones.size() + 2));
+            expBloque.instrucciones.addLast(new Instruccion(linea, OpCode.POP_JUMP_IF_FALSE, ifBloque.instrucciones.size() + 2));
             lBloque = ParserStatus.StackGenerador.peek().crearBloque(expBloque.instrucciones,ifBloque,null);
             int linea2 = ((LexerToken)colon2).NumeroFila+1;
             rBloque = ParseResult.getAs(suite2);
@@ -476,7 +476,7 @@ public class RuleGenerator {
         Bloque whileBloque = ParseResult.getAs(suite);
 
         expBloque.instrucciones.addFirst(new Instruccion(linea, OpCode.CREATE_LOOP, expBloque.instrucciones.size() + whileBloque.instrucciones.size() + 3));
-        expBloque.instrucciones.addLast(new Instruccion(linea, OpCode.JUMP_IF_FALSE_OR_POP, whileBloque.instrucciones.size() + 2));
+        expBloque.instrucciones.addLast(new Instruccion(linea, OpCode.POP_JUMP_IF_FALSE, whileBloque.instrucciones.size() + 2));
 
         whileBloque.instrucciones.addLast(new Instruccion(linea, OpCode.CONTINUE_LOOP ,0));
         whileBloque.instrucciones.addLast(new Instruccion(linea, OpCode.DESTROY_LOOP ,0));
