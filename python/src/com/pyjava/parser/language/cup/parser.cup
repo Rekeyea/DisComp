@@ -62,6 +62,9 @@ non terminal binary_operator;
 non terminal unary_operator;
 non terminal print_stmt;
 non terminal expression;
+non terminal slice_expression;
+non terminal slice_rest;
+non terminal slice_step;
 non terminal testcoma;
 non terminal return_stmt;
 non terminal namecoma;
@@ -126,6 +129,7 @@ precedence left NOTB;
 precedence right COMA;
 precedence right ASSIGN;
 precedence left DOT;
+precedence left COLON;
 precedence left NEWLINE;
 precedence left ELSE;
 
@@ -190,8 +194,20 @@ dictorsetelement    ::= expression:e1 COLON:c expression:e2                 {: R
 dictorsetmaker      ::= dictorsetelement:d                                  {: RESULT = RuleGenerator.generateListElements(d,null,null); :}
                         |dictorsetelement:e1 COMA:c dictorsetmaker:e2       {: RESULT = RuleGenerator.generateListElements(e1,c,e2); :};
 
-subscript ::=   LBRACKET:l expression:e RBRACKET                    {: RESULT = RuleGenerator.generateSubscript(l,e,null); :}
-                |LBRACKET:l expression:e RBRACKET subscript:s       {: RESULT = RuleGenerator.generateSubscript(l,e,s); :};
+subscript ::=   LBRACKET:l slice_expression:e RBRACKET                    {: RESULT = RuleGenerator.generateSubscript(l,e,null); :}
+                |LBRACKET:l slice_expression:e RBRACKET subscript:s       {: RESULT = RuleGenerator.generateSubscript(l,e,s); :};
+
+slice_expression ::= expression:e                                           {: RESULT = e; :}
+                     | expression:e COLON                                   {: RESULT = e; :}
+                     | expression:e COLON slice_rest:s                      {: RESULT = e; :}
+                     | COLON slice_rest:s                                   {: RESULT = s; :}
+                     | COLON:c                                              {: RESULT = c; :};
+
+slice_rest ::= expression:e                                                 {: RESULT = e; :}
+               | expression:e1 COLON expression:e2                          {: RESULT = e1; :}
+               | expression:e COLON                                         {: RESULT = e; :}
+               | COLON expression:e                                         {: RESULT = e; :}
+               | COLON: c                                                   {: RESULT = c; :};
 
 exprsub ::= expression:exp1 subscript:sub                           {: RESULT = RuleGenerator.generateFullSubscript(exp1,sub); :};
 
