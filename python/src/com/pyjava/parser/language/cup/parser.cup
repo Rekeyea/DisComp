@@ -318,7 +318,7 @@ suite ::=   stmt:s                                          {: RESULT = s; :}
 if_stmt ::=     IF expression:e COLON:c suite:s1                                            {: RESULT = RuleGenerator.generateIfStatement(e,c,s1,null,null); :}
             | IF expression:e COLON:c1 suite:s1 ELSE COLON:c2 suite:s2                      {: RESULT = RuleGenerator.generateIfStatement(e,c1,s1,c2,s2); :};
 
-for_stmt ::= FOR name:n IN expression:exp COLON NEWLINE suite:b       {: RESULT=RuleGenerator.generateForStatement(n,exp,b); :};
+for_stmt ::= FOR name:n IN expression:exp COLON suite:b       {: RESULT=RuleGenerator.generateForStatement(n,exp,b); :};
 
 while_stmt ::= WHILE expression:e COLON:c suite:b                       {: RESULT=RuleGenerator.generateWhileStatement(e,c,b); :};
 
