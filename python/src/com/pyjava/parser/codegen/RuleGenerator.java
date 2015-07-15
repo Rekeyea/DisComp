@@ -375,10 +375,12 @@ public class RuleGenerator {
         Bloque bNames = ParseResult.getAs(namelist);
         ParseResult pTrail = (ParseResult)tuplemaker;
         Bloque bTrail = ParseResult.getAs(tuplemaker);
+        /*
         Instruccion instLista = new Instruccion(linea,OpCode.CREATE_TUPLE,pTrail.argumentos);
         Instruccion unpack = new Instruccion(linea,OpCode.UNPACK,prNamelist.argumentos);
         bTrail.instrucciones.addLast(instLista);
         bTrail.instrucciones.addLast(unpack);
+        */
         Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bTrail.instrucciones,bNames,null);
         return new ParseResult(linea,bRes);
     }
