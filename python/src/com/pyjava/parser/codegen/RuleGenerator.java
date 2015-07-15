@@ -339,18 +339,30 @@ public class RuleGenerator {
     }
 
     public static ParseResult joinNames(Object m, Object nc){
+        ParseResult prM = (ParseResult)m;
         ParseResult pr = (ParseResult)nc;
         int line = pr.linea;
-        Name nombre = ParseResult.getAs(m);
         Bloque b = ParseResult.getAs(nc);
-        b.instrucciones.addLast(new Instruccion(line,OpCode.STORE_NAME,nombre.index));
-        return new ParseResult(line,b);
+        ParseResult nPr = (ParseResult)nc;
+        int argumentos = nPr.argumentos+1;
+        if(prM.value instanceof Name){
+            Name nombre = ParseResult.getAs(m);
+            b.instrucciones.addLast(new Instruccion(line,OpCode.STORE_NAME,nombre.index));
+        }else{
+            Bloque mBloque = ParseResult.getAs(m);
+            b.instrucciones.addAll(mBloque.instrucciones);
+            b.instrucciones.addLast(new Instruccion(line,OpCode.SET_INDEX,0));
+        }
+        ParseResult prRes = new ParseResult(line,b);
+        prRes.argumentos = argumentos;
+        return prRes;
     }
 
     public static ParseResult generateUnpackAssignation(Object namelist,Object assign,Object expression){
         int linea = ((LexerToken)assign).NumeroFila+1;
+        ParseResult prNamelist = (ParseResult)namelist;
         Bloque bNames = ParseResult.getAs(namelist);
-        Instruccion unpack = new Instruccion(linea,OpCode.UNPACK,bNames.instrucciones.size());
+        Instruccion unpack = new Instruccion(linea,OpCode.UNPACK,prNamelist.argumentos);
         Bloque bTrail = ParseResult.getAs(expression);
         bTrail.instrucciones.addLast(unpack);
         Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bTrail.instrucciones,bNames,null);
@@ -359,11 +371,12 @@ public class RuleGenerator {
 
     public static ParseResult generateTupleMakerAssignation(Object namelist,Object assign,Object tuplemaker){
         int linea = ((LexerToken)assign).NumeroFila+1;
+        ParseResult prNamelist = (ParseResult)namelist;
         Bloque bNames = ParseResult.getAs(namelist);
         ParseResult pTrail = (ParseResult)tuplemaker;
         Bloque bTrail = ParseResult.getAs(tuplemaker);
         Instruccion instLista = new Instruccion(linea,OpCode.CREATE_TUPLE,pTrail.argumentos);
-        Instruccion unpack = new Instruccion(linea,OpCode.UNPACK,bNames.instrucciones.size());
+        Instruccion unpack = new Instruccion(linea,OpCode.UNPACK,prNamelist.argumentos);
         bTrail.instrucciones.addLast(instLista);
         bTrail.instrucciones.addLast(unpack);
         Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bTrail.instrucciones,bNames,null);
@@ -469,5 +482,14 @@ public class RuleGenerator {
         return new ParseResult(line,bRes);
     }
 
+    public static ParseResult addSetIndex(Object n){
+        ParseResult pr = (ParseResult)n;
+        int line = pr.linea;
+        Bloque b = ParseResult.getAs(pr);
+        b.instrucciones.add(new Instruccion(line,OpCode.SET_INDEX,0));
+        ParseResult res = new ParseResult(line,b);
+        res.argumentos=1;
+        return res;
+    }
 
 }

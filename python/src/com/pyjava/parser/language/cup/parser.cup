@@ -121,10 +121,14 @@ precedence right ASSIGN;
 precedence left DOT;
 
 
-program ::= expr_stmt:f NEWLINE
+program ::= expr_stmt:f NEWLINE expr_stmt:f2 NEWLINE print_stmt:p NEWLINE
 {:
     System.out.println("EL PROGRAMA ESTA BIEN");
     Bloque as = ParseResult.getAs(f);
+    Bloque a2s = ParseResult.getAs(f2);
+    Bloque ap = ParseResult.getAs(p);
+    as.instrucciones.addAll(a2s.instrucciones);
+    as.instrucciones.addAll(ap.instrucciones);
     Code code = ParserStatus.StackGenerador.peek().crearCodigo("lala","lala",as);
     RESULT = code;
 :};
@@ -232,11 +236,17 @@ return_stmt ::= RETURN
 
 assign_exprsub ::= expression:exp1 subscript:sub            {: RESULT = RuleGenerator.generateSubscriptForAssign(exp1,sub); :};
 
-namecoma ::=    COMA name:n                                 {: RESULT = RuleGenerator.storeName(n); :}
-                |COMA:c name:n namecoma:nc                  {: RESULT = RuleGenerator.joinNames(n,nc); :};
+namecoma ::=    COMA name:n                                 {:
+                                                                ParseResult pr = RuleGenerator.storeName(n);
+                                                                pr.argumentos = 1;
+                                                                RESULT = pr;
+                                                            :}
+                |COMA assign_exprsub:n                      {: RESULT = RuleGenerator.addSetIndex(n); :}
+                |COMA:c name:n namecoma:nc                  {: RESULT = RuleGenerator.joinNames(n,nc); :}
+                |COMA assign_exprsub:n namecoma:nc          {: RESULT = RuleGenerator.joinNames(n,nc); :};
 
 namelist ::=    name:n namecoma:nc                          {: RESULT = RuleGenerator.joinNames(n,nc); :}
-                |exprsub:e namecoma:nc                      {: RESULT = null; :};
+                |assign_exprsub:e namecoma:nc               {: RESULT = RuleGenerator.joinNames(e,nc); :};
 
 
 
