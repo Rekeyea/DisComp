@@ -59,6 +59,7 @@ public class PySingletons {
 
     public static PyNativeFunction raw_input = null;
     public static PyNativeFunction __hash__ = null;
+    public static PyNativeFunction range = null;
 
     private static boolean inicializado = false;
 
@@ -169,6 +170,53 @@ public class PySingletons {
                             }
 
                             return args[0].__hash__();
+
+                        }
+                    }
+            );
+
+            range = new PyNativeFunction("range", builtinFunc,
+                    new PyCallable() {
+                        @Override
+                        public PyObject invoke(PyObject[] args, AttrDict kwargs) throws PyException {
+                            if (args.length == 1) {
+                                int i = args[0].__getint__();
+                                ArrayList<PyObject> res = new ArrayList<>();
+                                for(int x = 0; x < i; x++){
+                                    res.add(new PyInteger(x));
+                                }
+
+                                return new PyList(res);
+
+
+                            }
+                            if(args.length == 2){
+                                int i = args[0].__getint__();
+                                int j = args[1].__getint__();
+
+                                ArrayList<PyObject> res = new ArrayList<>();
+                                for(int x = i; x < j; x++){
+                                    res.add(new PyInteger(x));
+                                }
+
+                                return new PyList(res);
+                            }
+
+                            if(args.length == 3){
+                                int i = args[0].__getint__();
+                                int j = args[1].__getint__();
+                                int k = args[2].__getint__();
+
+                                ArrayList<PyObject> res = new ArrayList<>();
+                                for(int x = i; x < j; x+=k){
+                                    res.add(new PyInteger(x));
+                                }
+
+                                return new PyList(res);
+                            }
+
+                            throw new PyTypeError(String.format("range necesita 1, 2 o 3 argumentos, %s encontrados.", args.length));
+
 
                         }
                     }

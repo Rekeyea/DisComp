@@ -43,6 +43,7 @@ public class Estado {
         builtins.put(PyString.__name__, PySingletons.string);
         builtins.put(PySingletons.raw_input.funcionNativaNombre, PySingletons.raw_input);
         builtins.put(PySingletons.__hash__.funcionNativaNombre, PySingletons.__hash__);
+        builtins.put(PySingletons.range.funcionNativaNombre, PySingletons.range);
 
         //singletons de objetos
         builtins.put("True", PySingletons.True);
