@@ -398,7 +398,7 @@ public class RuleGenerator {
     }
 
 
-    public static ParseResult generateFor(Object name, Object expression, Object body){
+    public static ParseResult generateForStatement(Object name, Object expression, Object body){
         ParseResult pName = (ParseResult)name;
         ParseResult pExp = (ParseResult)expression;
         ParseResult pBody = (ParseResult)body;
@@ -469,7 +469,23 @@ public class RuleGenerator {
         Bloque b = ParserStatus.StackGenerador.peek().crearBloque(lBloque.instrucciones,rBloque,null);
         return new ParseResult(linea,b);
     }
-      
+
+    public static ParseResult generateWhileStatement(Object exp,Object colon,Object suite){
+        int linea = ((LexerToken)colon).NumeroFila+1;
+        Bloque expBloque = ParseResult.getAs(exp);
+        Bloque whileBloque = ParseResult.getAs(suite);
+
+        expBloque.instrucciones.addFirst(new Instruccion(linea, OpCode.CREATE_LOOP, expBloque.instrucciones.size() + whileBloque.instrucciones.size() + 3));
+        expBloque.instrucciones.addLast(new Instruccion(linea, OpCode.JUMP_IF_FALSE_OR_POP, whileBloque.instrucciones.size() + 2));
+
+        whileBloque.instrucciones.addLast(new Instruccion(linea, OpCode.CONTINUE_LOOP ,0));
+        whileBloque.instrucciones.addLast(new Instruccion(linea, OpCode.DESTROY_LOOP ,0));
+
+        Bloque b = ParserStatus.StackGenerador.peek().crearBloque(expBloque.instrucciones,whileBloque,null);
+
+        return new ParseResult(linea,b);
+    }
+
     public static ParseResult generateFullSubscript(Object exp1, Object sub){
         int line = ((ParseResult)exp1).linea;
         Bloque bExp = ParseResult.getAs(exp1);

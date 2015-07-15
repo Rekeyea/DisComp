@@ -1,0 +1,1 @@
+java -jar C:\jflex-1.6.1\lib\java-cup-11a.jar -symbols sym1 language\cup\parser.cup
