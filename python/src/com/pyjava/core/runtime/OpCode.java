@@ -12,7 +12,7 @@ public class OpCode {
      * Nota: TOS = Top of the stack, o sea, tope del stack del frame actual.
      CALL_FUNCTION(argc): Realiza la llamada a una función, donde el argumento (arg) indica cuantos argumentos posicionales tiene, y arg2 indica cuantos por nombre
         La estructura del stack debera ser la siguiente:
-        base del stack -- [argN_1, arg_1, ... , argN_arg2, arg_arg2,   ..., arg1, arg2, ... , arg_arg]
+        base del stack -- [arg_arg2,   ..., arg1, arg2, ... , arg_arg, argN_1, arg_1, ... , argN_arg2]
         Donde en el tope del stack se encuentran los argumentos posicionales de derecha a izquierda, seguido por los argumentos por nombre donde primero esta el valor y seguido el nombre
         tambien de derecha a izquierda
 
@@ -205,14 +205,23 @@ public class OpCode {
     public final static int SET_INDEX = 46;
     public final static int UNPACK = 47;
 
-    //------------ Operaciones de slices -------------
-
-    //pendiente
 
 
     //------------ Operaciones de creacion de funciones -----------
     //CREATE_FUNC : Crea una nueva funcion. En TOS debe haber una instancia de Code. La crea y la agrega como variable local.
     public final static int CREATE_FUNC = 48;
+
+
+    //------------ Operaciones de slices -------------
+
+    /**
+     *
+     * CREATE_SLICE : Crea y pushea en el stack un objeto slice que puede ser utilizado con set_index y get_index.
+     *                En el stack deben haber siempre 3 elementos, que pueden ser PyNone o no, si es PyNone, se usa el valor por defecto.
+     *                Deben estar : start, end, step
+     *
+    */
+    public final static int CREATE_SLICE= 49;
 
 
 

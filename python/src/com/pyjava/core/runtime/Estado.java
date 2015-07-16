@@ -114,14 +114,12 @@ public class Estado {
 
                     //Por ahora solo argumentos posicionales son validos, los kwargs se ignoran/no obtienen.
 
-                    //Obtengo argumentos. Estan en el stack de derecha a izquierda.
+           
                     PyObject[] args = new PyObject[instrArg];
                     AttrDict kwargs = new AttrDict();
 
-                    for (int i = instrArg - 1; i >= 0; i--) {
-                        args[i] = stack.pop();
-                    }
 
+                    //primero kwargs
                     //En este caso no importa el orden en que los inserto
                     for(int i = 0; i < instr.arg2; i++ ){
                         PyObject val = stack.pop();
@@ -133,6 +131,11 @@ public class Estado {
                             throw new PyRuntimeException("kwargs debe ser un PyString");
                         }
 
+                    }
+
+                    //luego args
+                    for (int i = instrArg - 1; i >= 0; i--) {
+                        args[i] = stack.pop();
                     }
 
                     //Objeto a llamar esta ultimo en el stack.
@@ -691,8 +694,6 @@ public class Estado {
                 }
 
 
-
-
                 case OpCode.CREATE_FUNC:{
 
                     //Construyo un PyUserFunction con el codigo obtenido del stack.
@@ -707,6 +708,24 @@ public class Estado {
                     frameActual.f_instr+=1;
                     break;
                 }
+
+
+                case OpCode.CREATE_SLICE:{
+
+                    //Construyo un PyUserFunction con el codigo obtenido del stack.
+                    //Si en el top del stack no hay un Code. Error
+                    PyObject start = stack.pop();
+                    PyObject end = stack.pop();
+                    PyObject step = stack.pop();
+
+                    stack.push(new PySlice(start,end,step));
+
+                    frameActual.f_instr+=1;
+                    break;
+                }
+
+
+
 
                 case OpCode.FIN_EJECUCION: {
                     System.out.println(String.format("[DEBUG] Ejecutando instruccion de FIN: Numero de instruccion = %s, tamanio del stack del frame actual = %s", frameActual.f_instr, stack.size()));

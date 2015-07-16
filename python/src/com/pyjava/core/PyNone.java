@@ -45,6 +45,10 @@ public class PyNone extends PyObject {
         return PySingletons.False;
     }
 
+    @Override
+    public boolean __is_none__(){
+        return true;
+    }
 
     @Override
     public int hashCode(){

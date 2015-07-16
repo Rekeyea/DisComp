@@ -245,15 +245,50 @@ public class PyString extends PyObject{
     @Override
     public PyObject __get_index__(PyObject i) throws PyException{
 
-        try{
-            int index = i.__getint__();
-            return new PyString(String.valueOf(value.charAt(index)));
+        if(!(i instanceof PySlice)) {
+            try {
+                int index = i.__getint__();
+                return new PyString(String.valueOf(value.charAt(index)));
+            } catch (PyException e) {
+                throw new PyTypeError(String.format("%s no es un indice valido", i.getType().getClassName()));
+            } catch (IndexOutOfBoundsException e) {
+                throw new PyIndexError();
+            }
         }
-        catch (PyException e){
-            throw new PyTypeError(String.format("%s no es un indice valido", i.getType().getClassName()));
-        }
-        catch (IndexOutOfBoundsException e){
-            throw new PyIndexError();
+        else {
+            PySlice slice = (PySlice)i;
+            int start = slice.start != null ? slice.start : 0;
+            int end = slice.end != null ? slice.end : value.length();
+            int step = slice.step != null ? slice.step : 1;
+
+            int listaSize = value.length();
+
+            if(start < 0){
+                start = listaSize + start;
+            }
+
+            if(end < 0 ){
+                end = listaSize + end;
+            }
+
+
+            ArrayList<PyObject> res = new ArrayList<>();
+            if(step > 0){
+                int maxIndex = listaSize - 1;
+                for(int iter = start; iter < end; iter+=step){
+                    if(iter > maxIndex){
+                        break;
+                    }
+                    res.add(new PyString(String.valueOf(value.charAt(iter))));
+                }
+
+            }
+            else {
+                throw new PyValueError("Slice step debe ser mayor a 0");
+
+            }
+
+            return new PyList(res);
         }
 
 
