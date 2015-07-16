@@ -517,6 +517,21 @@ public class RuleGenerator {
         return new ParseResult(line,bRes);
     }
 
+    public static ParseResult generateSubscriptTupleMakerSingleAssignation(Object m,Object assign,Object tuplemaker){
+        int linea = ((LexerToken)assign).NumeroFila+1;
+
+        Bloque bExpSub = ParseResult.getAs(m);
+
+        ParseResult pTrail = (ParseResult)tuplemaker;
+        Bloque bTrail = ParseResult.getAs(tuplemaker);
+
+        bTrail.instrucciones.addLast(new Instruccion(linea,OpCode.CREATE_TUPLE,pTrail.argumentos));
+        bExpSub.instrucciones.addLast(new Instruccion(linea,OpCode.SET_INDEX,0));
+
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bTrail.instrucciones,bExpSub,null);
+        return new ParseResult(linea,bRes);
+    }
+
     public static ParseResult generateSubscriptForAssign(Object exp1, Object sub){
         int line = ((ParseResult)exp1).linea;
         Bloque bExp = ParseResult.getAs(exp1);
