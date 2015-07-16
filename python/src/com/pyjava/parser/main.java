@@ -43,7 +43,7 @@ public class main {
 
         try{
 
-            parser Analizador = new parser(new Lexer(new FileReader("/home/rafael/proyects/DisComp/python/src/com/pyjava/parser/python.py")));
+            parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
             Symbol s = Analizador.parse();
 
             Code codigoModulo = (Code)s.value;

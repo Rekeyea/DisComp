@@ -1,5 +1,7 @@
 package com.pyjava.parser.codegen;
 
+import com.pyjava.core.PyObject;
+import com.pyjava.core.runtime.Code;
 import com.pyjava.core.runtime.Instruccion;
 import com.pyjava.core.runtime.OpCode;
 import com.pyjava.parser.sym1;
@@ -8,7 +10,9 @@ import jdk.nashorn.internal.parser.Lexer;
 import org.omg.CosNaming._NamingContextImplBase;
 import sun.util.locale.ParseStatus;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -524,4 +528,90 @@ public class RuleGenerator {
         return res;
     }
 
+    public static ParseResult generateFunParams(Object name, Object rest){
+        LexerToken l = (LexerToken)name;
+        int numeroFila = l.NumeroFila+1;
+        if(rest==null){
+            LinkedList<LexerToken> lista = new LinkedList<>();
+            lista.add(l);
+            return new ParseResult(numeroFila,lista);
+        }else{
+            LinkedList<LexerToken> lista = ParseResult.getAs(rest);
+            lista.addFirst(l);
+            return new ParseResult(numeroFila,lista);
+        }
+    }
+
+    public static void generateNewScope(){
+        ParserStatus.StackGenerador.push(new Generador());
+    }
+
+    public static ParseResult generateFunctionDef(Object def, Object fName, Object fParams, Object fCode ){
+        LexerToken l = (LexerToken)def;
+        int numeroLinea = l.NumeroFila+1;
+        Generador genFunc = ParserStatus.StackGenerador.pop();
+        int numLineLastInst = ((Bloque)ParseResult.getAs(fCode)).instrucciones.getLast().linea;
+        Const none = genFunc.createOrGetConst(ConstCreator.createPyNone());
+
+        Instruccion cargarNone = new Instruccion(numeroLinea+numLineLastInst,OpCode.LOAD_CONST,none.index);
+        Instruccion returnNone = new Instruccion(numeroLinea+numLineLastInst,OpCode.RETURN_VALUE,0);
+        Bloque bCode = ParseResult.getAs(fCode);
+        bCode.instrucciones.addLast(cargarNone);
+        bCode.instrucciones.addLast(returnNone);
+
+        Name nombreFuncion = ParseResult.getAs(fName);
+        Code codigoFunc = genFunc.crearCodigo(nombreFuncion.value,"lala",bCode);
+        codigoFunc.co_arguments = new ArrayList<>();
+        if(fParams!=null){
+            LinkedList<LexerToken> params = ParseResult.getAs(fParams);
+            for(LexerToken t :params ){
+                codigoFunc.co_arguments.add(t.TokenValue);
+            }
+        }
+        Const constCodigo = ParserStatus.StackGenerador.peek().createOrGetConst(codigoFunc);
+        Instruccion loadFunc = new Instruccion(numeroLinea,OpCode.LOAD_CONST,constCodigo.index);
+        Instruccion createFunc = new Instruccion(numeroLinea,OpCode.CREATE_FUNC,0);
+        LinkedList<Instruccion> instruccionesFuncion = new LinkedList<>();
+        instruccionesFuncion.add(loadFunc);
+        instruccionesFuncion.add(createFunc);
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(instruccionesFuncion,null,null);
+        return new ParseResult(numeroLinea,bRes);
+    }
+
+    public static ParseResult generateReturnEmpty(Object ret){
+        LexerToken lRet = (LexerToken)ret;
+        int linea = lRet.NumeroFila+1;
+        Instruccion returnNone = new Instruccion(linea,OpCode.RETURN_VALUE,0);
+        Const none = ParserStatus.StackGenerador.peek().createOrGetConst(ConstCreator.createPyNone());
+        Instruccion cargarNone = new Instruccion(linea,OpCode.LOAD_CONST,none.index);
+        LinkedList<Instruccion> instrucciones = new LinkedList<>();
+        instrucciones.add(cargarNone);
+        instrucciones.add(returnNone);
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
+        return new ParseResult(linea,bRes);
+    }
+
+    public static ParseResult generateReturnTup(Object ret, Object exp){
+        LexerToken lRet = (LexerToken)ret;
+        int linea = lRet.NumeroFila+1;
+        Instruccion returnTuple = new Instruccion(linea,OpCode.RETURN_VALUE,0);
+        ParseResult prRes = (ParseResult)exp;
+        Bloque bExp = ParseResult.getAs(exp);
+        Instruccion crearTupla = new Instruccion(linea,OpCode.CREATE_TUPLE,prRes.argumentos);
+        bExp.instrucciones.addLast(crearTupla);
+        bExp.instrucciones.addLast(returnTuple);
+        return new ParseResult(linea,bExp);
+    }
+
+    public static ParseResult generateReturnExp(Object ret,Object exp){
+        LexerToken lRet = (LexerToken)ret;
+        int linea = lRet.NumeroFila+1;
+        Instruccion returnExp = new Instruccion(linea,OpCode.RETURN_VALUE,0);
+        Bloque bRes = ParseResult.getAs(exp);
+        bRes.instrucciones.addLast(returnExp);
+        return new ParseResult(linea,bRes);
+    }
+
 }
+
+

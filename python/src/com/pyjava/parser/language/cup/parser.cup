@@ -86,7 +86,6 @@ non terminal compound_stmt;
 non terminal if_stmt;
 non terminal while_stmt;
 non terminal for_stmt;
-non terminal func_def;
 non terminal stmt_list;
 non terminal suite;
 non terminal name;
@@ -104,6 +103,8 @@ non terminal exprsub;
 non terminal assign_exprsub;
 non terminal single_input;
 non terminal input;
+non terminal func_def;
+non terminal func_parameters;
 
 non terminal program;
 
@@ -249,8 +250,9 @@ printtrail ::=  expression:e                            {: RESULT = RuleGenerato
 print_stmt ::= PRINT:p printtrail:n                     {: RESULT = RuleGenerator.generatePrintNewline(p,n); :};
 
 
-return_stmt ::= RETURN
-                |RETURN tuplemaker;
+return_stmt ::= RETURN:r                                    {: RESULT = RuleGenerator.generateReturnEmpty(r); :}
+                |RETURN:r expression:e                      {: RESULT = RuleGenerator.generateReturnExp(r,e); :}
+                |RETURN:r tuplemaker:t                      {: RESULT = RuleGenerator.generateReturnTup(r,t); :};
 
 
 
@@ -282,14 +284,6 @@ expr_stmt ::=   name:n ASSIGN:au expression:e                       {: RESULT = 
 
 
 
-
-
-
-
-
-
-
-
 named_argument ::= NAME ASSIGN expression;
 named_argument_list ::= named_argument
                         |named_argument COMA named_argument_list;
@@ -310,12 +304,12 @@ func_call ::=   expression:e DOT:d name:n trailer:t     {: RESULT = RuleGenerato
 
 flow_stmt ::=   BREAK
                 |CONTINUE
-                |return_stmt;
+                |return_stmt:r              {: RESULT = r; :};
 
 small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
                 |expression:e               {: RESULT = e; :}
                 |print_stmt:p               {: RESULT = p; :}
-                |flow_stmt;
+                |flow_stmt:f                {: RESULT = f; :};
 
 stmt ::=    small_stmt:p NEWLINE            {: RESULT = p; :}
             |compound_stmt:c        {: RESULT = c; :};
@@ -323,7 +317,7 @@ stmt ::=    small_stmt:p NEWLINE            {: RESULT = p; :}
 compound_stmt ::=   if_stmt:f               {: RESULT = f; :}
                     |while_stmt:f           {: RESULT = f; :}
                     |for_stmt:f             {: RESULT = f; :}
-                    |func_def;
+                    |func_def:f             {: RESULT = f; :};
 
 stmt_list ::=   stmt:s                      {: RESULT = s; :}
                 |stmt:s stmt_list:l         {: RESULT = RuleGenerator.joinBloques(s,l); :};
@@ -340,4 +334,13 @@ while_stmt ::= WHILE expression:e COLON:c suite:b                       {: RESUL
 
 
 
+func_parameters ::= NAME:n                                                      {: RESULT = RuleGenerator.generateFunParams(n,null); :}
+                    |NAME:n COMA func_parameters:fp                             {: RESULT = RuleGenerator.generateFunParams(n,fp); :};
 
+
+func_def ::=    DEF:d name:n LPAREN func_parameters:fp RPAREN COLON
+                {: RuleGenerator.generateNewScope(); :}
+                suite:s     {: RESULT = RuleGenerator.generateFunctionDef(d,n,fp,s); :}
+                |DEF:d name:n LPAREN RPAREN COLON
+                {: RuleGenerator.generateNewScope(); :}
+                suite:s     {: RESULT = RuleGenerator.generateFunctionDef(d,n,null,s); :};
