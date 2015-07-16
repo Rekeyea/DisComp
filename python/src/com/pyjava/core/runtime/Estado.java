@@ -63,35 +63,26 @@ public class Estado {
         return frameActual.f_code.co_code.get(frameActual.f_instr).linea;
     }
 
-    /**
-     * Retorna el nombre del archivo de ejecucion actual
-     * @return
-     */
-    public String getArchivoActual(){
-        return frameActual.f_code.co_filename;
-    }
-
-    /**
-     * Retorna el nombre de la funcion actual
-     * @return
-     */
-    public String getFuncActual(){
-        return frameActual.f_code.co_name;
-    }
 
     /**
      * Imprime el trace
      */
     public void printStacktrace(){
 
-        if(this.frameActual.f_back != null){
-            this.printStacktrace();
+        String res = "";
+        Frame printFrame = this.frameActual;
+        while (printFrame != null){
+
+            res =  String.format("\tFuncion o modulo: %s\n", printFrame.f_code.co_name)
+                    + String.format("\tLinea: %s\n", printFrame.f_code.co_code.get(printFrame.f_instr).linea)
+                    + "\t-----\n"
+                    + res;
+
+            printFrame = printFrame.f_back;
         }
 
-        System.out.println(String.format("\tArchivo: %s", this.getArchivoActual()));
-        System.out.println(String.format("\tFuncion o modulo: %s", this.getFuncActual()));
-        System.out.println(String.format("\tLinea: %s", this.getLineaActual()));
-        System.out.println("-----");
+        System.out.println(res);
+
     }
 
     /**
