@@ -127,10 +127,10 @@ precedence left PLUS, MINUS;
 precedence left MULT, DIV, MOD, DIVE;
 precedence right EXP;
 precedence left NOTB;
-precedence right COMA;
-precedence right ASSIGN;
 precedence left DOT;
 precedence left COLON;
+precedence left COMA;
+precedence right ASSIGN;
 precedence left NEWLINE;
 precedence left ELSE;
 
@@ -284,16 +284,16 @@ expr_stmt ::=   name:n ASSIGN:au expression:e                       {: RESULT = 
 
 
 
-named_argument ::= NAME ASSIGN expression;
-named_argument_list ::= named_argument
-                        |named_argument COMA named_argument_list;
+named_argument ::= NAME:n ASSIGN expression:e                           {: RESULT = RuleGenerator.generateNamedArgument(n,e); :};
+named_argument_list ::= named_argument:n                                {: RESULT = n; :}
+                        |named_argument:n COMA:c named_argument_list:l  {: RESULT = RuleGenerator.generateNamedArgumentList(n,c,l); :};
 
 argument_list ::=   expression:e                            {: RESULT = RuleGenerator.generateArguments(null,e,null); :}
                     |expression:e COMA:c argument_list:al   {: RESULT = RuleGenerator.generateArguments(c,e,al); :}
-                    |named_argument_list;
+                    |named_argument_list:nl                 {: RESULT = nl; :};
 
-trailer ::= LPAREN RPAREN                       {: RESULT = null; :}
-            |LPAREN argument_list:al RPAREN     {: RESULT = al; :};
+trailer ::= LPAREN RPAREN                                 {: RESULT = null; :}
+            |LPAREN:l argument_list:al RPAREN             {: RESULT = al; :};
 
 func_call ::=   expression:e DOT:d name:n trailer:t     {: RESULT = RuleGenerator.generateNameFunctionCall(e,d,n,t); :}
                 |name:n trailer:t                       {: RESULT = RuleGenerator.generateFunctionCall(n,t); :};

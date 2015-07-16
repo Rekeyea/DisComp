@@ -5,6 +5,7 @@ import com.pyjava.core.runtime.Code;
 import com.pyjava.core.runtime.Instruccion;
 import com.pyjava.core.runtime.OpCode;
 import com.pyjava.parser.sym1;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.LocatorEx;
 import java_cup.parse_action_table;
 import jdk.nashorn.internal.parser.Lexer;
 import org.omg.CosNaming._NamingContextImplBase;
@@ -228,18 +229,20 @@ public class RuleGenerator {
         int line = pr.linea;
         Name name = ParseResult.getAs(pr);
         int cantArguments = 0;
+        int cantArguments2 = 0;
         Instruccion cargarNombreFuncion = new Instruccion(line,OpCode.LOAD_NAME,name.index);
         Bloque trail = null;
         if(fTrail!=null){
             trail = ParseResult.getAs(fTrail);
             cantArguments = ((ParseResult)fTrail).argumentos;
+            cantArguments2 = ((ParseResult)fTrail).argumentos2;
             trail.instrucciones.addFirst(cargarNombreFuncion);
         }else{
             LinkedList<Instruccion> instrucciones = new LinkedList<>();
             instrucciones.add(cargarNombreFuncion);
             trail = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
         }
-        Instruccion llamarFuncion = new Instruccion(line,OpCode.CALL_FUNCTION,cantArguments);
+        Instruccion llamarFuncion = new Instruccion(line,OpCode.CALL_FUNCTION,cantArguments,cantArguments2);
         trail.instrucciones.addLast(llamarFuncion);
         return new ParseResult(line,ParserStatus.StackGenerador.peek().crearBloque(trail.instrucciones,null,null));
     }
@@ -253,12 +256,14 @@ public class RuleGenerator {
             p.argumentos = 1;
             return p;
         }else{
+            ParseResult prRight = (ParseResult)right;
             int line = ((LexerToken)coma).NumeroFila+1;
             Bloque lBloque = ParseResult.getAs(left);
             Bloque rBloque = ParseResult.getAs(right);
             Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(lBloque.instrucciones,rBloque,null);
             ParseResult res = new ParseResult(line,bRes);
             res.argumentos = ((ParseResult)right).argumentos + 1;
+            res.argumentos2 = ((ParseResult)right).argumentos2;
             return res;
         }
 
@@ -319,6 +324,7 @@ public class RuleGenerator {
         Instruccion nombreAtributo = new Instruccion(linea,OpCode.LOAD_ATTR,n.index);
         ParseResult argumentos = (ParseResult)trail;
         int cantArgumentos = 0;
+        int cantArgumentos2 = 0;
         Bloque bRes;
         b.instrucciones.addLast(nombreAtributo);
         if(argumentos==null){
@@ -326,8 +332,9 @@ public class RuleGenerator {
             bRes = b;
         }else{
             cantArgumentos = argumentos.argumentos;
+            cantArgumentos2 = argumentos.argumentos2;
             Bloque tail = (Bloque)argumentos.value;
-            Instruccion llamaFuncion = new Instruccion(linea,OpCode.CALL_FUNCTION,cantArgumentos);
+            Instruccion llamaFuncion = new Instruccion(linea,OpCode.CALL_FUNCTION,cantArgumentos,cantArgumentos2);
             tail.instrucciones.addLast(llamaFuncion);
             bRes = ParserStatus.StackGenerador.peek().crearBloque(b.instrucciones,tail,null);
         }
@@ -610,6 +617,41 @@ public class RuleGenerator {
         Bloque bRes = ParseResult.getAs(exp);
         bRes.instrucciones.addLast(returnExp);
         return new ParseResult(linea,bRes);
+    }
+
+    public static ParseResult generateNamedArgument(Object name, Object exp){
+        LexerToken lName = (LexerToken)name;
+        int line = lName.NumeroFila+1;
+        Const pName = ParserStatus.StackGenerador.peek().createOrGetConst(ConstCreator.createPyString(lName.TokenValue));
+        Instruccion loadParamName = new Instruccion(line,OpCode.LOAD_CONST,pName.index);
+        Bloque bRes = ParseResult.getAs(exp);
+        bRes.instrucciones.addFirst(loadParamName);
+        ParseResult pRes = new ParseResult(line,bRes);
+        pRes.argumentos2=1;
+        return pRes;
+    }
+
+    public static ParseResult generateNamedArgumentList(Object namedArg,Object coma,Object list){
+        LexerToken lComa = (LexerToken)coma;
+        ParseResult prList = (ParseResult)list;
+        int line = lComa.NumeroFila+1;
+        Bloque bNA = ParseResult.getAs(namedArg);
+        Bloque bL = ParseResult.getAs(list);
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bNA.instrucciones,bL,null);
+        ParseResult pRes = new ParseResult(line,bRes);
+        pRes.argumentos2 = prList.argumentos2+1;
+        return pRes;
+    }
+
+    public static ParseResult generateJoinedArguments(Object args,Object br){
+        ParseResult prArgs =(ParseResult)args;
+        LexerToken token = (LexerToken)br;
+        int line = token.NumeroFila+1;
+        Bloque bArgs = ParseResult.getAs(prArgs);
+        ParseResult res = new ParseResult(line,bArgs);
+        res.argumentos = prArgs.argumentos;
+        res.argumentos2 = prArgs.argumentos2;
+        return res;
     }
 
 }
