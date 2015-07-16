@@ -43,7 +43,7 @@ public class main {
 
         try{
 
-            parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
+            /*parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
             Symbol s = Analizador.parse();
 
             Code codigoModulo = (Code)s.value;
@@ -75,27 +75,27 @@ public class main {
                     //Finalizo la ejecucion ante error.
                     return;
                 }
+            }*/
+
+
+            Lexer lexer = new Lexer(new FileReader("/home/rekeyea/Documents/python.py"));
+            Symbol s = lexer.next_token();
+            while(s.sym!=sym1.EOF){
+                int symbol = s.sym;
+                if(symbol==sym1.INDENT){
+                    System.out.println("INDENT");
+                }else if (symbol==sym1.DEDENT){
+                    System.out.println("DEDENT");
+                   }else if (symbol==sym1.NEWLINE){
+                    System.out.println("NEW LINE");
+                }else{
+                    String texto = ((LexerToken)s.value).TokenValue;
+                    if(!texto.isEmpty()){
+                        System.out.println(texto);
+                    }
+                }
+                s = lexer.next_token();
             }
-
-
-//            Lexer lexer = new Lexer(new FileReader("/home/rafael/proyects/DisComp/python/src/com/pyjava/parser/python.py"));
-//            Symbol s = lexer.next_token();
-//            while(s.sym!=sym1.EOF){
-//                int symbol = s.sym;
-//                if(symbol==sym1.INDENT){
-//                    System.out.println("INDENT");
-//                }else if (symbol==sym1.DEDENT){
-//                    System.out.println("DEDENT");
-//                }else if (symbol==sym1.NEWLINE){
-//                    System.out.println("NEW LINE");
-//                }else{
-//                    String texto = ((LexerToken)s.value).TokenValue;
-//                    if(!texto.isEmpty()){
-//                        System.out.println(texto);
-//                    }
-//                }
-//                s = lexer.next_token();
-//            }
         }
         catch (Exception e){
             throw e;

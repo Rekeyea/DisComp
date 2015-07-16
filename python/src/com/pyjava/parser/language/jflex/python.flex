@@ -18,6 +18,7 @@ import com.pyjava.parser.codegen.LexerToken;
 %{
     boolean DevolverNewline = true;
     boolean DevolverEOF     = false;
+    int EstadoNoDevolverNewLine = 0;
     Deque<Integer> Stack = new LinkedList<Integer>();
 
     StringBuffer string = new StringBuffer();
@@ -119,13 +120,30 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     "."                       {return symbol(sym1.DOT, yytext());}
     ":"                       {return symbol(sym1.COLON, yytext());}
     ";"                       {return symbol(sym1.SEMICOLON, yytext());}
-    "("                       {return symbol(sym1.LPAREN, yytext());}
-    ")"                       {return symbol(sym1.RPAREN, yytext());}
-    "["                       {return symbol(sym1.LBRACKET, yytext());}
-    "]"                       {return symbol(sym1.RBRACKET, yytext());}
-    "{"                       {return symbol(sym1.LCURLY, yytext());}
-    "}"                       {return symbol(sym1.RCURLY, yytext());}
-
+    "("                       {
+                                EstadoNoDevolverNewLine +=1;
+                                return symbol(sym1.LPAREN, yytext());
+                              }
+    ")"                       {
+                                EstadoNoDevolverNewLine -=1;
+                                return symbol(sym1.RPAREN, yytext());
+                              }
+    "["                       {
+                                EstadoNoDevolverNewLine +=1;
+                                return symbol(sym1.LBRACKET, yytext());
+                              }
+    "]"                       {
+                                EstadoNoDevolverNewLine -=1;
+                                return symbol(sym1.RBRACKET, yytext());
+                              }
+    "{"                       {
+                                EstadoNoDevolverNewLine +=1;
+                                return symbol(sym1.LCURLY, yytext());
+                              }
+    "}"                       {
+                                EstadoNoDevolverNewLine -=1;
+                                return symbol(sym1.RCURLY, yytext());
+                              }
     "+"                       {return symbol(sym1.PLUS, yytext());}
     "-"                       {return symbol(sym1.MINUS, yytext());}
     "**"                      {return symbol(sym1.EXP, yytext());}
@@ -163,39 +181,55 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
     {NEWLINE}{TAB}+
     {
+        if(EstadoNoDevolverNewLine>0){
+
+        }else{
             yypushback(yylength());
             yybegin(INDENTATION_TAB);
+        }
     }
     {NEWLINE}{NEWLINE}+
     {
+        if(EstadoNoDevolverNewLine==0){
             return symbol(sym1.NEWLINE, yytext());
+        }
     }
     {NEWLINE}
     {
-        if(Stack.size()>0){
-            yypushback(1);
-            if(DevolverNewline){
-                DevolverNewline = false;
-                return symbol(sym1.NEWLINE, yytext());
-            }else{
-                Stack.pop();
-                if(Stack.size()==0){
-                    DevolverNewline = true;
+        if(EstadoNoDevolverNewLine==0){
+            if(Stack.size()>0){
+                yypushback(1);
+                if(DevolverNewline){
+                    DevolverNewline = false;
+                    return symbol(sym1.NEWLINE, yytext());
+                }else{
+                    Stack.pop();
+                    if(Stack.size()==0){
+                        DevolverNewline = true;
+                    }
+                    return symbol(sym1.DEDENT,"");
                 }
-                return symbol(sym1.DEDENT,"");
+            }else{
+                return symbol(sym1.NEWLINE, yytext());
             }
-        }else{
-            return symbol(sym1.NEWLINE, yytext());
         }
     }
     {WHITESPACE}              {}
 
-    {TAB}                     {return symbol(sym1.TAB, yytext());}
+    {TAB}                     {
+                                if(EstadoNoDevolverNewLine==0){
+                                    return symbol(sym1.TAB, yytext());
+                                }
+                              }
     {ASSIGN}                  {return symbol(sym1.NAME, yytext());}
     {LONG}                    {return symbol(sym1.LONG, yytext());}
     {INTEGER}                 {return symbol(sym1.INTEGER, yytext());}
     {FLOAT}                   {return symbol(sym1.FLOAT, yytext());}
-    {NEWLINE}                 {return symbol(sym1.NEWLINE, yytext());}
+    {NEWLINE}                 {
+                                if(EstadoNoDevolverNewLine==0){
+                                    return symbol(sym1.NEWLINE, yytext());
+                                }
+                              }
     {NAME}                    {return symbol(sym1.NAME, yytext());}
 }
 
