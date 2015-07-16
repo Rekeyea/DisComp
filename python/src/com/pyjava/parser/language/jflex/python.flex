@@ -57,7 +57,7 @@ NEWLINE = \r|\n|\r\n
 WHITESPACE = " "
 INPUTCHARACTER = [^\r\n]
 TAB = \t
-COMMENT     = "#" {INPUTCHARACTER}* {NEWLINE}?
+COMMENT     = "#" {INPUTCHARACTER}*
 ASSIGN = "="
 INTEGER = [0-9]+
 LONG = {INTEGER}("L"|"l")
