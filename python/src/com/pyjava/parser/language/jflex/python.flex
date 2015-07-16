@@ -17,6 +17,7 @@ import com.pyjava.parser.codegen.LexerToken;
 
 %{
     boolean DevolverNewline = true;
+    boolean DevolverEOF     = false;
     Deque<Integer> Stack = new LinkedList<Integer>();
 
     StringBuffer string = new StringBuffer();
@@ -31,7 +32,14 @@ import com.pyjava.parser.codegen.LexerToken;
 %eofval{
     if(Stack.size()<=0)
     {
-        return symbol(sym1.EOF,"");
+//        yypushback(0);
+//        if(DevolverEOF){
+//            DevolverEOF = false;
+            return symbol(sym1.EOF,"");
+//        } else {
+//            DevolverEOF = true;
+//            return symbol(sym1.NEWLINE,"");
+//        }
     }else{
         Stack.pop();
         yypushback(0);
@@ -54,8 +62,10 @@ ASSIGN = "="
 INTEGER = [0-9]+
 LONG = {INTEGER}("L"|"l")
 FLOAT = [0-9]*(".")?[0-9]+([eE][-+]?[0-9]+)?
-STRING = \"|\'
-TRIPLE_STRING = (\"\"\")|(\'\'\')
+SINGLE_QUOTE = \'
+DOUBLE_QUOTE = \"
+TRIPLE_STRING_SINGLE_QUOTE = {SINGLE_QUOTE}{3}
+TRIPLE_STRING_DOUBLE_QUOTE = {DOUBLE_QUOTE}{3}
 NONE = "None"
 TRUE = "True"
 FALSE = "False"
@@ -64,9 +74,10 @@ FALSE = "False"
 NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
 
-%state STRING
-%state TRIPLE_STRING
-%state INDENTATION_WS
+%state SINGLE_QUOTE_STRING
+%state DOUBLE_QUOTE_STRING
+%state TRIPLE_STRING_SINGLE_QUOTE
+%state TRIPLE_STRING_DOUBLE_QUOTE
 %state INDENTATION_TAB
 
 %%
@@ -140,8 +151,10 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     "<="                      {return symbol(sym1.MINOREQ, yytext());}
     ">="                      {return symbol(sym1.MAJOREQ, yytext());}
     "="                       {return symbol(sym1.ASSIGN, yytext());}
-    {STRING}                  {string.setLength(0); yybegin(STRING);}
-    {TRIPLE_STRING}           {string.setLength(0); yybegin(TRIPLE_STRING);}
+    {SINGLE_QUOTE}            {string.setLength(0); yybegin(SINGLE_QUOTE_STRING);}
+    {DOUBLE_QUOTE}            {string.setLength(0); yybegin(DOUBLE_QUOTE_STRING);}
+    {TRIPLE_STRING_SINGLE_QUOTE}           {string.setLength(0); yybegin(TRIPLE_STRING_SINGLE_QUOTE);}
+    {TRIPLE_STRING_DOUBLE_QUOTE}           {string.setLength(0); yybegin(TRIPLE_STRING_DOUBLE_QUOTE);}
     {NONE}                    {return symbol(sym1.NONE, yytext());}
     {TRUE}                    {return symbol(sym1.TRUE, yytext());}
     {FALSE}                   {return symbol(sym1.FALSE, yytext());}
@@ -182,13 +195,27 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {NAME}                    {return symbol(sym1.NAME, yytext());}
 }
 
-<STRING> {
-  \"|\'                       {
+<SINGLE_QUOTE_STRING> {
+  \'                       {
                                     String res = string.toString();
                                     yybegin(YYINITIAL);
                                     return symbol(sym1.STRING, res);
                               }
-  [^\r\n\"\\]+                {string.append( yytext() );}
+  [^\t\r\n\'\\]+              {string.append( yytext() );}
+  \\t                         {string.append('\t');}
+  \\n                         {string.append('\n');}
+  \\r                         {string.append('\r');}
+  \\\'                        {string.append('\'');}
+  \\                          {string.append('\\');}
+}
+
+<DOUBLE_QUOTE_STRING> {
+  \"                      {
+                                    String res = string.toString();
+                                    yybegin(YYINITIAL);
+                                    return symbol(sym1.STRING, res);
+                              }
+  [^\t\r\n\"\\]+              {string.append( yytext() );}
   \\t                         {string.append('\t');}
   \\n                         {string.append('\n');}
   \\r                         {string.append('\r');}
@@ -196,9 +223,26 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
   \\                          {string.append('\\');}
 }
 
-<TRIPLE_STRING> {
-  (\"\"\")|(\'\'\')           {yybegin(YYINITIAL); return symbol(sym1.STRING3, string.toString());}
-  [^((\"\"\")|(\'\'\'))]+     {string.append(yytext());}
+<TRIPLE_STRING_DOUBLE_QUOTE> {
+  (\"\"\")                   {yybegin(YYINITIAL); return symbol(sym1.STRING3, string.toString());}
+  [^(\"\"\")\t\r\n(\r\n)\\]+       {string.append(yytext());}
+  \\t                         {string.append('\t');}
+  \\n                         {string.append('\n');}
+  \\r                         {string.append('\r');}
+  \\\"                        {string.append('\"');}
+  \\                          {string.append('\\');}
+  \r\n                      {string.append("\r\n");}
+}
+
+<TRIPLE_STRING_SINGLE_QUOTE> {
+  (\'\'\')                   {yybegin(YYINITIAL); return symbol(sym1.STRING3, string.toString());}
+  [^(\'\'\')\t\r\n(\r\n)\\]+       {string.append(yytext());}
+  \\t                         {string.append('\t');}
+  \\n                         {string.append('\n');}
+  \\r                         {string.append('\r');}
+  \\\'                        {string.append('\'');}
+  \\                          {string.append('\\');}
+  \r\n                      {string.append("\r\n");}
 }
 
 
