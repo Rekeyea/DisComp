@@ -932,6 +932,54 @@ public class Test1 {
         }
 
 
+        System.out.println("--------------- TEST STRING ----------------------");
+        try {
+
+            PyObject str = new PyString("hola\nmundo");
+            System.out.println(str.__repr__().value);
+            System.out.println(str.print());
+        }
+        catch (Throwable t){
+            System.out.println(t.getMessage());
+        }
+
+
+        System.out.println("--------------- TEST SLICE ----------------------");
+        try {
+
+            System.out.println(new PySlice().print());
+            System.out.println(new PySlice(new PyInteger(2), PySingletons.None, PySingletons.None).print());
+            System.out.println(new PySlice(PySingletons.None, new PyInteger(2), PySingletons.None).print());
+            System.out.println(new PySlice(PySingletons.None, PySingletons.None, new PyInteger(2)).print());
+            System.out.println(new PySlice(new PyInteger(2), new PyInteger(2), new PyInteger(2)).print());
+
+            System.out.println(new PyString("Hola carola").__get_index__(new PySlice(new PyInteger(1), PySingletons.None, new PyInteger(2))).print());
+
+            ArrayList<PyObject> testLista = new ArrayList<>();
+            testLista.add(new PyInteger(1));
+            testLista.add(new PyInteger(2));
+            testLista.add(new PyInteger(3));
+            testLista.add(new PyInteger(4));
+
+            System.out.println(new PyList(testLista).__get_index__(new PySlice(new PyInteger(1), PySingletons.None, new PyInteger(1))).print());
+
+            ArrayList<PyObject> testLista2 = new ArrayList<>();
+            testLista2.add(new PyString("a"));
+            testLista2.add(new PyString("b"));
+            testLista2.add(new PyString("c"));
+            testLista2.add(new PyString("d"));
+
+            System.out.println("\t---- asignacion ----");
+            PyList plist = new PyList(testLista);
+            System.out.println(plist.print());
+            plist.__set_index__(new PySlice(new PyInteger(0), PySingletons.None, new PyInteger(1)), new PyTuple(testLista2));
+            System.out.println(plist.print());
+
+        }
+        catch (Throwable t){
+            System.out.println(t.getMessage());
+        }
+
 
     }
 }

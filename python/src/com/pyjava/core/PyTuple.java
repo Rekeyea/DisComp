@@ -167,18 +167,55 @@ public class PyTuple extends PyObject {
     @Override
     public PyObject __get_index__(PyObject i) throws PyException{
 
-        try{
-            int index = i.__getint__();
-            if(index < 0){
-                index = tupla.size() + index;
+        if(!(i instanceof PySlice)) {
+            try {
+                int index = i.__getint__();
+                if (index < 0) {
+                    index = tupla.size() + index;
+                }
+                return this.tupla.get(index);
+            } catch (PyException e) {
+                throw new PyTypeError(String.format("'%s' no es un indice valido para tuplas", i.getType().getClassName()));
+            } catch (IndexOutOfBoundsException e) {
+                throw new PyIndexError();
             }
-            return this.tupla.get(index);
         }
-        catch (PyException e){
-            throw new PyTypeError(String.format("'%s' no es un indice valido para tuplas", i.getType().getClassName()));
-        }
-        catch (IndexOutOfBoundsException e){
-            throw new PyIndexError();
+        else {
+            int tuplaSize = tupla.size();
+
+            PySlice slice = (PySlice)i;
+            int start = slice.start != null ? slice.start : 0;
+            int end = slice.end != null ? slice.end : tuplaSize;
+            int step = slice.step != null ? slice.step : 1;
+
+
+
+            if(start < 0){
+                start = tuplaSize + start;
+            }
+
+            if(end < 0 ){
+                end = tuplaSize + end;
+            }
+
+
+            ArrayList<PyObject> res = new ArrayList<>();
+            if(step > 0){
+                int maxIndex = tuplaSize - 1;
+                for(int iter = start; iter < end; iter+=step){
+                    if(iter > maxIndex){
+                        break;
+                    }
+                    res.add(tupla.get(iter));
+                }
+
+            }
+            else {
+                throw new PyValueError("Slice step debe ser mayor a 0");
+
+            }
+
+            return new PyTuple(res);
         }
     }
 

@@ -520,10 +520,17 @@ public class PyObject {
     /**
      * Guarda v[i] siendo v e i PyObject.
      */
-    public PyObject __set_index__(PyObject i, PyObject v) throws PyException{
+    public void __set_index__(PyObject i, PyObject v) throws PyException{
         throw new PyTypeError(String.format("No se puede guardar en indice a %s", getType().getClassName()));
     }
 
+    /**
+     * Devuelve true si el objeto es None. Helper para identificar None sin castear. Solo PyNone debera retornar true.
+     * @return
+     */
+    public boolean __is_none__ (){
+        return false;
+    }
 
     /**
      * Clase interna para manejar definicion de builtins.

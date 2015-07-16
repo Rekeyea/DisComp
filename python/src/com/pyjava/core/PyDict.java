@@ -161,13 +161,13 @@ public class PyDict extends PyObject {
     }
 
     @Override
-    public PyObject __set_index__(PyObject i, PyObject v) throws PyException{
+    public void __set_index__(PyObject i, PyObject v) throws PyException{
 
         if (!i.__hasheable__()) {
             throw new PyTypeError(String.format("'%s' no es hasheable y no es clave valida para dict", i.getType().getClassName()));
         }
 
-        return this.dict.put(i, v);
+        this.dict.put(i, v);
 
     }
 

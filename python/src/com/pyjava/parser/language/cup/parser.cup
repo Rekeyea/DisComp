@@ -102,6 +102,7 @@ non terminal subscript;
 non terminal exprsub;
 non terminal assign_exprsub;
 non terminal single_input;
+non terminal input_newline;
 non terminal input;
 non terminal func_def;
 non terminal func_parameters;
@@ -141,11 +142,15 @@ program ::= input:i         {:
                                 RESULT = code;
                             :};
 
-input ::=   single_input:s NEWLINE input:i          {: RESULT = RuleGenerator.joinBloques(s,i); :}
-            | single_input:s NEWLINE                {: RESULT = s; :};
+input ::=   single_input:s input_newline:n input:i          {: RESULT = RuleGenerator.joinBloques(s,i); :}
+            | single_input:s input_newline:n        {: RESULT = s; :}
+            | single_input:s                        {: RESULT = s; :};
 
 single_input ::= small_stmt:s             {: RESULT = s; :}
-                 | compound_stmt:s          {: RESULT = s; :};
+                 | compound_stmt:s        {: RESULT = s; :};
+
+input_newline ::= NEWLINE:n                       {: RESULT = RuleGenerator.generateEmptyBlock(n); :}
+                  | NEWLINE:n input_newline:i       {: RESULT = RuleGenerator.generateEmptyBlock(n); :};
 
 integer ::=    INTEGER:n                {: RESULT = RuleGenerator.generateConstant(n); :}
                |MINUS INTEGER:n        {: RESULT = RuleGenerator.generateMinusConstant(n); :};
@@ -283,10 +288,10 @@ expr_stmt ::=   name:n ASSIGN:au expression:e                       {: RESULT = 
                 |namelist:n ASSIGN:au expression:tr                 {: RESULT = RuleGenerator.generateUnpackAssignation(n,au,tr); :};
 
 
-
 named_argument ::= NAME:n ASSIGN expression:e                           {: RESULT = RuleGenerator.generateNamedArgument(n,e); :};
 named_argument_list ::= named_argument:n                                {: RESULT = n; :}
                         |named_argument:n COMA:c named_argument_list:l  {: RESULT = RuleGenerator.generateNamedArgumentList(n,c,l); :};
+
 
 argument_list ::=   expression:e                            {: RESULT = RuleGenerator.generateArguments(null,e,null); :}
                     |expression:e COMA:c argument_list:al   {: RESULT = RuleGenerator.generateArguments(c,e,al); :}
@@ -298,16 +303,12 @@ trailer ::= LPAREN RPAREN                                 {: RESULT = null; :}
 func_call ::=   expression:e DOT:d name:n trailer:t     {: RESULT = RuleGenerator.generateNameFunctionCall(e,d,n,t); :}
                 |name:n trailer:t                       {: RESULT = RuleGenerator.generateFunctionCall(n,t); :};
 
-
-
-
-
 flow_stmt ::=   BREAK
                 |CONTINUE
                 |return_stmt:r              {: RESULT = r; :};
 
 small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
-                |expression:e               {: RESULT = e; :}
+                |expression:e               {: RESULT = RuleGenerator.addPop(e); :}
                 |print_stmt:p               {: RESULT = p; :}
                 |flow_stmt:f                {: RESULT = f; :};
 

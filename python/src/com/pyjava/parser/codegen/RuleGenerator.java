@@ -654,6 +654,38 @@ public class RuleGenerator {
         return res;
     }
 
+    public static ParseResult generateBreak(Object b){
+        int linea = ((LexerToken)b).NumeroFila;
+        LinkedList<Instruccion> instrucciones = new LinkedList<>();
+        instrucciones.add(new Instruccion(linea,OpCode.BREAK_LOOP,0));
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
+        return new ParseResult(linea,bRes);
+    }
+
+    public static ParseResult generateContinue(Object c){
+        int linea = ((LexerToken)c).NumeroFila;
+        LinkedList<Instruccion> instrucciones = new LinkedList<>();
+        instrucciones.add(new Instruccion(linea,OpCode.CONTINUE_LOOP,0));
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
+        return new ParseResult(linea,bRes);
+    }
+
+    public static ParseResult addPop(Object n){
+        ParseResult pr = (ParseResult)n;
+        int line = pr.linea;
+        Bloque b = ParseResult.getAs(pr);
+        b.instrucciones.add(new Instruccion(line,OpCode.POP_TOP,0));
+        ParseResult res = new ParseResult(line,b);
+        res.argumentos=1;
+        return res;
+    }
+
+    public static ParseResult generateEmptyBlock(Object n){
+        int linea = ((LexerToken)n).NumeroFila;
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(null,null,null);
+        return new ParseResult(linea,bRes);
+    }
+
 }
 
 

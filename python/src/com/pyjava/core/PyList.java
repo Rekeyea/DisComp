@@ -173,35 +173,140 @@ public class PyList extends PyObject {
     @Override
     public PyObject __get_index__(PyObject i) throws PyException{
 
-        try{
-            int index = i.__getint__();
-            if(index < 0){
-                index = lista.size() + index;
+        if(!(i instanceof PySlice)) {
+
+            try {
+                int index = i.__getint__();
+                if (index < 0) {
+                    index = lista.size() + index;
+                }
+                return this.lista.get(index);
+            } catch (PyException e) {
+                throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
+            } catch (IndexOutOfBoundsException e) {
+                throw new PyIndexError();
             }
-            return this.lista.get(index);
         }
-        catch (PyException e){
-            throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
-        }
-        catch (IndexOutOfBoundsException e){
-            throw new PyIndexError();
+        else {
+            int listaSize = lista.size();
+
+            PySlice slice = (PySlice)i;
+            int start = slice.start != null ? slice.start : 0;
+            int end = slice.end != null ? slice.end : listaSize;
+            int step = slice.step != null ? slice.step : 1;
+
+
+            if(start < 0){
+                start = listaSize + start;
+            }
+
+            if(end < 0 ){
+                end = listaSize + end;
+            }
+
+
+            ArrayList<PyObject> res = new ArrayList<>();
+            if(step > 0){
+                int maxIndex = listaSize - 1;
+                for(int iter = start; iter < end; iter+=step){
+                    if(iter > maxIndex){
+                        break;
+                    }
+                    res.add(lista.get(iter));
+                }
+
+            }
+            else {
+                throw new PyValueError("Slice step debe ser mayor a 0");
+
+            }
+
+            return new PyList(res);
+
+
         }
     }
 
     @Override
-    public PyObject __set_index__(PyObject i, PyObject v) throws PyException{
-        try{
-            int index = i.__getint__();
-            if(index < 0){
-                index = lista.size() + index;
+    public void __set_index__(PyObject i, PyObject v) throws PyException{
+
+        if(!(i instanceof PySlice)) {
+
+            try {
+                int index = i.__getint__();
+                if (index < 0) {
+                    index = lista.size() + index;
+                }
+                this.lista.set(index, v);
+            } catch (PyException e) {
+                throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
+            } catch (IndexOutOfBoundsException e) {
+                throw new PyIndexError();
             }
-            return this.lista.set(index, v);
         }
-        catch (PyException e){
-            throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
-        }
-        catch (IndexOutOfBoundsException e){
-            throw new PyIndexError();
+        else {
+
+            //si estamos asignando con un slice
+            //el valor debe ser un iterable
+            int listaSize = lista.size();
+
+            PySlice slice = (PySlice)i;
+            int start = slice.start != null ? slice.start : 0;
+            int end = slice.end != null ? slice.end : listaSize;
+            int step = slice.step != null ? slice.step : 1;
+
+
+            if(start < 0){
+                start = listaSize + start;
+            }
+
+            if(end < 0 ){
+                end = listaSize + end;
+            }
+
+
+            ArrayList<PyObject> res = new ArrayList<>(this.lista);
+            PyObject iterador = v.__iter__();
+            if(step > 0){
+
+                //En cualquier caso, no hago mas nada una vez consumi todo el iterador, simplemente retorno.
+                try {
+
+                    //Primero asigna elementos reemplazando.
+
+                    int maxIndex = listaSize - 1;
+                    int iter = start;
+                    for (; iter < end; iter += step) {
+                        if (iter > maxIndex) {
+                            break;
+                        }
+                        res.set(iter,iterador.__next__());
+                    }
+
+                    //Despues, al igual que python, segun donde se quedo iter, inserto lo que sobro.
+                    while (true){
+                        if (iter > maxIndex) {
+                            res.add(iterador.__next__());
+                        }
+                        else {
+                            res.add(iter, iterador.__next__());
+                        }
+                        iter++;
+                    }
+                }
+                catch (PyStopIteration e){
+
+                }
+
+            }
+            else {
+                throw new PyValueError("Slice step debe ser mayor a 0");
+
+            }
+
+            this.lista = res;
+
+
         }
     }
 

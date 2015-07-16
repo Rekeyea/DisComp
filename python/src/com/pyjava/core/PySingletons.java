@@ -42,6 +42,7 @@ public class PySingletons {
     public static PyType list = null;
     public static PyType tuple = null;
     public static PyType dict = null;
+    public static PyType slice = null;
 
     public static PyType code = null;
     public static PyType builtinFunc = null;
@@ -95,6 +96,7 @@ public class PySingletons {
             list = type.crearClase(PyList.__name__, PyList.class, Arrays.asList(object));
             tuple = type.crearClase(PyTuple.__name__, PyTuple.class, Arrays.asList(object));
             dict =  type.crearClase(PyDict.__name__, PyDict.class, Arrays.asList(object));
+            slice =  type.crearClase(PySlice.__name__, PySlice.class, Arrays.asList(object));
 
             code = type.crearClase(Code.__name__, Code.class, Arrays.asList(object));
             builtinFunc = type.crearClase(PyNativeFunction.__name__, PyNativeFunction.class, Arrays.asList(object));
