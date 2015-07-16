@@ -43,7 +43,7 @@ public class main {
 
         try{
 
-            /*parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
+            parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
             Symbol s = Analizador.parse();
 
             Code codigoModulo = (Code)s.value;
@@ -75,9 +75,9 @@ public class main {
                     //Finalizo la ejecucion ante error.
                     return;
                 }
-            }*/
+            }
 
-
+            /*
             Lexer lexer = new Lexer(new FileReader("/home/rekeyea/Documents/python.py"));
             Symbol s = lexer.next_token();
             while(s.sym!=sym1.EOF){
@@ -96,6 +96,7 @@ public class main {
                 }
                 s = lexer.next_token();
             }
+            */
         }
         catch (Exception e){
             throw e;
