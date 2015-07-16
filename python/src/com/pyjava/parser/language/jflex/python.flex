@@ -41,13 +41,13 @@ import com.pyjava.parser.codegen.LexerToken;
 //            return symbol(sym1.NEWLINE,"");
 //        }
     }else{
-        Stack.pop();
         yypushback(0);
         if(DevolverNewline){
             DevolverNewline = false;
             return symbol(sym1.NEWLINE,"");
         }else{
             DevolverNewline = true;
+            Stack.pop();
             return symbol(sym1.DEDENT,yytext());
         }
     }
@@ -165,6 +165,10 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {
             yypushback(yylength());
             yybegin(INDENTATION_TAB);
+    }
+    {NEWLINE}{NEWLINE}+
+    {
+            return symbol(sym1.NEWLINE, yytext());
     }
     {NEWLINE}
     {
