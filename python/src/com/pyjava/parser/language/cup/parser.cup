@@ -203,17 +203,20 @@ dictorsetmaker      ::= dictorsetelement:d                                  {: R
 subscript ::=   LBRACKET:l slice_expression:e RBRACKET                    {: RESULT = RuleGenerator.generateSubscript(l,e,null); :}
                 |LBRACKET:l slice_expression:e RBRACKET subscript:s       {: RESULT = RuleGenerator.generateSubscript(l,e,s); :};
 
-slice_expression ::= expression:e                                           {: RESULT = e; :}
-                     | expression:e COLON                                   {: RESULT = e; :}
-                     | expression:e COLON slice_rest:s                      {: RESULT = e; :}
-                     | COLON slice_rest:s                                   {: RESULT = s; :}
-                     | COLON:c                                              {: RESULT = c; :};
+slice_expression ::=    expression:e                                                {: RESULT = e; :}
+                        | COLON COLON:c                                             {: RESULT = RuleGenerator.generateSlice(c,null,null,null); :}
+                        | COLON:c                                                   {: RESULT = RuleGenerator.generateSlice(c,null,null,null); :}
+                        | expression:e COLON:c                                      {: RESULT = RuleGenerator.generateSlice(c,e,null,null); :}
+                        | COLON:c expression:e                                      {: RESULT = RuleGenerator.generateSlice(c,null,e,null); :}
+                        | COLON:c COLON expression:e                                {: RESULT = RuleGenerator.generateSlice(c,null,null,e); :}
+                        | COLON:c expression:e COLON                                {: RESULT = RuleGenerator.generateSlice(c,null,e,null); :}
+                        | expression:e COLON:c COLON                                {: RESULT = RuleGenerator.generateSlice(c,e,null,null); :}
+                        | COLON:c expression:e1 COLON expression:e2                 {: RESULT = RuleGenerator.generateSlice(c,null,e1,e2); :}
+                        | expression:e1 COLON:c expression:e2                       {: RESULT = RuleGenerator.generateSlice(c,e1,e2,null); :}
+                        | expression:e1 COLON:c COLON expression:e2                 {: RESULT = RuleGenerator.generateSlice(c,e1,null,e2); :}
+                        | expression:e1 COLON:c expression:e2 COLON                 {: RESULT = RuleGenerator.generateSlice(c,e1,e2,null); :}
+                        | expression:e1 COLON:c expression:e2 COLON expression:e3   {: RESULT = RuleGenerator.generateSlice(c,e1,e2,e3); :};
 
-slice_rest ::= expression:e                                                 {: RESULT = e; :}
-               | expression:e1 COLON expression:e2                          {: RESULT = e1; :}
-               | expression:e COLON                                         {: RESULT = e; :}
-               | COLON expression:e                                         {: RESULT = e; :}
-               | COLON: c                                                   {: RESULT = c; :};
 
 exprsub ::= expression:exp1 subscript:sub                           {: RESULT = RuleGenerator.generateFullSubscript(exp1,sub); :};
 

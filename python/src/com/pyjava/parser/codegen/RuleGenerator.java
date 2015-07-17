@@ -701,6 +701,83 @@ public class RuleGenerator {
         return new ParseResult(linea,bRes);
     }
 
+    public static ParseResult generateSlice1(Object coma, Object exp){
+        LexerToken lComa = (LexerToken)coma;
+        int linea = lComa.NumeroFila+1;
+        Const none = ParserStatus.StackGenerador.peek().createOrGetConst(ConstCreator.createPyNone());
+        Instruccion cargarNone1 = new Instruccion(linea,OpCode.LOAD_CONST,none.index);
+        Instruccion cargarNone2 = new Instruccion(linea,OpCode.LOAD_CONST,none.index);
+        Bloque bExp = ParseResult.getAs(exp);
+        bExp.instrucciones.addFirst(cargarNone1);
+        bExp.instrucciones.addFirst(cargarNone2);
+        Instruccion createSlice = new Instruccion(linea,OpCode.CREATE_SLICE,0);
+        bExp.instrucciones.addLast(createSlice);
+        return new ParseResult(linea,bExp);
+    }
+
+    public static ParseResult generateSlice0(Object coma){
+        LexerToken lComa = (LexerToken)coma;
+        int linea = lComa.NumeroFila+1;
+        Const none = ParserStatus.StackGenerador.peek().createOrGetConst(ConstCreator.createPyNone());
+        Instruccion cargarNone1 = new Instruccion(linea,OpCode.LOAD_CONST,none.index);
+        Instruccion cargarNone2 = new Instruccion(linea,OpCode.LOAD_CONST,none.index);
+        Instruccion cargarNone3 = new Instruccion(linea,OpCode.LOAD_CONST,none.index);
+        LinkedList<Instruccion> instrucciones = new LinkedList<>();
+        instrucciones.add(cargarNone1);
+        instrucciones.add(cargarNone2);
+        instrucciones.add(cargarNone3);
+        Instruccion createSlice = new Instruccion(linea,OpCode.CREATE_SLICE,0);
+        instrucciones.add(createSlice);
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
+        return new ParseResult(linea,bRes);
+    }
+
+    public static ParseResult generateSlice2(Object coma,Object exp){
+        LexerToken lComa = (LexerToken)coma;
+        int linea = lComa.NumeroFila+1;
+        Const none = ParserStatus.StackGenerador.peek().createOrGetConst(ConstCreator.createPyNone());
+        Instruccion cargarNone1 = new Instruccion(linea,OpCode.LOAD_CONST,none.index);
+        Instruccion cargarNone2 = new Instruccion(linea,OpCode.LOAD_CONST,none.index);
+        Instruccion cargarNone3 = new Instruccion(linea,OpCode.LOAD_CONST,none.index);
+        LinkedList<Instruccion> instrucciones = new LinkedList<>();
+        instrucciones.add(cargarNone1);
+        instrucciones.add(cargarNone2);
+        instrucciones.add(cargarNone3);
+        Instruccion createSlice = new Instruccion(linea,OpCode.CREATE_SLICE,0);
+        instrucciones.add(createSlice);
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(instrucciones,null,null);
+        return new ParseResult(linea,bRes);
+    }
+
+    public static ParseResult generateSlice(Object coma,Object start,Object end, Object step){
+        LexerToken lComa = (LexerToken)coma;
+        int linea = lComa.NumeroFila+1;
+        Const none = ParserStatus.StackGenerador.peek().createOrGetConst(ConstCreator.createPyNone());
+
+        Bloque bloqueStart = ParserStatus.StackGenerador.peek().crearBloque(null,null,null);
+        Bloque bloqueEnd = ParserStatus.StackGenerador.peek().crearBloque(null,null,null);
+        Bloque bloqueStep = ParserStatus.StackGenerador.peek().crearBloque(null,null,null);
+
+        if(start==null){
+            bloqueStart.instrucciones.add(new Instruccion(linea,OpCode.LOAD_CONST,none.index));
+        }else{
+            bloqueStart.instrucciones.addAll(((Bloque)ParseResult.getAs(start)).instrucciones);
+        }
+        if(end==null){
+            bloqueEnd.instrucciones.add(new Instruccion(linea,OpCode.LOAD_CONST,none.index));
+        }else{
+            bloqueEnd.instrucciones.addAll(((Bloque)ParseResult.getAs(end)).instrucciones);
+        }
+        if(step==null){
+            bloqueStep.instrucciones.add(new Instruccion(linea,OpCode.LOAD_CONST,none.index));
+        }else{
+            bloqueStep.instrucciones.addAll(((Bloque)ParseResult.getAs(step)).instrucciones);
+        }
+        bloqueStart.instrucciones.addLast(new Instruccion(linea,OpCode.CREATE_SLICE,0));
+        Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bloqueStep.instrucciones,bloqueEnd,bloqueStart.instrucciones);
+        return new ParseResult(linea,bRes);
+    }
+
 }
 
 
