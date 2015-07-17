@@ -16,10 +16,23 @@ public class Preprocesador {
     public static InputStream Preprocesar(String filePath) throws IOException{
         List<String> lines = Files.readAllLines(Paths.get(filePath),Charset.defaultCharset());
         StringBuilder builder = new StringBuilder();
+        boolean estadoComillaTriple = false;
         for(String line : lines){
-            if(!line.trim().isEmpty()){
+            //hay que tener en cuenta tambien los strings con comillas triples
+            if(estadoComillaTriple){
+                if(line.contains("\"\"\"")){
+                    estadoComillaTriple = false;
+                }
                 builder.append(line);
                 builder.append(System.lineSeparator());
+            }else{
+                if(!line.trim().isEmpty()){
+                    if(line.contains("\"\"\"")){
+                        estadoComillaTriple = true;
+                    }
+                    builder.append(line);
+                    builder.append(System.lineSeparator());
+                }
             }
         }
         return new ByteArrayInputStream(builder.toString().getBytes("UTF-8"));
