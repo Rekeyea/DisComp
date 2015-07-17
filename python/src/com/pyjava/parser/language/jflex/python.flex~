@@ -25,6 +25,7 @@ import com.pyjava.parser.sym1;
     StringBuffer string = new StringBuffer();
 
     private Symbol symbol(int type,String value){
+        System.out.println(type);
         LexerToken token = new LexerToken(yycolumn,yyline,type,value);
         return new Symbol(type,yyline,yycolumn,token);
     }
@@ -194,9 +195,10 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
                 return symbol(sym1.DEDENT,"");
             }
         }else{
-
-        	return symbol(sym1.NEWLINE, yytext());
-
+            if(!DespuesIndent){
+                return symbol(sym1.NEWLINE, yytext());
+            }
+            DespuesIndent = false;
         }
     }
     {WHITESPACE}              {}
@@ -303,3 +305,4 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 }
 
 [^]  {ParserStatus.parsingWasSuccessfull=false; ParserStatus.parsingUnsuccessfullMessage=" Caractér inesperado < "+yytext()+" > en la línea "+(yyline+1);}
+

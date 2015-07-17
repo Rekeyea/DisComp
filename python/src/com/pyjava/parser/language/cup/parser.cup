@@ -109,6 +109,7 @@ non terminal func_parameters;
 non terminal program;
 
 precedence right RETURN;
+precedence right ASSIGN;
 precedence left OR;
 precedence left AND;
 precedence left NOT;
@@ -130,7 +131,6 @@ precedence left RCURLY;
 precedence left DOT;
 precedence left COLON;
 precedence left COMA;
-precedence right ASSIGN;
 precedence left NEWLINE;
 precedence left ELSE;
 
@@ -143,7 +143,6 @@ program ::= input:i         {:
                             :};
 
 input ::=   single_input:s input_newline:n input:i          {: RESULT = RuleGenerator.joinBloques(s,i); :}
-            | single_input:s input:i                        {: RESULT = RuleGenerator.joinBloques(s,i); :}
             | single_input:s input_newline:n                {: RESULT = s; :}
             | single_input:s                                {: RESULT = s; :};
 
