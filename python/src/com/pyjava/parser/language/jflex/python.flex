@@ -59,7 +59,7 @@ NEWLINE = \r|\n|\r\n
 WHITESPACE = " "
 INPUTCHARACTER = [^\r\n]
 TAB = \t
-COMMENT     = "#" {INPUTCHARACTER}*
+COMMENT = "#"
 ASSIGN = "="
 INTEGER = [0-9]+
 LONG = {INTEGER}("L"|"l")
@@ -81,6 +81,7 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 %state TRIPLE_STRING_SINGLE_QUOTE
 %state TRIPLE_STRING_DOUBLE_QUOTE
 %state INDENTATION_TAB
+%state COMMENT
 
 %%
 
@@ -313,6 +314,11 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     }
     [^] {yypushback(1); yybegin(YYINITIAL);}
 
+}
+
+<COMMENT>{
+    [^] {}
+    {NEWLINE} {yybegin(YYINITIAL); return symbol(sym1.NEWLINE, yytext());}
 }
 
 [^]  {ParserStatus.parsingWasSuccessfull=false; ParserStatus.parsingUnsuccessfullMessage=" Caractér inesperado < "+yytext()+" > en la línea "+(yyline+1);}
