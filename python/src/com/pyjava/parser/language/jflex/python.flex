@@ -25,7 +25,7 @@ import com.pyjava.parser.sym1;
     StringBuffer string = new StringBuffer();
 
     private Symbol symbol(int type,String value){
-        System.out.println(type);
+        //System.out.println(type);
         LexerToken token = new LexerToken(yycolumn,yyline,type,value);
         return new Symbol(type,yyline,yycolumn,token);
     }
@@ -166,7 +166,7 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {FALSE}                   {return symbol(sym1.FALSE, yytext());}
 
     {COMMENT}                 { yybegin(COMMENT); }
-
+    {NEWLINE}{NEWLINE}+       { return symbol(sym1.NEWLINE,""); }
     {NEWLINE}{TAB}+
     {
         yypushback(yylength());
