@@ -1,5 +1,5 @@
 /*SECCIÓN DE CÓDIGO DE USUARIO*/
-package com.pyjava.parser;
+package com.pyjava.parser.codegen;
 import java_cup.runtime.*;
 import jflex.sym;
 import java.util.Deque;
@@ -314,5 +314,5 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
 }
 
-[^]  {System.out.println("Illegal Character < "+yytext()+" > in state "+yystate());}
+[^]  {ParserStatus.parsingWasSuccessfull=false; ParserStatus.parsingUnsuccessfullMessage=" Caractér inesperado < "+yytext()+" > en la línea "+(yyline+1);}
 
