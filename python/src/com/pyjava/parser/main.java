@@ -47,7 +47,7 @@ public class main {
             /*parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
             Symbol s = Analizador.parse();*/
 
-            Code codigoModulo = ParserStatus.ParseFile("/home/rekeyea/Documents/python.py");
+            Code codigoModulo = ParserStatus.ParseFile("C:\\Users\\Cristiano\\Desktop\\test.py");
 
 
 

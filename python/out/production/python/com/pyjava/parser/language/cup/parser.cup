@@ -21,9 +21,8 @@ action code
 parser code
 {:
 
-
-
     public void syntax_error(Symbol s){
+
         System.out.println("Error de sintaxis "+s.sym+" en la linea "+(s.left+1)+" y la columna "+s.right);
         System.out.println(s.value);
     }
@@ -106,16 +105,14 @@ non terminal input_newline;
 non terminal input;
 non terminal func_def;
 non terminal func_parameters;
+non terminal file_input;
+non terminal simple_stmt;
+
 
 non terminal program;
 
 precedence right RETURN;
-precedence right LPAREN;
-precedence left RPAREN;
-precedence right LBRACKET;
-precedence left RBRACKET;
-precedence right LCURLY;
-precedence left RCURLY;
+precedence right ASSIGN;
 precedence left OR;
 precedence left AND;
 precedence left NOT;
@@ -128,23 +125,59 @@ precedence left PLUS, MINUS;
 precedence left MULT, DIV, MOD, DIVE;
 precedence right EXP;
 precedence left NOTB;
+precedence right LPAREN;
+precedence left RPAREN;
+precedence right LBRACKET;
+precedence left RBRACKET;
+precedence right LCURLY;
+precedence left RCURLY;
 precedence left DOT;
 precedence left COLON;
 precedence left COMA;
-precedence right ASSIGN;
 precedence left NEWLINE;
 precedence left ELSE;
 
-program ::= input:i         {:
+
+program ::= file_input:i    {:
                                 System.out.println("EL PROGRAMA ESTA BIEN");
+                                ParserStatus.parsingWasSuccessfull=true;
                                 Bloque b = ParseResult.getAs(i);
                                 Code code = ParserStatus.StackGenerador.peek().crearCodigo("Compilador","Compilador",b);
                                 RESULT = code;
                             :};
 
+file_input ::=  NEWLINE:n                         {: RESULT = RuleGenerator.generateEmptyBlock(n); :}
+                |stmt:s                           {: RESULT = s; :}
+                |NEWLINE:n file_input:f           {: Object obj = RuleGenerator.generateEmptyBlock(n);
+                                                     RESULT = RuleGenerator.joinBloques(obj,f); :}
+                |stmt:s file_input:f                {: RESULT = RuleGenerator.joinBloques(s,f); :};
+
+stmt ::=    simple_stmt:p                          {: RESULT = p; :}
+            |compound_stmt:c                      {: RESULT = c; :};
+
+
+simple_stmt ::= small_stmt:s NEWLINE              {: RESULT = s; :};
+
+
+small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
+                |expression:e               {: RESULT = RuleGenerator.addPop(e); :}
+                |print_stmt:p               {: RESULT = p; :}
+                |flow_stmt:f                {: RESULT = f; :};
+
+
+compound_stmt ::=   if_stmt:f               {: RESULT = f; :}
+                    |while_stmt:f           {: RESULT = f; :}
+                    |for_stmt:f             {: RESULT = f; :}
+                    |func_def:f             {: RESULT = f; :};
+
+
+
+
+
+
 input ::=   single_input:s input_newline:n input:i          {: RESULT = RuleGenerator.joinBloques(s,i); :}
-            | single_input:s input_newline:n        {: RESULT = s; :}
-            | single_input:s                        {: RESULT = s; :};
+            | single_input:s input_newline:n                {: RESULT = s; :}
+            | single_input:s                                {: RESULT = s; :};
 
 single_input ::= small_stmt:s             {: RESULT = s; :}
                  | compound_stmt:s        {: RESULT = s; :};
@@ -203,17 +236,20 @@ dictorsetmaker      ::= dictorsetelement:d                                  {: R
 subscript ::=   LBRACKET:l slice_expression:e RBRACKET                    {: RESULT = RuleGenerator.generateSubscript(l,e,null); :}
                 |LBRACKET:l slice_expression:e RBRACKET subscript:s       {: RESULT = RuleGenerator.generateSubscript(l,e,s); :};
 
-slice_expression ::= expression:e                                           {: RESULT = e; :}
-                     | expression:e COLON                                   {: RESULT = e; :}
-                     | expression:e COLON slice_rest:s                      {: RESULT = e; :}
-                     | COLON slice_rest:s                                   {: RESULT = s; :}
-                     | COLON:c                                              {: RESULT = c; :};
+slice_expression ::=    expression:e                                                {: RESULT = e; :}
+                        | COLON COLON:c                                             {: RESULT = RuleGenerator.generateSlice(c,null,null,null); :}
+                        | COLON:c                                                   {: RESULT = RuleGenerator.generateSlice(c,null,null,null); :}
+                        | expression:e COLON:c                                      {: RESULT = RuleGenerator.generateSlice(c,e,null,null); :}
+                        | COLON:c expression:e                                      {: RESULT = RuleGenerator.generateSlice(c,null,e,null); :}
+                        | COLON:c COLON expression:e                                {: RESULT = RuleGenerator.generateSlice(c,null,null,e); :}
+                        | COLON:c expression:e COLON                                {: RESULT = RuleGenerator.generateSlice(c,null,e,null); :}
+                        | expression:e COLON:c COLON                                {: RESULT = RuleGenerator.generateSlice(c,e,null,null); :}
+                        | COLON:c expression:e1 COLON expression:e2                 {: RESULT = RuleGenerator.generateSlice(c,null,e1,e2); :}
+                        | expression:e1 COLON:c expression:e2                       {: RESULT = RuleGenerator.generateSlice(c,e1,e2,null); :}
+                        | expression:e1 COLON:c COLON expression:e2                 {: RESULT = RuleGenerator.generateSlice(c,e1,null,e2); :}
+                        | expression:e1 COLON:c expression:e2 COLON                 {: RESULT = RuleGenerator.generateSlice(c,e1,e2,null); :}
+                        | expression:e1 COLON:c expression:e2 COLON expression:e3   {: RESULT = RuleGenerator.generateSlice(c,e1,e2,e3); :};
 
-slice_rest ::= expression:e                                                 {: RESULT = e; :}
-               | expression:e1 COLON expression:e2                          {: RESULT = e1; :}
-               | expression:e COLON                                         {: RESULT = e; :}
-               | COLON expression:e                                         {: RESULT = e; :}
-               | COLON: c                                                   {: RESULT = c; :};
 
 exprsub ::= expression:exp1 subscript:sub                           {: RESULT = RuleGenerator.generateFullSubscript(exp1,sub); :};
 
@@ -304,22 +340,15 @@ trailer ::= LPAREN RPAREN                                 {: RESULT = null; :}
 func_call ::=   expression:e DOT:d name:n trailer:t     {: RESULT = RuleGenerator.generateNameFunctionCall(e,d,n,t); :}
                 |name:n trailer:t                       {: RESULT = RuleGenerator.generateFunctionCall(n,t); :};
 
-flow_stmt ::=   BREAK
-                |CONTINUE
-                |return_stmt:r              {: RESULT = r; :};
+flow_stmt ::=   BREAK:b                       {: RESULT = RuleGenerator.generateBreak(b); :}
+                |CONTINUE:c                   {: RESULT = RuleGenerator.generateContinue(c); :}
+                |return_stmt:r                {: RESULT = r; :};
 
-small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
-                |expression:e               {: RESULT = RuleGenerator.addPop(e); :}
-                |print_stmt:p               {: RESULT = p; :}
-                |flow_stmt:f                {: RESULT = f; :};
 
-stmt ::=    small_stmt:p input_newline            {: RESULT = p; :}
-            |compound_stmt:c        {: RESULT = c; :};
 
-compound_stmt ::=   if_stmt:f               {: RESULT = f; :}
-                    |while_stmt:f           {: RESULT = f; :}
-                    |for_stmt:f             {: RESULT = f; :}
-                    |func_def:f             {: RESULT = f; :};
+
+
+
 
 stmt_list ::=   stmt:s                      {: RESULT = s; :}
                 |stmt:s stmt_list:l         {: RESULT = RuleGenerator.joinBloques(s,l); :};

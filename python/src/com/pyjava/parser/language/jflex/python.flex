@@ -30,21 +30,20 @@ import com.pyjava.parser.sym1;
         return new Symbol(type,yyline,yycolumn,token);
     }
 
+    public int indentLevel = 0;
+    public int indentSentence = 0;
+
+
 %}
 
 %eofval{
-    if(Stack.size()<=0)
+    if(indentLevel == 0)
     {
         return symbol(sym1.EOF,"");
     }else{
+        indentLevel--;
         yypushback(0);
-        if(DevolverNewline){
-            DevolverNewline = false;
-            return symbol(sym1.NEWLINE,"");
-        }else{
-            Stack.pop();
-            return symbol(sym1.DEDENT,yytext());
-        }
+        return symbol(sym1.DEDENT,yytext());
     }
 %eofval}
 
@@ -166,39 +165,14 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {FALSE}                   {return symbol(sym1.FALSE, yytext());}
 
     {COMMENT}                 { yybegin(COMMENT); }
-    {NEWLINE}{TAB}+
-    {
-        yypushback(yylength());
-        yybegin(INDENTATION_TAB);
-    }
     {NEWLINE}
     {
-        if(Stack.size()>0){
-            yypushback(1);
-            if(DevolverNewline){
-                DevolverNewline = false;
-                return symbol(sym1.NEWLINE, yytext());
-            }else{
-                Stack.pop();
-                if(Stack.size()==0){
-                    DevolverNewline = true;
-                    DespuesIndent = true;
-                }
-                return symbol(sym1.DEDENT,"");
-            }
-        }else{
-        	return symbol(sym1.NEWLINE, yytext());
-        }
+            yypushback(yylength());
+            yybegin(INDENTATION_TAB);
     }
     {WHITESPACE}              {}
 
-    {TAB}                     {
-                                return symbol(sym1.TAB, yytext());
-                                /*if(EstadoNoDevolverNewLine==0){
-                                    return symbol(sym1.TAB, yytext());
-                                }*/
-
-                              }
+    {TAB}                     {}
 
     {ASSIGN}                  {return symbol(sym1.NAME, yytext());}
     {LONG}                    {return symbol(sym1.LONG, yytext());}
@@ -260,36 +234,34 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
 <INDENTATION_TAB>{
     {NEWLINE} {
+        indentSentence = 0;
         return symbol(sym1.NEWLINE,yytext());
     }
-    {TAB}+
+    {TAB}
     {
-      //HAY QUE VER BIEN COMO FUNCIONA EL yypushback PERO ESE ES EL CAMINO
-      int indentLevel = yylength();
-      int nivelStack = Stack.size() == 0 ? 0 : Stack.peek();
-
-      if(indentLevel == nivelStack){
-          yybegin(YYINITIAL);
-      }else if(indentLevel < nivelStack){
-          //tengo que emitir tokens DEDENT hasta llegar al nivel del stack
-          Stack.pop();
-          yypushback(indentLevel);
-          return symbol(sym1.DEDENT,yytext());
-      }else{
-          //aumento el nivel de indentacion
-          nivelStack+=1;
-          yypushback((indentLevel-nivelStack));
-          Stack.push(nivelStack);
-          return symbol(sym1.INDENT,yytext());
-      }
-
+        indentSentence++;
+        if (indentSentence > indentLevel){
+            indentLevel++;
+            return symbol(sym1.INDENT,yytext());
+        }
     }
-    [^] {yypushback(1); yybegin(YYINITIAL);}
+
+    [^]
+    {
+    if (indentSentence < indentLevel) {
+        yypushback(1);
+        indentLevel--;
+        return symbol(sym1.DEDENT,yytext());
+    } else {
+        yypushback(1);
+        yybegin(YYINITIAL);
+    }
+    }
 
 }
 
 <COMMENT>{
-    {NEWLINE} {yybegin(YYINITIAL);}
+    {NEWLINE} {yybegin(YYINITIAL); return symbol(sym1.NEWLINE,"");}
     [^] {}
 }
 
