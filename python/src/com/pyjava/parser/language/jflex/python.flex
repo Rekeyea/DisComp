@@ -32,6 +32,8 @@ import com.pyjava.parser.sym1;
 
     public int indentLevel = 0;
     public int indentSentence = 0;
+    public int dictNewLine = 0;
+
 
 
 %}
@@ -114,21 +116,27 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     ":"                       {return symbol(sym1.COLON, yytext());}
     ";"                       {return symbol(sym1.SEMICOLON, yytext());}
     "("                       {
+                                dictNewLine++;
                                 return symbol(sym1.LPAREN, yytext());
                               }
     ")"                       {
+                                dictNewLine--;
                                 return symbol(sym1.RPAREN, yytext());
                               }
     "["                       {
+                                dictNewLine++;
                                 return symbol(sym1.LBRACKET, yytext());
                               }
     "]"                       {
+                                dictNewLine--;
                                 return symbol(sym1.RBRACKET, yytext());
                               }
     "{"                       {
+                                dictNewLine++;
                                 return symbol(sym1.LCURLY, yytext());
                               }
     "}"                       {
+                                dictNewLine--;
                                 return symbol(sym1.RCURLY, yytext());
                               }
     "+"                       {return symbol(sym1.PLUS, yytext());}
@@ -167,8 +175,10 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {COMMENT}                 { yybegin(COMMENT); }
     {NEWLINE}
     {
+        if (dictNewLine == 0){
             yypushback(yylength());
             yybegin(INDENTATION_TAB);
+        }
     }
     {WHITESPACE}              {}
 
@@ -211,24 +221,24 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 
 <TRIPLE_STRING_DOUBLE_QUOTE> {
   (\"\"\")                   {yybegin(YYINITIAL); return symbol(sym1.STRING3, string.toString());}
-  [^(\"\"\")\t\r\n(\r\n)\\]+       {string.append(yytext());}
   \\t                         {string.append('\t');}
   \\n                         {string.append('\n');}
   \\r                         {string.append('\r');}
   \\\"                        {string.append('\"');}
   \\                          {string.append('\\');}
-  \r\n                      {string.append("\r\n");}
+  \\r\\n                      {string.append("\r\n");}
+  [^]                          {string.append(yytext());}
 }
 
 <TRIPLE_STRING_SINGLE_QUOTE> {
   (\'\'\')                   {yybegin(YYINITIAL); return symbol(sym1.STRING3, string.toString());}
-  [^(\'\'\')\t\r\n(\r\n)\\]+       {string.append(yytext());}
   \\t                         {string.append('\t');}
   \\n                         {string.append('\n');}
   \\r                         {string.append('\r');}
   \\\'                        {string.append('\'');}
   \\                          {string.append('\\');}
-  \r\n                      {string.append("\r\n");}
+  \\r\\n                      {string.append("\r\n");}
+  [^]                          {string.append(yytext());}
 }
 
 
