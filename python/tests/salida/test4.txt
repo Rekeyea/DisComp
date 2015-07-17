@@ -1,0 +1,101 @@
+Iteracion 0
+Total de a's: 0
+find de hola: -1
+find de hola desde 5: -1
+join con ', '.join(valor): 
+split con ' ': ['']
+replace con 'reemplazame' por 'reemplazado': 
+
+--------------
+
+Iteracion 1
+Total de a's: 3
+find de hola: 0
+find de hola desde 5: -1
+join con ', '.join(valor): h, o, l, a, r, e, e, m, p, l, a, z, a, m, e
+split con ' ': ['holareemplazame']
+replace con 'reemplazame' por 'reemplazado': holareemplazado
+
+--------------
+
+Iteracion 2
+Total de a's: 2
+find de hola: 0
+find de hola desde 5: -1
+join con ', '.join(valor): h, o, l, a, h, o, l, a
+split con ' ': ['holahola']
+replace con 'reemplazame' por 'reemplazado': holahola
+
+--------------
+
+Iteracion 3
+Total de a's: 5
+find de hola: 0
+find de hola desde 5: 8
+join con ', '.join(valor): h, o, l, a, h, o, l, a, h, o, l, a, r, e, e, m, p, l, a, z, a, m, e
+split con ' ': ['holaholaholareemplazame']
+replace con 'reemplazame' por 'reemplazado': holaholaholareemplazado
+
+--------------
+
+Iteracion 4
+Total de a's: 4
+find de hola: 0
+find de hola desde 5: 8
+join con ', '.join(valor): h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a
+split con ' ': ['holaholaholahola']
+replace con 'reemplazame' por 'reemplazado': holaholaholahola
+
+--------------
+
+Iteracion 5
+Total de a's: 7
+find de hola: 0
+find de hola desde 5: 8
+join con ', '.join(valor): h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, r, e, e, m, p, l, a, z, a, m, e
+split con ' ': ['holaholaholaholaholareemplazame']
+replace con 'reemplazame' por 'reemplazado': holaholaholaholaholareemplazado
+
+--------------
+
+Iteracion 6
+Total de a's: 6
+find de hola: 0
+find de hola desde 5: 8
+join con ', '.join(valor): h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a
+split con ' ': ['holaholaholaholaholahola']
+replace con 'reemplazame' por 'reemplazado': holaholaholaholaholahola
+
+--------------
+
+Iteracion 7
+Total de a's: 9
+find de hola: 0
+find de hola desde 5: 8
+join con ', '.join(valor): h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, r, e, e, m, p, l, a, z, a, m, e
+split con ' ': ['holaholaholaholaholaholaholareemplazame']
+replace con 'reemplazame' por 'reemplazado': holaholaholaholaholaholaholareemplazado
+
+--------------
+
+Iteracion 8
+Total de a's: 8
+find de hola: 0
+find de hola desde 5: 8
+join con ', '.join(valor): h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a
+split con ' ': ['holaholaholaholaholaholaholahola']
+replace con 'reemplazame' por 'reemplazado': holaholaholaholaholaholaholahola
+
+--------------
+
+Iteracion 9
+Total de a's: 11
+find de hola: 0
+find de hola desde 5: 8
+join con ', '.join(valor): h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, h, o, l, a, r, e, e, m, p, l, a, z, a, m, e
+split con ' ': ['holaholaholaholaholaholaholaholaholareemplazame']
+replace con 'reemplazame' por 'reemplazado': holaholaholaholaholaholaholaholaholareemplazado
+
+--------------
+
+-------- Fin de ejecucion ------

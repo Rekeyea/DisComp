@@ -3,6 +3,7 @@ package com.pyjava.core;
 import com.pyjava.core.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by Cristiano on 10/07/2015.
@@ -101,6 +102,31 @@ public class PyTuple extends PyObject {
         throw AritmeticaHelper.getErrorBinary("+", this, obj);
     }
 
+    @Override
+    public PyObject __mul__(PyObject obj) throws PyException{
+
+        try {
+            int cant = obj.__getint__();
+            if (cant < 0) {
+                return new PyList();
+            }
+            if(cant == 1){
+                return new PyList(new ArrayList<>(this.tupla));
+            }
+
+            LinkedList<PyObject> res = new LinkedList<>();
+            for(int i = 0; i < cant; i++){
+                res.addAll(this.tupla);
+            }
+            return new PyTuple(new ArrayList<PyObject>(res));
+
+        }
+        catch (PyTypeError e) {
+            throw AritmeticaHelper.getErrorBinary("*", this, obj);
+        }
+
+    }
+
 
 
     @Override
@@ -192,7 +218,7 @@ public class PyTuple extends PyObject {
                     index = tupla.size() + index;
                 }
                 return this.tupla.get(index);
-            } catch (PyException e) {
+            } catch (PyTypeError e) {
                 throw new PyTypeError(String.format("'%s' no es un indice valido para tuplas", i.getType().getClassName()));
             } catch (IndexOutOfBoundsException e) {
                 throw new PyIndexError();

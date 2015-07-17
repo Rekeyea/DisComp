@@ -1,0 +1,118 @@
+0  -->  259
+2  -->  257
+4  -->  239
+6  -->  237
+8  -->  235
+10  -->  233
+12  -->  215
+14  -->  213
+16  -->  179
+18  -->  177
+
+Creo dict de lista de tuplas, resultado seguro difiere con el de python ya que ordenan claves distinto
+
+0  -->  259
+2  -->  257
+4  -->  239
+6  -->  237
+8  -->  235
+10  -->  233
+12  -->  215
+14  -->  213
+16  -->  179
+18  -->  177
+(0, 259)
+Encontre un par:  0  continue
+no hice ni break ni continue
+(2, 257)
+Encontre un par:  2  continue
+no hice ni break ni continue
+(4, 239)
+Encontre un par:  4  continue
+no hice ni break ni continue
+(6, 237)
+Encontre un par:  6  continue
+no hice ni break ni continue
+(8, 235)
+Encontre un par:  8  continue
+no hice ni break ni continue
+(10, 233)
+Encontre un par:  10  continue
+no hice ni break ni continue
+(12, 215)
+Encontre un par:  12  continue
+no hice ni break ni continue
+(14, 213)
+Encontre un par:  14  continue
+no hice ni break ni continue
+(16, 179)
+Encontre un par:  16  continue
+no hice ni break ni continue
+(18, 177)
+Encontre un par:  18  continue
+no hice ni break ni continue
+0
+Encontre un par:  0  continue
+no hice ni break ni continue
+2
+Encontre un par:  2  continue
+no hice ni break ni continue
+4
+Encontre un par:  4  continue
+no hice ni break ni continue
+6
+Encontre un par:  6  continue
+no hice ni break ni continue
+8
+Encontre un par:  8  continue
+no hice ni break ni continue
+10
+Encontre un par:  10  continue
+no hice ni break ni continue
+12
+Encontre un par:  12  continue
+no hice ni break ni continue
+14
+Encontre un par:  14  continue
+no hice ni break ni continue
+16
+Encontre un par:  16  continue
+no hice ni break ni continue
+18
+Encontre un par:  18  continue
+no hice ni break ni continue
+259
+no hice ni break ni continue
+257
+no hice ni break ni continue
+239
+no hice ni break ni continue
+237
+no hice ni break ni continue
+235
+no hice ni break ni continue
+233
+no hice ni break ni continue
+215
+no hice ni break ni continue
+213
+no hice ni break ni continue
+179
+no hice ni break ni continue
+177
+Encontre 177, haciendo break
+-----------
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+(1, 2, 1, 2, 1, 2)
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+[0, 1, (2, 257), (4, 239), (6, 237), (8, 235), 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+['h', 'o', 'l', 'a', ' ', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a']
+['h', 'o', 'l', 'a', ' ', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a']
+['h', 'o', 'l', 'a', ' ', 'l', 'a', 'l', 'a', 'l', 'a']
+['h', 'l', ' ', 'a', 'a', 'a']
+-----------
+['h', 'o', 'l', 'a', ' ', 'h', 'o', 'l', 'a', ' ', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a']
+['h', 'o', 'l', 'a', ' ', 'h', 'o', 'l', 'a', ' ', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'a', 'l', 'menos 1', 'menos 2', 'a']
+-----------
+valor super importante de prueba
+valor super importante de prueba

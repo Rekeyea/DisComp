@@ -5,16 +5,9 @@ import com.pyjava.core.runtime.Code;
 import com.pyjava.core.runtime.Instruccion;
 import com.pyjava.core.runtime.OpCode;
 import com.pyjava.parser.sym1;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.LocatorEx;
-import java_cup.parse_action_table;
-import jdk.nashorn.internal.parser.Lexer;
-import org.omg.CosNaming._NamingContextImplBase;
-import sun.util.locale.ParseStatus;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by rekeyea on 7/12/15.
@@ -26,35 +19,42 @@ public class RuleGenerator {
         int numLine = token.NumeroFila+1;
         Object val = null;
         Generador gen = ParserStatus.StackGenerador.peek();
-        switch (token.TokenType){
-            case sym1.INTEGER:
-                val =  gen.createOrGetConst(ConstCreator.createPyInt(token.TokenValue));
-                break;
-            case sym1.LONG:
-                val =  gen.createOrGetConst(ConstCreator.createPyLong(token.TokenValue));
-                break;
-            case sym1.FLOAT:
-                val =  gen.createOrGetConst(ConstCreator.createPyFloat(token.TokenValue));
-                break;
-            case sym1.STRING:
-                val =  gen.createOrGetConst(ConstCreator.createPyString(token.TokenValue));
-                break;
-            case sym1.STRING3:
-                val =  gen.createOrGetConst(ConstCreator.createPyString(token.TokenValue));
-                break;
-            case sym1.NONE:
-                val =  gen.createOrGetConst(ConstCreator.createPyNone());
-                break;
-            case sym1.TRUE:
-                val =  gen.createOrGetConst(ConstCreator.createPyTrue());
-                break;
-            case sym1.FALSE:
-                val =  gen.createOrGetConst(ConstCreator.createPyFalse());
-                break;
-            default:
-                val =  null;
+        try {
+            switch (token.TokenType) {
+                case sym1.INTEGER:
+                    val = gen.createOrGetConst(ConstCreator.createPyInt(token.TokenValue));
+                    break;
+                case sym1.LONG:
+                    val = gen.createOrGetConst(ConstCreator.createPyLong(token.TokenValue));
+                    break;
+                case sym1.FLOAT:
+                    val = gen.createOrGetConst(ConstCreator.createPyFloat(token.TokenValue));
+                    break;
+                case sym1.STRING:
+                    val = gen.createOrGetConst(ConstCreator.createPyString(token.TokenValue));
+                    break;
+                case sym1.STRING3:
+                    val = gen.createOrGetConst(ConstCreator.createPyString(token.TokenValue));
+                    break;
+                case sym1.NONE:
+                    val = gen.createOrGetConst(ConstCreator.createPyNone());
+                    break;
+                case sym1.TRUE:
+                    val = gen.createOrGetConst(ConstCreator.createPyTrue());
+                    break;
+                case sym1.FALSE:
+                    val = gen.createOrGetConst(ConstCreator.createPyFalse());
+                    break;
+                default:
+                    val = null;
+            }
+            return new ParseResult(numLine, val);
         }
-        return new ParseResult(numLine,val);
+        catch (Exception e){
+            ParserStatus.parsingWasSuccessfull=false;
+            ParserStatus.parsingUnsuccessfullMessage.add(String.format("Error en linea %s: %s", numLine, e.getMessage()));
+            throw e;
+        }
     }
 
     public static ParseResult generateMinusConstant(Object t){
@@ -583,7 +583,7 @@ public class RuleGenerator {
         bCode.instrucciones.addLast(returnNone);
 
         Name nombreFuncion = ParseResult.getAs(fName);
-        Code codigoFunc = genFunc.crearCodigo(nombreFuncion.value,"lala",bCode);
+        Code codigoFunc = genFunc.crearCodigo(nombreFuncion.value,ParserStatus.fileToParse,bCode);
         codigoFunc.co_arguments = new ArrayList<>();
         if(fParams!=null){
             LinkedList<LexerToken> params = ParseResult.getAs(fParams);

@@ -1,0 +1,35 @@
+Recursion: 0 -- f anidada: 3
+None f anidada: 3
+None
+Recursion: 1 -- f anidada: 3
+None f anidada: 3
+None
+Recursion: 2 -- f anidada: 3
+None f anidada: 3
+None
+Recursion: 3 -- f anidada: 3
+None f anidada: 3
+None
+Recursion: 4 -- f anidada: 3
+None f anidada: 3
+None
+Recursion: 5 -- f anidada: 3
+None f anidada: 3
+None
+Recursion: 6 -- f anidada: 3
+None f anidada: 3
+None
+Recursion: 7 -- f anidada: 3
+None f anidada: 3
+None
+Recursion: 8 -- f anidada: 3
+None f anidada: 3
+None
+Recursion: 9 -- f anidada: 3
+None f anidada: 3
+None
+Recursion: 10 -- f anidada: 3
+None f anidada: 3
+None
+None
+-------- Fin de ejecucion ------

@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="python:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/python_jar</output-path>
+    <root id="archive" name="python.jar">
+      <element id="module-output" name="python" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/java-cup-11b.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/jflex-1.6.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

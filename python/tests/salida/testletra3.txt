@@ -1,0 +1,4 @@
+<type 'int'>
+<type 'long'>
+<type 'float'>
+-------- Fin de ejecucion ------

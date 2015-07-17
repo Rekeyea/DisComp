@@ -7,6 +7,7 @@ import com.pyjava.parser.codegen.ParserStatus;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Created by Cristiano on 11/07/2015.
@@ -26,8 +27,8 @@ public class Interprete {
             try {
                 codigo = ParserStatus.ParseFile(fileName);
             }
-            catch (FileNotFoundException e) {
-                System.out.println(String.format("%s no encontrado."));
+            catch (IOException e) {
+                System.out.println(String.format("Error, archivo '%s' no encontrado.", fileName));
                 return;
             }
             catch (UnsupportedOperationException e){

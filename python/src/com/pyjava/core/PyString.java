@@ -249,7 +249,7 @@ public class PyString extends PyObject{
             try {
                 int index = i.__getint__();
                 return new PyString(String.valueOf(value.charAt(index)));
-            } catch (PyException e) {
+            } catch (PyTypeError e) {
                 throw new PyTypeError(String.format("%s no es un indice valido", i.getType().getClassName()));
             } catch (IndexOutOfBoundsException e) {
                 throw new PyIndexError();

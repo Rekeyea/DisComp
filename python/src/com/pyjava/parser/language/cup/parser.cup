@@ -138,10 +138,11 @@ precedence left ELSE;
 
 
 program ::= file_input:i    {:
-                                System.out.println("EL PROGRAMA ESTA BIEN");
+                                //System.out.println("EL PROGRAMA ESTA BIEN");
                                 ParserStatus.parsingWasSuccessfull=true;
                                 Bloque b = ParseResult.getAs(i);
-                                Code code = ParserStatus.StackGenerador.peek().crearCodigo("Compilador","Compilador",b);
+                                Generador gen = ParserStatus.StackGenerador.peek();
+                                Code code = gen.crearCodigo("<modulo principal>",ParserStatus.fileToParse, b);
                                 RESULT = code;
                             :};
 

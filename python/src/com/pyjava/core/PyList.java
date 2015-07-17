@@ -2,10 +2,8 @@ package com.pyjava.core;
 
 import com.pyjava.core.exceptions.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Created by Cristiano on 09/07/2015.
@@ -84,6 +82,31 @@ public class PyList extends PyObject {
         }
 
         throw AritmeticaHelper.getErrorBinary("+", this, obj);
+    }
+
+    @Override
+    public PyObject __mul__(PyObject obj) throws PyException{
+
+        try {
+            int cant = obj.__getint__();
+            if (cant < 0) {
+                return new PyList();
+            }
+            if(cant == 1){
+                return new PyList(new ArrayList<>(this.lista));
+            }
+
+            LinkedList<PyObject> res = new LinkedList<>();
+            for(int i = 0; i < cant; i++){
+                res.addAll(this.lista);
+            }
+            return new PyList(new ArrayList<PyObject>(res));
+
+        }
+        catch (PyTypeError e) {
+            throw AritmeticaHelper.getErrorBinary("*", this, obj);
+        }
+
     }
 
     @Override
@@ -181,7 +204,7 @@ public class PyList extends PyObject {
                     index = lista.size() + index;
                 }
                 return this.lista.get(index);
-            } catch (PyException e) {
+            } catch (PyTypeError e) {
                 throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
             } catch (IndexOutOfBoundsException e) {
                 throw new PyIndexError();
@@ -238,14 +261,13 @@ public class PyList extends PyObject {
                     index = lista.size() + index;
                 }
                 this.lista.set(index, v);
-            } catch (PyException e) {
+            } catch (PyTypeError e) {
                 throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
             } catch (IndexOutOfBoundsException e) {
                 throw new PyIndexError();
             }
         }
         else {
-
             //si estamos asignando con un slice
             //el valor debe ser un iterable
             int listaSize = lista.size();
@@ -264,6 +286,25 @@ public class PyList extends PyObject {
                 end = listaSize + end;
             }
 
+            if(start < 0){
+                start = 0;
+            }
+            if (start > listaSize){
+                start = listaSize;
+            }
+
+            if(end < 0){
+                end = 0;
+            }
+
+            if(end > listaSize){
+                end = listaSize;
+            }
+
+            if(start > end){
+                end = start;
+            }
+
 
             ArrayList<PyObject> res = new ArrayList<>(this.lista);
             PyObject iterador = v.__iter__();
@@ -274,18 +315,23 @@ public class PyList extends PyObject {
 
                     //Primero asigna elementos reemplazando.
 
-                    int maxIndex = listaSize - 1;
+
                     int iter = start;
                     for (; iter < end; iter += step) {
-                        if (iter > maxIndex) {
-                            break;
+                        try{
+                            res.set(iter,iterador.__next__());
                         }
-                        res.set(iter,iterador.__next__());
+                        catch (PyStopIteration e){
+                            //si me quede sin elementos, pero no termine el slice aun, se acorta la lista.
+                            res = new ArrayList<PyObject>(res.subList(0, iter));
+                            break;
+
+                        }
                     }
 
                     //Despues, al igual que python, segun donde se quedo iter, inserto lo que sobro.
                     while (true){
-                        if (iter > maxIndex) {
+                        if (iter > res.size()-1) {
                             res.add(iterador.__next__());
                         }
                         else {
@@ -307,6 +353,8 @@ public class PyList extends PyObject {
             this.lista = res;
 
 
+
+
         }
     }
 
@@ -318,14 +366,41 @@ public class PyList extends PyObject {
                 index = lista.size() + index;
             }
             return this.lista.remove(index);
-        }
-        catch (PyException e){
+        } catch (PyTypeError e) {
             throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
         }
         catch (IndexOutOfBoundsException e){
             throw new PyIndexError();
         }
     }
+
+    /**
+     * Helper para insert, ya que set_index no me sirve porque quiero hacer un add y no un set.
+      * @param i
+     * @param v
+     * @throws PyException
+     */
+    public void insert(PyObject i, PyObject v) throws PyException {
+
+        try {
+            int index = i.__getint__();
+            if (index < 0) {
+                index = lista.size() + index;
+            }
+            if(index > lista.size()){
+                index = lista.size();
+            }
+            else if(index < 0){
+                index = 0;
+            }
+            this.lista.add(index, v);
+        } catch (PyTypeError e) {
+            throw new PyTypeError(String.format("'%s' no es un indice valido para listas", i.getType().getClassName()));
+        } catch (IndexOutOfBoundsException e) {
+            throw new PyIndexError();
+        }
+    }
+
 
     public static class Builtins{
 
@@ -501,7 +576,7 @@ public class PyList extends PyObject {
 
                                 PyList lista = (PyList) args[0];
 
-                                lista.__set_index__(args[1], args[2]);
+                                lista.insert(args[1], args[2]);
 
                                 return PySingletons.None;
 

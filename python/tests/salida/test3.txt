@@ -1,0 +1,26 @@
+1
+2
+True
+objeto
+long
+float
+bool true
+bool false
+__hash__() de objeto: -1023367863 Es distinto en cada ejecucion.
+1
+2
+3
+[1, 2, 3, 4]
+(1, 2, 3, 'a')
+{'hola':1}
+[(...), (...), (...), (...), (...), (...), (...)]
+[False, True, 2.2, 3L, 'k1', 'k2', <instancia de 'object'>]
+['bool false', 'bool true', 'float', 'long', 1, 2, 'objeto']
+['bool false', 'bool true', 'float', 'long', 1, 2, 'objeto']
+A partir de esta linea, debe haber un error de clave, por acceder a clave no existente del diccionario
+Error: Stack trace:
+	Funcion o modulo: <modulo principal>
+	Linea: 36
+	-----
+
+KeyError: Clave no encontrada: 'k5'

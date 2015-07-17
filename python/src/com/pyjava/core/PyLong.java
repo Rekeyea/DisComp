@@ -71,7 +71,7 @@ public class PyLong extends PyObject {
     @Override
     public int __getint__() throws PyException{
         if(this.value > (long)Integer.MAX_VALUE || this.value < (long)Integer.MIN_VALUE){
-            throw new PyValueError(String.format("el valor '%s' no es un %s valido", this.value, PyInteger.__name__));
+            throw new PyValueError(String.format("el valor '%s' es demasiado grande para convertir a %s", this.value, PyInteger.__name__));
         }
         return (int)this.value;
     }

@@ -1,0 +1,8 @@
+22
+[99, True]
+[99, 'una lista']
+[True, 'una lista']
+[99, True]
+[99, True, 'una lista']
+[99, 'una lista']
+[0, 1, 'una lista', [1, 2]]

@@ -5,6 +5,7 @@ import java_cup.runtime.Symbol;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -19,15 +20,25 @@ public class ParserStatus {
     public static String fileToParse = "";
     public static HashMap<Integer,Integer> mapeoDeLineas = new HashMap<>();
 
-    public static Code ParseFile(String filePath) throws Exception{
+    public static Code ParseFile(String filePath) throws Exception {
         fileToParse = filePath;
-        parser Analizador = new parser(new Lexer( Preprocesador.Preprocesar(fileToParse)));
-        Symbol s = Analizador.parse();
-        if(parsingWasSuccessfull){
-            Code codigo = (Code)s.value;
-            return codigo;
-        }else{
-            throw new UnsupportedOperationException(String.join(", ", parsingUnsuccessfullMessage));
+        Lexer lexer = new Lexer( Preprocesador.Preprocesar(fileToParse));
+        parser Analizador = new parser(lexer);
+        try {
+            Symbol s = Analizador.parse();
+            if (parsingWasSuccessfull) {
+                Code codigo = (Code) s.value;
+                return codigo;
+            } else {
+                throw new UnsupportedOperationException(String.join(", ", parsingUnsuccessfullMessage));
+            }
+        }
+        catch (Throwable t){
+            if (parsingWasSuccessfull) {
+                throw new Exception(t.getMessage());
+            } else {
+                throw new UnsupportedOperationException(String.join(", ", parsingUnsuccessfullMessage));
+            }
         }
     }
 

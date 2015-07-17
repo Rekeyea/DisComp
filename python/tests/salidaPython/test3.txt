@@ -1,0 +1,20 @@
+1
+2
+True
+objeto
+long
+float
+bool true
+bool false
+__hash__() de objeto: 1761386917   Es distinto en cada ejecucion.
+1
+2
+3
+[1, 2, 3, 4]
+(1, 2, 3, 'a')
+{'hola': 1}
+[('k2', 2), ('k1', 1), (3L, 'long'), (True, 'bool true'), (2.2, 'float'), (<object object at 0x01D084B0>, 'objeto'), (False, 'bool false')]
+['k2', 'k1', 3L, True, 2.2, <object object at 0x01D084B0>, False]
+[2, 1, 'long', 'bool true', 'float', 'objeto', 'bool false']
+[2, 1, 'long', 'bool true', 'float', 'objeto', 'bool false']
+A partir de esta linea, debe haber un error de clave, por acceder a clave no existente del diccionario

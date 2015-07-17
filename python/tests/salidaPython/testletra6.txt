@@ -1,0 +1,8 @@
+{'Love Actually ': 'Richard Curtis', 'Amelie': 'Jean-Pierre Jeunet', 'Kill Bill': 'Tarantino'}
+Richard Curtis
+{'Love Actually ': 'Richard Curtis', 'Amelie': 'Jean-Pierre Jeunet', 'Kill Bill': 'Quentin Tarantino'}
+<type 'tuple'>   (1, 2, True, 'python')
+<type 'int'>   1
+<type 'tuple'>   (1,)
+1
+(1, 2)

@@ -1,0 +1,18 @@
+----- Test listas-------
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+[1, 3, 5, 7, 9]
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 3, 5, 7, 9]
+['Hola en 0', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 3, 5, 7, 9]
+['Hola en 0', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 3, 5, 7, 'chau en -1', 9]
+Resultado de pop:  9
+['Hola en 0', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 3, 5, 7, 'chau en -1']
+['Hola en 0', 'insert en 1', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 3, 5, 7, 'chau en -1']
+['Hola en 0', 'insert en 1', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 3, 5, 7, 'chau en -1', 'insert fuera de rango']
+['insert fuera de rango negativo', 'Hola en 0', 'insert en 1', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 3, 5, 7, 'chau en -1', 'insert fuera de rango']
+Luego de append, ver elemento del final:  ['insert fuera de rango negativo', 'Hola en 0', 'insert en 1', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 3, 5, 7, 'chau en -1', 'insert fuera de rango', 'append, debo estar al final']
+Ultimo elemento con indice negativo:  append, debo estar al final
+Indice de 'insert fuera de rango negativo':  0
+Indice de 'chau en -1':  17
+Indice de 1:  4
+Intento hacer .index de elemento que no existe, esto deberia explotar.
+Indice de elemento que no existe: 
