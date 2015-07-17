@@ -47,7 +47,7 @@ import com.pyjava.parser.sym1;
     }
 %eofval}
 
-NEWLINE = \r|\n|\r\n
+NEWLINE = \r\n?|\n
 WHITESPACE = " "
 INPUTCHARACTER = [^\r\n]
 TAB = \t
