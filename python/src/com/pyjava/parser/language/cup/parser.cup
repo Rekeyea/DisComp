@@ -317,7 +317,7 @@ small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
                 |flow_stmt:f                {: RESULT = f; :};
 
 stmt ::=    small_stmt:p input_newline            {: RESULT = p; :}
-            |compound_stmt:c        {: RESULT = c; :};
+            |compound_stmt:c                      {: RESULT = c; :};
 
 compound_stmt ::=   if_stmt:f               {: RESULT = f; :}
                     |while_stmt:f           {: RESULT = f; :}

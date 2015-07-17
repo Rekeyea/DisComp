@@ -25,6 +25,7 @@ import com.pyjava.parser.sym1;
     StringBuffer string = new StringBuffer();
 
     private Symbol symbol(int type,String value){
+        System.out.println(type);
         LexerToken token = new LexerToken(yycolumn,yyline,type,value);
         return new Symbol(type,yyline,yycolumn,token);
     }
@@ -49,7 +50,6 @@ import com.pyjava.parser.sym1;
 
 NEWLINE = \r\n?|\n
 WHITESPACE = " "
-INPUTCHARACTER = [^\r\n]
 TAB = \t
 COMMENT = "#"
 ASSIGN = "="
@@ -171,12 +171,6 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {
         yypushback(yylength());
         yybegin(INDENTATION_TAB);
-    }
-    {NEWLINE}{NEWLINE}+
-    {
-
-        return symbol(sym1.NEWLINE, yytext());
-
     }
     {NEWLINE}
     {
