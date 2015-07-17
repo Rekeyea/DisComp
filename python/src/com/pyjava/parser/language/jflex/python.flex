@@ -179,7 +179,7 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {TRUE}                    {return symbol(sym1.TRUE, yytext());}
     {FALSE}                   {return symbol(sym1.FALSE, yytext());}
 
-    {COMMENT}                 { }
+    {COMMENT}                 { yybegin(COMMENT); }
 
     {NEWLINE}{TAB}+
     {
