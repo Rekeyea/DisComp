@@ -19,6 +19,7 @@ import com.pyjava.parser.sym1;
 %{
     boolean DevolverNewline = true;
     boolean DevolverEOF     = false;
+    boolean DespuesIndent   = false;
     int EstadoNoDevolverNewLine = 0;
     Deque<Integer> Stack = new LinkedList<Integer>();
 
@@ -34,14 +35,7 @@ import com.pyjava.parser.sym1;
 %eofval{
     if(Stack.size()<=0)
     {
-//        yypushback(0);
-//        if(DevolverEOF){
-//            DevolverEOF = false;
             return symbol(sym1.EOF,"");
-//        } else {
-//            DevolverEOF = true;
-//            return symbol(sym1.NEWLINE,"");
-//        }
     }else{
         yypushback(0);
         if(DevolverNewline){
@@ -208,11 +202,15 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
                     Stack.pop();
                     if(Stack.size()==0){
                         DevolverNewline = true;
+                        DespuesIndent = true;
                     }
                     return symbol(sym1.DEDENT,"");
                 }
             }else{
-                return symbol(sym1.NEWLINE, yytext());
+                if(!DespuesIndent){
+                    return symbol(sym1.NEWLINE, yytext());
+                }
+                DespuesIndent = false;
             }
         }
     }
