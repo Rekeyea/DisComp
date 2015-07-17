@@ -25,8 +25,19 @@ import com.pyjava.parser.sym1;
     StringBuffer string = new StringBuffer();
 
     private Symbol symbol(int type,String value){
-        //System.out.println(type);
-        LexerToken token = new LexerToken(yycolumn,yyline,type,value);
+        int line = -1;
+        int lineaNueva = yyline;
+        while(line==-1){
+            try{
+                line = ParserStatus.mapeoDeLineas.get(lineaNueva);
+            }catch (Exception ex){
+                lineaNueva--;
+            }
+            if(lineaNueva==0){
+                line=0;
+            }
+        }
+        LexerToken token = new LexerToken(yycolumn,line,type,value);
         return new Symbol(type,yyline,yycolumn,token);
     }
 
@@ -275,4 +286,4 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     [^] {}
 }
 
-[^]  {ParserStatus.parsingWasSuccessfull=false; ParserStatus.parsingUnsuccessfullMessage=" Caractér inesperado < "+yytext()+" > en la línea "+(yyline+1);}
+[^]  {ParserStatus.parsingWasSuccessfull=false; ParserStatus.parsingUnsuccessfullMessage.add(" Caractér inesperado < "+yytext()+" > en la línea "+ParserStatus.mapeoDeLineas.get(yyline));}

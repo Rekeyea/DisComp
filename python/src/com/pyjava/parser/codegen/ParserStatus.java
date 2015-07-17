@@ -5,10 +5,7 @@ import java_cup.runtime.Symbol;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.Iterator;
+import java.util.*;
 
 
 /**
@@ -18,8 +15,9 @@ public class ParserStatus {
     public static Deque<Generador> StackGenerador = new ArrayDeque<Generador>();
 
     public static boolean parsingWasSuccessfull = true;
-    public static String parsingUnsuccessfullMessage = "";
+    public static List<String> parsingUnsuccessfullMessage = new LinkedList<>();
     public static String fileToParse = "";
+    public static HashMap<Integer,Integer> mapeoDeLineas = new HashMap<>();
 
     public static Code ParseFile(String filePath) throws Exception{
         fileToParse = filePath;
@@ -29,7 +27,7 @@ public class ParserStatus {
             Code codigo = (Code)s.value;
             return codigo;
         }else{
-            throw new UnsupportedOperationException(parsingUnsuccessfullMessage);
+            throw new UnsupportedOperationException(String.join(", ", parsingUnsuccessfullMessage));
         }
     }
 

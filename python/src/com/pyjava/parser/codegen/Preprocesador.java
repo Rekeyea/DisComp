@@ -17,6 +17,8 @@ public class Preprocesador {
         List<String> lines = Files.readAllLines(Paths.get(filePath),Charset.defaultCharset());
         StringBuilder builder = new StringBuilder();
         boolean estadoComillaTriple = false;
+        int numeroLineaViejo = 0;
+        int numeroLineaNuevo = 0;
         for(String line : lines){
             //hay que tener en cuenta tambien los strings con comillas triples
             if(estadoComillaTriple){
@@ -25,6 +27,8 @@ public class Preprocesador {
                 }
                 builder.append(line);
                 builder.append(System.lineSeparator());
+                ParserStatus.mapeoDeLineas.put(numeroLineaNuevo,numeroLineaViejo);
+                numeroLineaNuevo++;
             }else{
                 if(!line.trim().isEmpty()){
                     if(line.contains("\"\"\"")){
@@ -32,8 +36,11 @@ public class Preprocesador {
                     }
                     builder.append(line);
                     builder.append(System.lineSeparator());
+                    ParserStatus.mapeoDeLineas.put(numeroLineaNuevo,numeroLineaViejo);
+                    numeroLineaNuevo++;
                 }
             }
+            numeroLineaViejo++;
         }
         return new ByteArrayInputStream(builder.toString().getBytes("UTF-8"));
 
