@@ -1,6 +1,9 @@
 --- IMPORTANTE ---
 El proyecto esta configurado para hacer build con Java 8
 Las librerias jflex y jcup se encuentran en la carpeta /libs
+Se debe configurar el archivo build.properties, con la ruta correcta al JDK.
+
+------------------------------
 
 Ejecutar build.bat, que ejecuta los scripts necesarios para generar el lexer y el parser con jflex y jcup. Por ultimo ejecuta el script ant para buildear todo el proyecto.
 
@@ -10,6 +13,8 @@ Se debe ejecutar de la forma: java -jar python.jar NOMBRE_ARCHIVO
 donde NOMBRE_ARCHIVO es el path completo al script python a ejecutar.
 
 
-Nota: Si se ejecuta tests.bat, algunos tests necesitan entrada desde la consola.
-Nota2: tests_salida_python.bat ejecuta los tests con el interprete de python real, el test test2.py, debe ser modificado ya que en python no existe la funcion .size de una lista.
-Nota 3: Hay que borrar los archivos de salida antes de ejecutar, si no se appendean.
+tests.bat: ejecuta todos los tests con el compilador implementado
+Nota: Si se ejecuta tests.bat, algunos tests necesitan entrada desde la consola. Ademas, hay que borrar todos los archivos en tests/salida ya que si no se hace append de la salida.
+
+tests_salida_python.bat ejecuta los tests con el interprete de python real, el test test2.py, debe ser modificado ya que en python no existe la funcion .size de una lista.
+
