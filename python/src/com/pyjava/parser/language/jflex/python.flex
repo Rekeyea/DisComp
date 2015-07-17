@@ -26,6 +26,7 @@ import com.pyjava.parser.sym1;
     StringBuffer string = new StringBuffer();
 
     private Symbol symbol(int type,String value){
+        System.out.println(type);
         LexerToken token = new LexerToken(yycolumn,yyline,type,value);
         return new Symbol(type,yyline,yycolumn,token);
     }
@@ -35,14 +36,13 @@ import com.pyjava.parser.sym1;
 %eofval{
     if(Stack.size()<=0)
     {
-            return symbol(sym1.EOF,"");
+        return symbol(sym1.EOF,"");
     }else{
         yypushback(0);
         if(DevolverNewline){
             DevolverNewline = false;
             return symbol(sym1.NEWLINE,"");
         }else{
-            DevolverNewline = true;
             Stack.pop();
             return symbol(sym1.DEDENT,yytext());
         }
@@ -225,11 +225,6 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {LONG}                    {return symbol(sym1.LONG, yytext());}
     {INTEGER}                 {return symbol(sym1.INTEGER, yytext());}
     {FLOAT}                   {return symbol(sym1.FLOAT, yytext());}
-    {NEWLINE}                 {
-                                if(EstadoNoDevolverNewLine==0){
-                                    return symbol(sym1.NEWLINE, yytext());
-                                }
-                              }
     {NAME}                    {return symbol(sym1.NAME, yytext());}
 }
 

@@ -143,9 +143,9 @@ program ::= input:i         {:
                             :};
 
 input ::=   single_input:s input_newline:n input:i          {: RESULT = RuleGenerator.joinBloques(s,i); :}
-            | single_input:s input:i               {: RESULT = RuleGenerator.joinBloques(s,i); :}
-            | single_input:s input_newline:n        {: RESULT = s; :}
-            | single_input:s                        {: RESULT = s; :};
+            | single_input:s input:i                        {: RESULT = RuleGenerator.joinBloques(s,i); :}
+            | single_input:s input_newline:n                {: RESULT = s; :}
+            | single_input:s                                {: RESULT = s; :};
 
 single_input ::= small_stmt:s             {: RESULT = s; :}
                  | compound_stmt:s        {: RESULT = s; :};
@@ -310,7 +310,7 @@ func_call ::=   expression:e DOT:d name:n trailer:t     {: RESULT = RuleGenerato
 
 flow_stmt ::=   BREAK:b                       {: RESULT = RuleGenerator.generateBreak(b); :}
                 |CONTINUE:c                   {: RESULT = RuleGenerator.generateContinue(c); :}
-                |return_stmt:r              {: RESULT = r; :};
+                |return_stmt:r                {: RESULT = r; :};
 
 small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
                 |expression:e               {: RESULT = RuleGenerator.addPop(e); :}

@@ -17,7 +17,7 @@ import java.util.Iterator;
 public class ParserStatus {
     public static Deque<Generador> StackGenerador = new ArrayDeque<Generador>();
 
-    public static boolean parsingWasSuccessfull = false;
+    public static boolean parsingWasSuccessfull = true;
     public static String parsingUnsuccessfullMessage = "";
     public static String fileToParse = "";
 
