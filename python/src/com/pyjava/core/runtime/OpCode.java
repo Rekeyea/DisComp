@@ -218,7 +218,7 @@ public class OpCode {
      *
      * CREATE_SLICE : Crea y pushea en el stack un objeto slice que puede ser utilizado con set_index y get_index.
      *                En el stack deben haber siempre 3 elementos, que pueden ser PyNone o no, si es PyNone, se usa el valor por defecto.
-     *                Deben estar : start, end, step
+     *                Deben estar : step, end, start
      *
     */
     public final static int CREATE_SLICE= 49;
