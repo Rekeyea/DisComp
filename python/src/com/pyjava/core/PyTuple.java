@@ -41,7 +41,25 @@ public class PyTuple extends PyObject {
     @Override
     public PyString __repr__() throws PyException{
 
-        if(this.tupla.size() > 0) {
+        if(this.tupla.size() == 1){
+            PyObject e = this.tupla.get(0);
+            StringBuilder res = new StringBuilder("(");
+            if(e instanceof PyTuple) {
+                res.append("(...), ");
+            }
+            else if(e instanceof PyList) {
+                res.append("[...], ");
+            }
+            else if(e instanceof PyDict){
+                res.append("{...}, ");
+            }
+            else {
+                res.append(e.__repr__().value + ", ");
+            }
+            res.append(")");
+            return new PyString(res.toString());
+        }
+        else if(this.tupla.size() > 0) {
             StringBuilder res = new StringBuilder("(");
             for (PyObject e : this.tupla) {
 
