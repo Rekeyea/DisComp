@@ -1,1 +1,0 @@
-java -jar java-cup-11b.jar -destdir C:\Users\Cristiano\Desktop\compilGit\DisComp\python\src\com\pyjava\parser -symbols sym1 C:\Users\Cristiano\Desktop\compilGit\DisComp\python\src\com\pyjava\parser\language\cup\parser.cup

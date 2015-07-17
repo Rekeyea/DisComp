@@ -1,1 +1,0 @@
-java -jar jflex-1.6.1.jar --inputstreamctor -d C:\Users\Cristiano\Desktop\compilGit\DisComp\python\src\com\pyjava\parser\codegen C:\Users\Cristiano\Desktop\compilGit\DisComp\python\src\com\pyjava\parser\language\jflex\python.flex
