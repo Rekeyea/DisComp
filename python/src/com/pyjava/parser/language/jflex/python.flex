@@ -48,7 +48,7 @@ import com.pyjava.parser.sym1;
     }
 %eofval}
 
-NEWLINE = \r\n?|\n
+NEWLINE = \r\n|\n
 WHITESPACE = " "
 TAB = \t
 COMMENT = "#"
@@ -166,7 +166,6 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
     {FALSE}                   {return symbol(sym1.FALSE, yytext());}
 
     {COMMENT}                 { yybegin(COMMENT); }
-    {NEWLINE}{NEWLINE}+       { return symbol(sym1.NEWLINE,""); }
     {NEWLINE}{TAB}+
     {
         yypushback(yylength());
@@ -188,9 +187,7 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
                 return symbol(sym1.DEDENT,"");
             }
         }else{
-
         	return symbol(sym1.NEWLINE, yytext());
-
         }
     }
     {WHITESPACE}              {}

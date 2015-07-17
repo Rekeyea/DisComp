@@ -446,8 +446,9 @@ public class RuleGenerator {
     public static ParseResult joinBloques(Object stmt, Object stmtlist){
         Bloque bStmt = ParseResult.getAs(stmt);
         Bloque bList = ParseResult.getAs(stmtlist);
+        int linea = ((ParseResult)stmtlist).linea;
         Bloque bRes = ParserStatus.StackGenerador.peek().crearBloque(bStmt.instrucciones,bList,null);
-        return new ParseResult(bStmt.instrucciones.getLast().linea,bRes);
+        return new ParseResult(linea,bRes);
     }
 
     public static ParseResult generateSubscript(Object br, Object exp, Object rest){

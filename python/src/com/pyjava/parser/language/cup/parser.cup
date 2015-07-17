@@ -105,6 +105,9 @@ non terminal input_newline;
 non terminal input;
 non terminal func_def;
 non terminal func_parameters;
+non terminal file_input;
+non terminal simple_stmt;
+
 
 non terminal program;
 
@@ -134,13 +137,43 @@ precedence left COMA;
 precedence left NEWLINE;
 precedence left ELSE;
 
-program ::= input:i         {:
+
+program ::= file_input:i    {:
                                 System.out.println("EL PROGRAMA ESTA BIEN");
                                 ParserStatus.parsingWasSuccessfull=true;
                                 Bloque b = ParseResult.getAs(i);
                                 Code code = ParserStatus.StackGenerador.peek().crearCodigo("Compilador","Compilador",b);
                                 RESULT = code;
                             :};
+
+file_input ::=  NEWLINE:n                         {: RESULT = RuleGenerator.generateEmptyBlock(n); :}
+                |stmt:s                           {: RESULT = s; :}
+                |NEWLINE:n file_input:f           {: Object obj = RuleGenerator.generateEmptyBlock(n);
+                                                     RESULT = RuleGenerator.joinBloques(obj,f); :}
+                |stmt:s file_input:f                {: RESULT = RuleGenerator.joinBloques(s,f); :};
+
+stmt ::=    simple_stmt:p                          {: RESULT = p; :}
+            |compound_stmt:c                      {: RESULT = c; :};
+
+
+simple_stmt ::= small_stmt:s NEWLINE              {: RESULT = s; :};
+
+
+small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
+                |expression:e               {: RESULT = RuleGenerator.addPop(e); :}
+                |print_stmt:p               {: RESULT = p; :}
+                |flow_stmt:f                {: RESULT = f; :};
+
+
+compound_stmt ::=   if_stmt:f               {: RESULT = f; :}
+                    |while_stmt:f           {: RESULT = f; :}
+                    |for_stmt:f             {: RESULT = f; :}
+                    |func_def:f             {: RESULT = f; :};
+
+
+
+
+
 
 input ::=   single_input:s input_newline:n input:i          {: RESULT = RuleGenerator.joinBloques(s,i); :}
             | single_input:s input_newline:n                {: RESULT = s; :}
@@ -311,18 +344,11 @@ flow_stmt ::=   BREAK:b                       {: RESULT = RuleGenerator.generate
                 |CONTINUE:c                   {: RESULT = RuleGenerator.generateContinue(c); :}
                 |return_stmt:r                {: RESULT = r; :};
 
-small_stmt ::=  expr_stmt:p                 {: RESULT = p; :}
-                |expression:e               {: RESULT = RuleGenerator.addPop(e); :}
-                |print_stmt:p               {: RESULT = p; :}
-                |flow_stmt:f                {: RESULT = f; :};
 
-stmt ::=    small_stmt:p input_newline            {: RESULT = p; :}
-            |compound_stmt:c                      {: RESULT = c; :};
 
-compound_stmt ::=   if_stmt:f               {: RESULT = f; :}
-                    |while_stmt:f           {: RESULT = f; :}
-                    |for_stmt:f             {: RESULT = f; :}
-                    |func_def:f             {: RESULT = f; :};
+
+
+
 
 stmt_list ::=   stmt:s                      {: RESULT = s; :}
                 |stmt:s stmt_list:l         {: RESULT = RuleGenerator.joinBloques(s,l); :};
