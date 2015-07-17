@@ -22,6 +22,7 @@ parser code
 {:
 
     public void syntax_error(Symbol s){
+
         System.out.println("Error de sintaxis "+s.sym+" en la linea "+(s.left+1)+" y la columna "+s.right);
         System.out.println(s.value);
     }
@@ -135,6 +136,7 @@ precedence left ELSE;
 
 program ::= input:i         {:
                                 System.out.println("EL PROGRAMA ESTA BIEN");
+                                ParserStatus.parsingWasSuccessfull=true;
                                 Bloque b = ParseResult.getAs(i);
                                 Code code = ParserStatus.StackGenerador.peek().crearCodigo("Compilador","Compilador",b);
                                 RESULT = code;

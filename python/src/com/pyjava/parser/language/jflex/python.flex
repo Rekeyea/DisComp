@@ -317,8 +317,8 @@ NAME = ([:jletter:]|_)([:jletterdigit:]|_)*
 }
 
 <COMMENT>{
+    {NEWLINE} {yybegin(YYINITIAL);}
     [^] {}
-    {NEWLINE} {yybegin(YYINITIAL); return symbol(sym1.NEWLINE, yytext());}
 }
 
 [^]  {ParserStatus.parsingWasSuccessfull=false; ParserStatus.parsingUnsuccessfullMessage=" Caractér inesperado < "+yytext()+" > en la línea "+(yyline+1);}

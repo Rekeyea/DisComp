@@ -5,6 +5,7 @@ import com.pyjava.core.exceptions.PyException;
 import com.pyjava.core.exceptions.PyFinEjecucion;
 import com.pyjava.core.runtime.*;
 import com.pyjava.parser.codegen.LexerToken;
+import com.pyjava.parser.codegen.ParserStatus;
 import java_cup.runtime.Symbol;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -43,10 +44,12 @@ public class main {
 
         try{
 
-            parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
-            Symbol s = Analizador.parse();
+            /*parser Analizador = new parser(new Lexer(new FileReader("/home/rekeyea/Documents/python.py")));
+            Symbol s = Analizador.parse();*/
 
-            Code codigoModulo = (Code)s.value;
+            Code codigoModulo = ParserStatus.ParseFile("/home/rekeyea/Documents/python.py");
+
+
 
             Frame frameInicial = new Frame();
             frameInicial.f_globals = frameInicial.f_locals;
