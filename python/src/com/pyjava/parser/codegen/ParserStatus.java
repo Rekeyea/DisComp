@@ -23,7 +23,7 @@ public class ParserStatus {
 
     public static Code ParseFile(String filePath) throws Exception{
         fileToParse = filePath;
-        parser Analizador = new parser(new Lexer(new FileReader(fileToParse)));
+        parser Analizador = new parser(new Lexer( Preprocesador.Preprocesar(fileToParse)));
         Symbol s = Analizador.parse();
         if(parsingWasSuccessfull){
             Code codigo = (Code)s.value;
